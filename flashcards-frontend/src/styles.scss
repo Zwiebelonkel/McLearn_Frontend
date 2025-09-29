@@ -183,8 +183,8 @@ body.dark-theme .card {
   top: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  padding: 1rem 0;
+  background: rgb(236, 73, 73);
+  padding: 0rem 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: white;
@@ -201,6 +201,7 @@ body.dark-theme .card {
   font-size: 2rem;
   font-weight: bold;
   margin: 0;
+  color: #ffffa0;
 }
 
 .header .nav {

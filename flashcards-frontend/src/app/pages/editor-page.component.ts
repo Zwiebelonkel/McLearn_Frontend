@@ -91,8 +91,9 @@ import { Card } from '../models';
     }
     .card-header {
       padding: 1rem;
-      background-color: #f8f9fa;
+      background-color:rgb(250, 250, 248);
       border-bottom: 1px solid #ccc;
+      border-radius: 9px 9px 0px 0px;
     }
     .card-body {
       padding: 1rem;

@@ -56,18 +56,19 @@ import { Card } from '../models';
     .card {
       perspective: 1000px;
       width: 100%;
-      height: 200px;
+      height: 250px;
       margin-bottom: 2rem;
       cursor: pointer;
+      border: none;
+      background-color: transparent;
     }
     .card-inner {
       position: relative;
       width: 100%;
       height: 100%;
       text-align: center;
-      transition: transform 0.6s;
+      transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
       transform-style: preserve-3d;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     }
     .card.flipped .card-inner {
       transform: rotateY(180deg);
@@ -82,16 +83,20 @@ import { Card } from '../models';
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
-      border-radius: 8px;
-    }
-    .card-front {
+      border-radius: 15px;
+      color: var(--dark-color);
       background-color: var(--light-color);
-      border: 1px solid #ccc;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
     .card-back {
-      background-color: var(--light-color);
-      border: 1px solid #ccc;
       transform: rotateY(180deg);
+    }
+    /* Dark Theme Styles */
+    :host-context(body.dark-theme) .card-front,
+    :host-context(body.dark-theme) .card-back {
+        background-color: #2d2d2d;
+        color: var(--light-color);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 6px 6px rgba(0,0,0,0.4);
     }
     .ratings {
       display: flex;
@@ -128,12 +133,47 @@ export class StudyPage {
   stackId = this.route.snapshot.paramMap.get('id')!;
   current = signal<Card | null>(null);
   showBack = signal(false);
+  isTransitioning = signal(false);
 
-  constructor(){ this.load(); }
-  load(){ this.api.nextCard(this.stackId).subscribe(c => { this.current.set(c); this.showBack.set(false); }); }
-  flip(){ this.showBack.set(!this.showBack()); }
-  rate(r: 'again'|'hard'|'good'|'easy'){
-    const id = this.current()?.id; if(!id) return;
-    this.api.review(id, r).subscribe(()=> this.load());
+  constructor() {
+    this.loadCard();
+  }
+
+  loadCard() {
+    this.isTransitioning.set(true);
+    this.api.nextCard(this.stackId).subscribe(card => {
+      this.current.set(card);
+      this.showBack.set(false);
+      this.isTransitioning.set(false);
+    });
+  }
+
+  flip() {
+    if (this.isTransitioning()) {
+      return;
+    }
+    this.showBack.set(!this.showBack());
+  }
+
+  rate(rating: 'again' | 'hard' | 'good' | 'easy') {
+    if (this.isTransitioning()) {
+      return;
+    }
+    const cardId = this.current()?.id;
+    if (!cardId) {
+      return;
+    }
+
+    this.isTransitioning.set(true);
+
+    this.api.review(cardId, rating).subscribe(() => {
+      this.showBack.set(false);
+      setTimeout(() => {
+        this.api.nextCard(this.stackId).subscribe(nextCard => {
+          this.current.set(nextCard);
+          this.isTransitioning.set(false);
+        });
+      }, 800);
+    });
   }
 }

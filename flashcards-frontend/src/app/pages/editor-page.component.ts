@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +14,35 @@ import { Card } from '../models';
       <h2 class="page-title">Edit Cards</h2>
 
       <form (submit)="add($event)" class="add-form">
-        <textarea [(ngModel)]="front" name="front" placeholder="Front (Question)" required class="form-textarea" rows="4"></textarea>
-        <textarea [(ngModel)]="back" name="back" placeholder="Back (Answer)" required class="form-textarea" rows="4"></textarea>
+        <!-- MARKDOWN TOOLBAR -->
+        <div class="markdown-toolbar">
+          <button type="button" (click)="insert('bold')"><b>B</b></button>
+          <button type="button" (click)="insert('italic')"><i>I</i></button>
+          <button type="button" (click)="insert('code')">Code</button>
+          <button type="button" (click)="insert('ul')">Liste</button>
+        </div>
+
+        <!-- TEXTAREA Front -->
+        <textarea
+          #frontArea
+          [(ngModel)]="front"
+          name="front"
+          placeholder="Front (Question)"
+          required
+          class="form-textarea"
+          rows="4">
+        </textarea>
+
+        <!-- TEXTAREA Back -->
+        <textarea
+          [(ngModel)]="back"
+          name="back"
+          placeholder="Back (Answer)"
+          required
+          class="form-textarea"
+          rows="4">
+        </textarea>
+
         <button type="submit" class="btn btn-primary">Add</button>
       </form>
 
@@ -131,6 +158,24 @@ import { Card } from '../models';
       gap: 1rem;
     }
 
+    .markdown-toolbar {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .markdown-toolbar button {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #ccc;
+      background: #f7f7f7;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .markdown-toolbar button:hover {
+      background: #e0e0e0;
+    }
+
     @media (max-width: 768px) {
       .add-form {
         flex-direction: column;
@@ -158,6 +203,8 @@ export class EditorPage {
   stackId = this.route.snapshot.paramMap.get('id')!;
   cards = signal<Card[]>([]);
   front = ''; back = '';
+
+  @ViewChild('frontArea') frontArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
     this.reload();
@@ -189,5 +236,40 @@ export class EditorPage {
     if (confirm('Delete card?')) {
       this.api.deleteCard(c.id).subscribe(() => this.reload());
     }
+  }
+
+  insert(type: 'bold' | 'italic' | 'code' | 'ul') {
+    const textarea = this.frontArea.nativeElement;
+    const { selectionStart, selectionEnd, value } = textarea;
+    const selected = value.slice(selectionStart, selectionEnd);
+
+    let inserted = '';
+    switch (type) {
+      case 'bold':
+        inserted = `**${selected || 'fett'}**`;
+        break;
+      case 'italic':
+        inserted = `*${selected || 'kursiv'}*`;
+        break;
+      case 'code':
+        inserted = `\`${selected || 'code'}\``;
+        break;
+      case 'ul':
+        inserted = selected
+          ? selected.split('\n').map(line => `- ${line}`).join('\n')
+          : '- ';
+        break;
+    }
+
+    // Neuer Wert
+    const newValue = value.slice(0, selectionStart) + inserted + value.slice(selectionEnd);
+    this.front = newValue;
+
+    // Cursor setzen
+    setTimeout(() => {
+      textarea.focus();
+      const cursor = selectionStart + inserted.length;
+      textarea.setSelectionRange(cursor, cursor);
+    });
   }
 }

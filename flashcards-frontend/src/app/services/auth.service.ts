@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, map, of, tap } from 'rxjs';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://outside-between.onrender.com/api';
+  private apiUrl = 'https://mclearn-server.onrender.com/api';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -15,6 +17,10 @@ export class AuthService {
       .post<{ token: string }>(`${this.apiUrl}/login`, { username, password })
       .pipe(tap((res) => this.storeToken(res.token)));
   }
+
+  private loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
+public isLoggedIn$ = this.loggedIn$.asObservable();
+
 
   /** Immer boolean liefern */
   loginGuest(): Observable<boolean> {
@@ -29,17 +35,6 @@ export class AuthService {
 
   register(username: string, password: string) {
     return this.http.post(`${this.apiUrl}/register`, { username, password });
-  }
-
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('tokenExpiry');
-
-    // nach Logout direkt wieder Gast versuchen (ohne Route „/login“)
-    this.loginGuest().subscribe({
-      next: () => this.router.navigateByUrl('/'),
-      error: () => this.router.navigateByUrl('/'),
-    });
   }
 
   /** Immer Observable<boolean> zurückgeben */
@@ -100,7 +95,20 @@ export class AuthService {
     const decoded = this.decodeToken(token);
     const expiry = decoded.exp * 1000;
     localStorage.setItem('tokenExpiry', expiry.toString());
+    this.loggedIn$.next(true); // ✅ Loginstatus setzen
   }
+  
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiry');
+    this.loggedIn$.next(false); // ❌ Loginstatus entfernen
+  
+    this.loginGuest().subscribe({
+      next: () => this.router.navigateByUrl('/'),
+      error: () => this.router.navigateByUrl('/'),
+    });
+  }
+  
 
   private decodeToken(token: string): any {
     return JSON.parse(atob(token.split('.')[1]));

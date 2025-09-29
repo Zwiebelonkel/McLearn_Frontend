@@ -1,4 +1,3 @@
-@use '../../../variables' as *;
 
 .loader-container {
   display: flex;
@@ -8,7 +7,7 @@
 
 .loader {
   border: 6px solid #ccc;
-  border-top: 6px solid $theme;
+  border-top: 6px solid red;
   border-radius: 50%;
   width: 40px;
   height: 40px;

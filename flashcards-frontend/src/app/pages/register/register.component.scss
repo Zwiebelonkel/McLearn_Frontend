@@ -1,73 +1,87 @@
-:host {
+.login-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
-  font-family: "Nunito Sans", sans-serif;
+  padding: 2rem;
+  font-family: var(--font-family-sans-serif);
 }
 
-.form-container {
-  padding: 30px 40px;
+.login-card {
+  background: var(--light-color);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   width: 100%;
+  max-width: 400px;
   text-align: center;
+  color: var(--dark-color);
 }
 
-h2 {
-  margin-bottom: 20px;
+.title {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
   font-weight: 700;
-  color: var(--text-color);
 }
 
-input {
+.form-input {
   width: 100%;
-  box-sizing: border-box; // ← Wichtig für saubere Breite innerhalb der Card
-  padding: 12px 16px;
-  margin-bottom: 15px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid var(--card-border);
-  display: block;
-  background-color: var(--input-bg);
-  color: var(--text-color);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 0px solid var(--light-color);
+  border-bottom: 1px solid var(--light-color);
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--light-color);
+  color: var(--dark-color);
+  transition: border-color 0.2s;
 }
 
-button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px;
-  border: none;
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.btn {
+  background: var(--primary-color);
   color: white;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  transition: 0.2s;
-  margin: 0;
-  margin-top: 15px;
-}
-
-button:hover {
-  transform: scale(1.1);
-  transition: 0.2s;
-}
-
-a {
-  color: #4caf50;
-  text-decoration: none;
   font-weight: bold;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-a:hover {
-  text-decoration: underline;
+.btn:hover:not(:disabled) {
+  background-color: var(--primary-color-hover);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .success-msg {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin-top: 1rem;
 }
 
 .error-msg {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
+  color: var(--danger-color);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.small-link {
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+  color: var(--primary-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color-hover);
 }

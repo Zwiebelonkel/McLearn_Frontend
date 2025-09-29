@@ -1,8 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { Card } from '../models';
+
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 @Component({
   standalone: true,
@@ -16,10 +19,10 @@ import { Card } from '../models';
         <div class="card" [class.flipped]="showBack()" (click)="flip()">
           <div class="card-inner">
             <div class="card-front">
-              <p>{{ current()!.front }}</p>
+              <div [innerHTML]="renderMarkdown(current()?.front || '')"></div>
             </div>
             <div class="card-back">
-              <p>{{ current()!.back }}</p>
+              <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
             </div>
           </div>
         </div>
@@ -56,7 +59,7 @@ import { Card } from '../models';
     .card {
       perspective: 1000px;
       width: 100%;
-      height: 250px;
+      min-height: 250px;
       margin-bottom: 2rem;
       cursor: pointer;
       border: none;
@@ -66,7 +69,7 @@ import { Card } from '../models';
       position: relative;
       width: 100%;
       height: 100%;
-      text-align: center;
+      text-align: left;
       transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
       transform-style: preserve-3d;
     }
@@ -76,13 +79,11 @@ import { Card } from '../models';
     .card-front, .card-back {
       position: absolute;
       width: 100%;
-      height: 100%;
+      min-height: 250px;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
+      padding: 1rem;
+      font-size: 1rem;
       border-radius: 15px;
       color: var(--dark-color);
       background-color: var(--light-color);
@@ -125,6 +126,11 @@ import { Card } from '../models';
       background-color: var(--info-color);
       color: white;
     }
+
+    /* Optional Markdown Style */
+    .card-front h1, .card-back h1 { font-size: 1.5rem; margin-top: 0; }
+    .card-front ul, .card-back ul { padding-left: 1.2rem; }
+    .card-front li, .card-back li { margin-bottom: 0.3rem; }
   `]
 })
 export class StudyPage {
@@ -137,6 +143,10 @@ export class StudyPage {
 
   constructor() {
     this.loadCard();
+  }
+
+  renderMarkdown(text: string): string {
+    return DOMPurify.sanitize(marked.parse(text || ''));
   }
 
   loadCard() {

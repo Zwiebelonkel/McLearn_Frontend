@@ -51,6 +51,11 @@ h6 { font-size: 1rem; }
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  box-sizing: border-box;
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 12px;
+  font-family: system-ui, sans-serif;
 }
 
 @media (min-width: 576px) {

@@ -12,8 +12,7 @@ import { appConfig } from './app/app.config';
       <h1>📚 Flashcards</h1>
       <router-outlet/>
     </main>
-  `,
-  styles: [`.container{width: 100%; box-sizing: border-box;max-width:900px;margin:24px auto;padding:0 12px;font-family:system-ui,sans-serif}`]
+  `
 })
 class AppRoot {}
 

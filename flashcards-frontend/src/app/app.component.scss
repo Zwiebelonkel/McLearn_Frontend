@@ -1,0 +1,37 @@
+.header {
+  background-color: var(--primary-color);
+  padding: 1rem;
+  color: var(--light-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav {
+    display: flex;
+    gap: 1rem;
+
+    .nav-link {
+      color: var(--light-color);
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.main {
+  padding: 2rem;
+}
+
+.footer {
+  background-color: var(--light-color);
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid #e9ecef;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

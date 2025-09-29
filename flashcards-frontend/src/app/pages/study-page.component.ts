@@ -208,15 +208,23 @@ export class StudyPage {
     this.showBack.set(!this.showBack());
   }
 
-  rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-    if (this.isTransitioning()) return;
-    const cardId = this.current()?.id;
-    if (!cardId) return;
+rate(rating: 'again' | 'hard' | 'good' | 'easy') {
+  if (this.isTransitioning()) return;
+  const cardId = this.current()?.id;
+  if (!cardId) return;
 
-    this.isTransitioning.set(true);
-    this.api.review(cardId, rating).subscribe(() => {
+  this.isTransitioning.set(true);
+  this.api.review(cardId, rating).subscribe((updatedCard) => {
+    if (rating === 'again') {
+      // Gleiche Karte nochmal zeigen → flip zurück auf Vorderseite
+      this.current.set(updatedCard);
+      this.showBack.set(false);
+      this.isTransitioning.set(false);
+    } else {
+      // Neue Karte laden
       this.showBack.set(false);
       setTimeout(() => this.loadCard(), 800);
-    });
-  }
+    }
+  });
+}
 }

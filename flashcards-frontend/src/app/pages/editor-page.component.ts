@@ -1,4 +1,10 @@
-import { Component, inject, signal, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,16 +28,14 @@ import { Card } from '../models';
       </div>
 
       <form (submit)="add($event)" class="add-form">
-        <!-- Vorderseite -->
-        <textarea
-          #frontArea
+        <!-- Vorderseite jetzt wieder Input -->
+        <input
+          type="text"
           [(ngModel)]="front"
           name="front"
-          placeholder="Front (Question – immer fett & zentriert)"
+          placeholder="Front (Question – einfach Text)"
           required
-          class="form-textarea"
-          rows="4">
-        </textarea>
+          class="form-input" />
 
         <!-- Rückseite -->
         <textarea
@@ -54,7 +58,7 @@ import { Card } from '../models';
           </div>
           <div class="card-body">
             <label>Front:
-              <textarea [(ngModel)]="c.front" name="f{{c.id}}" class="form-textarea" rows="3"></textarea>
+              <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
             </label>
             <label>Back:
               <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
@@ -112,6 +116,7 @@ import { Card } from '../models';
       margin-bottom: 2rem;
     }
 
+    .form-input,
     .form-textarea {
       width: 100%;
       padding: 0.5rem;
@@ -119,6 +124,9 @@ import { Card } from '../models';
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+    }
+
+    .form-textarea {
       resize: vertical;
     }
 
@@ -204,7 +212,8 @@ export class EditorPage {
   private api = inject(ApiService);
   stackId = this.route.snapshot.paramMap.get('id')!;
   cards = signal<Card[]>([]);
-  front = ''; back = '';
+  front = '';
+  back = '';
 
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 

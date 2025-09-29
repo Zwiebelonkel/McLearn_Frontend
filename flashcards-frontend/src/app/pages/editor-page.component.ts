@@ -121,6 +121,7 @@ import { Card } from '../models';
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+      box-sizing: border-box;
     }
 
     .form-textarea {

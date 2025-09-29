@@ -173,7 +173,7 @@ export class StudyPage {
   }
 
   renderMarkdown(text: string): string {
-    return DOMPurify.sanitize(marked.parse(text || ''));
+    return DOMPurify.sanitize(marked(text || '') as string);
   }
 
   loadCard() {

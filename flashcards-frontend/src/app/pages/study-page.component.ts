@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { Card } from '../models';
 
+// Markdown + Sanitize
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -47,15 +48,18 @@ import DOMPurify from 'dompurify';
       padding: 2rem;
       text-align: center;
     }
+
     .back-link {
       text-decoration: none;
       color: var(--primary-color);
       margin-bottom: 1rem;
       display: inline-block;
     }
+
     .page-title {
       margin-bottom: 2rem;
     }
+
     .card {
       perspective: 1000px;
       width: 100%;
@@ -65,6 +69,7 @@ import DOMPurify from 'dompurify';
       border: none;
       background-color: transparent;
     }
+
     .card-inner {
       position: relative;
       width: 100%;
@@ -73,9 +78,11 @@ import DOMPurify from 'dompurify';
       transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
       transform-style: preserve-3d;
     }
+
     .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
+
     .card-front, .card-back {
       position: absolute;
       width: 100%;
@@ -89,48 +96,68 @@ import DOMPurify from 'dompurify';
       background-color: var(--light-color);
       box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
+
     .card-back {
       transform: rotateY(180deg);
     }
-    /* Dark Theme Styles */
+
     :host-context(body.dark-theme) .card-front,
     :host-context(body.dark-theme) .card-back {
-        background-color: #2d2d2d;
-        color: var(--light-color);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 6px 6px rgba(0,0,0,0.4);
+      background-color: #2d2d2d;
+      color: var(--light-color);
     }
+
     .ratings {
       display: flex;
       justify-content: center;
       gap: 1rem;
     }
+
     .btn {
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
+
     .btn-danger {
       background-color: var(--danger-color);
       color: white;
     }
+
     .btn-warning {
       background-color: var(--warning-color);
       color: white;
     }
+
     .btn-success {
       background-color: var(--success-color);
       color: white;
     }
+
     .btn-info {
       background-color: var(--info-color);
       color: white;
     }
 
-    /* Optional Markdown Style */
-    .card-front h1, .card-back h1 { font-size: 1.5rem; margin-top: 0; }
-    .card-front ul, .card-back ul { padding-left: 1.2rem; }
-    .card-front li, .card-back li { margin-bottom: 0.3rem; }
+    /* Optional Markdown Styling */
+    .card-front h1, .card-back h1 {
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    .card-front ul, .card-back ul {
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .card-front li, .card-back li {
+      margin-bottom: 0.3rem;
+    }
+
+    .card-front p, .card-back p {
+      margin: 0.5rem 0;
+    }
   `]
 })
 export class StudyPage {
@@ -159,31 +186,19 @@ export class StudyPage {
   }
 
   flip() {
-    if (this.isTransitioning()) {
-      return;
-    }
+    if (this.isTransitioning()) return;
     this.showBack.set(!this.showBack());
   }
 
   rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-    if (this.isTransitioning()) {
-      return;
-    }
+    if (this.isTransitioning()) return;
     const cardId = this.current()?.id;
-    if (!cardId) {
-      return;
-    }
+    if (!cardId) return;
 
     this.isTransitioning.set(true);
-
     this.api.review(cardId, rating).subscribe(() => {
       this.showBack.set(false);
-      setTimeout(() => {
-        this.api.nextCard(this.stackId).subscribe(nextCard => {
-          this.current.set(nextCard);
-          this.isTransitioning.set(false);
-        });
-      }, 800);
+      setTimeout(() => this.loadCard(), 800);
     });
   }
 }

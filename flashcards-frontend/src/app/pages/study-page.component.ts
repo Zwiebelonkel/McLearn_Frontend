@@ -11,21 +11,24 @@ import DOMPurify from 'dompurify';
 @Component({
   standalone: true,
   imports: [CommonModule, RouterLink],
+  selector: 'app-study-page',
   template: `
     <div class="container">
       <a routerLink="/" class="back-link">← Back</a>
       <h2 class="page-title">Study</h2>
 
       <ng-container *ngIf="current(); else empty">
-        <div class="card" [class.flipped]="showBack()" (click)="flip()">
-          <div class="card-inner">
-            <!-- Vorderseite: normaler Text, fett & zentriert -->
-            <div class="card-front">
-              <p>{{ current()?.front }}</p>
-            </div>
-            <!-- Rückseite: Markdown gerendert -->
-            <div class="card-back">
-              <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
+        <div class="card-wrapper">
+          <div class="card" [class.flipped]="showBack()" (click)="flip()">
+            <div class="card-inner">
+              <!-- Vorderseite: Frage fett & zentriert -->
+              <div class="card-front">
+                <p>{{ current()?.front }}</p>
+              </div>
+              <!-- Rückseite: Markdown gerendert -->
+              <div class="card-back">
+                <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -62,58 +65,69 @@ import DOMPurify from 'dompurify';
       margin-bottom: 2rem;
     }
 
-    .card {
+    .card-wrapper {
       perspective: 1000px;
       width: 100%;
-      min-height: 250px;
-      margin-bottom: 2rem;
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
+      max-width: 500px;
+      margin: 0 auto 3rem;
+    }
+
+    .card {
+      width: 100%;
+      height: 300px;
+      position: relative;
     }
 
     .card-inner {
-      position: relative;
       width: 100%;
       height: 100%;
-      transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+      position: relative;
       transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
     }
 
     .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
 
-    .card-front, .card-back {
+    .card-front,
+    .card-back {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      min-height: 250px;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      padding: 1rem;
-      font-size: 1rem;
+      height: 100%;
+      padding: 1.5rem;
       border-radius: 15px;
-      color: var(--dark-color);
       background-color: var(--light-color);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    }
-
-    /* Vorderseite fett & zentriert */
-    .card-front {
+      color: var(--dark-color);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19),
+                  0 6px 6px rgba(0,0,0,0.23);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      font-weight: bold;
       font-size: 1.2rem;
+      box-sizing: border-box;
     }
+
+    .card-front {
+      font-weight: bold;
+    }
+
     .card-front p {
       margin: 0;
     }
 
     .card-back {
       transform: rotateY(180deg);
-      text-align: left; /* Markdown Listen links */
+      justify-content: flex-start;
+      align-items: flex-start;
+      text-align: left;
+      font-weight: normal;
+      overflow-y: auto;
     }
 
     :host-context(body.dark-theme) .card-front,
@@ -126,10 +140,12 @@ import DOMPurify from 'dompurify';
       display: flex;
       justify-content: center;
       gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.2rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -174,7 +190,6 @@ export class StudyPage {
     this.loadCard();
   }
 
-  // Nur für Rückseite verwenden
   renderMarkdown(text: string): string {
     return DOMPurify.sanitize(marked.parse(text || '') as string);
   }

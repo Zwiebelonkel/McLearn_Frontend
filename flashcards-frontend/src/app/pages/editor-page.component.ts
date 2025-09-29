@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api.service';
+import { ApiService, CreateCardPayload } from '../services/api.service';
 import { Card } from '../models';
 
 @Component({
@@ -38,8 +38,10 @@ export class EditorPage {
 
   constructor(){ this.reload(); }
   reload(){ this.api.cards(this.stackId).subscribe(cs => this.cards.set(cs)); }
-  add(e: Event){ e.preventDefault();
-    this.api.createCard({ stack_id: this.stackId, front: this.front, back: this.back })
+  add(e: Event){
+    e.preventDefault();
+    const payload: CreateCardPayload = { stack_id: this.stackId, front: this.front, back: this.back };
+    this.api.createCard(payload)
       .subscribe(()=>{ this.front=''; this.back=''; this.reload(); });
   }
   save(c: Card){ this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(()=>this.reload()); }

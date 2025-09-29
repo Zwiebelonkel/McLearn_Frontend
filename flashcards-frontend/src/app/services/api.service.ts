@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environments';
 import { Card, Stack } from '../models';
+
+export type CreateCardPayload = Partial<Card> & { stack_id: string };
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -14,7 +16,7 @@ export class ApiService {
   deleteStack(id: string) { return this.http.delete(`${environment.apiBase}/stacks/${id}`, { headers: this.headers }); }
 
   cards(stackId: string) { return this.http.get<Card[]>(`${environment.apiBase}/cards`, { params: { stackId }, headers: this.headers }); }
-  createCard(payload: Partial<Card>) { return this.http.post<Card>(`${environment.apiBase}/cards`, payload, { headers: this.headers }); }
+  createCard(payload: CreateCardPayload) { return this.http.post<Card>(`${environment.apiBase}/cards`, payload, { headers: this.headers }); }
   updateCard(id: string, payload: Partial<Card>) { return this.http.patch<Card>(`${environment.apiBase}/cards/${id}`, payload, { headers: this.headers }); }
   deleteCard(id: string) { return this.http.delete(`${environment.apiBase}/cards/${id}`, { headers: this.headers }); }
 

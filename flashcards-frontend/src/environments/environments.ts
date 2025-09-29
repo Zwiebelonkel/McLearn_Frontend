@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiBase: 'https://<dein-render-service>.onrender.com/api',
+  apiBase: 'https://mclearn-server.onrender.com',
   apiKey: 'supersecret-onetime-key' // = API_KEY im Backend
 };

@@ -1,0 +1,25 @@
+<link
+  href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+<div class="card form-container">
+  <h2>📝 Registrieren</h2>
+
+  <input type="text" [(ngModel)]="username" placeholder="Benutzername" />
+  <input
+    type="password"
+    [(ngModel)]="password"
+    placeholder="Passwort"
+    (keydown.enter)="register()"
+  />
+  <button class="btn" (click)="register()" [disabled]="!username || !password">
+    Registrieren
+  </button>
+
+  <div *ngIf="success" class="success-msg">Registrierung erfolgreich 🎉</div>
+  <div *ngIf="error" class="error-msg">{{ errorMessage }}</div>
+
+  <p>Schon registriert?! <a routerLink="/login">Hier einloggen</a></p>
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

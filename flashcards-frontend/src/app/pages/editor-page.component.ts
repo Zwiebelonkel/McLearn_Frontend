@@ -13,36 +13,32 @@ import { Card } from '../models';
       <a routerLink="/" class="back-link">← Back</a>
       <h2 class="page-title">Edit Cards</h2>
 
-      <!-- MARKDOWN TOOLBAR -->
+      <!-- Markdown Toolbar (nur für Rückseite) -->
       <div class="markdown-toolbar">
-        <button type="button" (click)="insert('bold','front')"><b>Q-B</b></button>
-        <button type="button" (click)="insert('italic','front')"><i>Q-I</i></button>
-        <button type="button" (click)="insert('code','front')">Q-Code</button>
-        <button type="button" (click)="insert('ul','front')">Q-Liste</button>
-        <button type="button" (click)="insert('bold','back')"><b>A-B</b></button>
-        <button type="button" (click)="insert('italic','back')"><i>A-I</i></button>
-        <button type="button" (click)="insert('code','back')">A-Code</button>
-        <button type="button" (click)="insert('ul','back')">A-Liste</button>
+        <button type="button" (click)="insert('bold')"><b>B</b></button>
+        <button type="button" (click)="insert('italic')"><i>I</i></button>
+        <button type="button" (click)="insert('code')">Code</button>
+        <button type="button" (click)="insert('ul')">Liste</button>
       </div>
 
       <form (submit)="add($event)" class="add-form">
-        <!-- TEXTAREA Front -->
+        <!-- Vorderseite -->
         <textarea
           #frontArea
           [(ngModel)]="front"
           name="front"
-          placeholder="Front (Question)"
+          placeholder="Front (Question – immer fett & zentriert)"
           required
           class="form-textarea"
           rows="4">
         </textarea>
 
-        <!-- TEXTAREA Back -->
+        <!-- Rückseite -->
         <textarea
           #backArea
           [(ngModel)]="back"
           name="back"
-          placeholder="Back (Answer)"
+          placeholder="Back (Answer – Markdown möglich)"
           required
           class="form-textarea"
           rows="4">
@@ -92,9 +88,8 @@ import { Card } from '../models';
 
     .markdown-toolbar {
       display: flex;
-      flex-wrap: wrap;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     .markdown-toolbar button {
@@ -211,7 +206,6 @@ export class EditorPage {
   cards = signal<Card[]>([]);
   front = ''; back = '';
 
-  @ViewChild('frontArea') frontArea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
@@ -246,8 +240,8 @@ export class EditorPage {
     }
   }
 
-  insert(type: 'bold' | 'italic' | 'code' | 'ul', target: 'front' | 'back') {
-    const textarea = target === 'front' ? this.frontArea.nativeElement : this.backArea.nativeElement;
+  insert(type: 'bold' | 'italic' | 'code' | 'ul') {
+    const textarea = this.backArea.nativeElement;
     const { selectionStart, selectionEnd, value } = textarea;
     const selected = value.slice(selectionStart, selectionEnd);
 
@@ -270,11 +264,7 @@ export class EditorPage {
     }
 
     const newValue = value.slice(0, selectionStart) + inserted + value.slice(selectionEnd);
-    if (target === 'front') {
-      this.front = newValue;
-    } else {
-      this.back = newValue;
-    }
+    this.back = newValue;
 
     setTimeout(() => {
       textarea.focus();

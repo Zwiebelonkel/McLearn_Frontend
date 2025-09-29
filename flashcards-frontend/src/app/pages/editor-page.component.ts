@@ -14,19 +14,23 @@ import { Card } from '../models';
       <h2 class="page-title">Edit Cards</h2>
 
       <form (submit)="add($event)" class="add-form">
-        <input [(ngModel)]="front" name="front" placeholder="Front (Question)" required class="form-input" />
-        <input [(ngModel)]="back" name="back" placeholder="Back (Answer)" required class="form-input" />
+        <textarea [(ngModel)]="front" name="front" placeholder="Front (Question)" required class="form-textarea" rows="4"></textarea>
+        <textarea [(ngModel)]="back" name="back" placeholder="Back (Answer)" required class="form-textarea" rows="4"></textarea>
         <button type="submit" class="btn btn-primary">Add</button>
       </form>
 
       <div class="card-list">
         <div *ngFor="let c of cards()" class="card">
           <div class="card-header">
-            <b>{{c.front}}</b> — {{c.back}} (Box {{c.box}})
+            <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
           </div>
           <div class="card-body">
-            <label>Front: <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input"></label>
-            <label>Back: <input [(ngModel)]="c.back"  name="b{{c.id}}" class="form-input"></label>
+            <label>Front:
+              <textarea [(ngModel)]="c.front" name="f{{c.id}}" class="form-textarea" rows="3"></textarea>
+            </label>
+            <label>Back:
+              <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
+            </label>
           </div>
           <div class="card-footer">
             <button (click)="save(c)" class="btn btn-secondary">Save</button>
@@ -42,65 +46,83 @@ import { Card } from '../models';
       margin: 0 auto;
       padding: 2rem;
     }
+
     .back-link {
       text-decoration: none;
       color: var(--primary-color);
       margin-bottom: 1rem;
       display: inline-block;
     }
+
     .page-title {
       margin-bottom: 2rem;
     }
+
     .add-form {
       display: flex;
+      flex-direction: column;
       gap: 1rem;
       margin-bottom: 2rem;
     }
-    .form-input {
-      flex: 1;
+
+    .form-textarea {
+      width: 100%;
       padding: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+      resize: vertical;
     }
+
     .btn {
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      align-self: flex-start;
     }
+
     .btn-primary {
       background-color: var(--primary-color);
       color: white;
     }
+
     .btn-secondary {
       background-color: var(--secondary-color);
       color: white;
     }
+
     .btn-danger {
       background-color: var(--danger-color);
       color: white;
     }
+
     .card-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1rem;
     }
+
     .card {
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
     .card-header {
       padding: 1rem;
-      background-color:rgb(250, 250, 248);
+      background-color: rgb(250, 250, 248);
       border-bottom: 1px solid #ccc;
       border-radius: 9px 9px 0px 0px;
     }
+
     .card-body {
       padding: 1rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
+
     .card-footer {
       padding: 1rem;
       border-top: 1px solid #ccc;
@@ -113,9 +135,11 @@ import { Card } from '../models';
       .add-form {
         flex-direction: column;
       }
+
       .add-form > .btn {
         align-self: flex-start;
       }
+
       .card-list {
         grid-template-columns: 1fr;
       }
@@ -135,14 +159,35 @@ export class EditorPage {
   cards = signal<Card[]>([]);
   front = ''; back = '';
 
-  constructor(){ this.reload(); }
-  reload(){ this.api.cards(this.stackId).subscribe(cs => this.cards.set(cs)); }
-  add(e: Event){
-    e.preventDefault();
-    const payload: CreateCardPayload = { stack_id: this.stackId, front: this.front, back: this.back };
-    this.api.createCard(payload)
-      .subscribe(()=>{ this.front=''; this.back=''; this.reload(); });
+  constructor() {
+    this.reload();
   }
-  save(c: Card){ this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(()=>this.reload()); }
-  del(c: Card){ if(confirm('Delete card?')) this.api.deleteCard(c.id).subscribe(()=>this.reload()); }
+
+  reload() {
+    this.api.cards(this.stackId).subscribe(cs => this.cards.set(cs));
+  }
+
+  add(e: Event) {
+    e.preventDefault();
+    const payload: CreateCardPayload = {
+      stack_id: this.stackId,
+      front: this.front,
+      back: this.back
+    };
+    this.api.createCard(payload).subscribe(() => {
+      this.front = '';
+      this.back = '';
+      this.reload();
+    });
+  }
+
+  save(c: Card) {
+    this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(() => this.reload());
+  }
+
+  del(c: Card) {
+    if (confirm('Delete card?')) {
+      this.api.deleteCard(c.id).subscribe(() => this.reload());
+    }
+  }
 }

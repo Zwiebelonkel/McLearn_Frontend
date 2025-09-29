@@ -1,10 +1,13 @@
  <header class="header">
     <nav class="nav">
-      <a class="nav-link" routerLink="/">Home</a>
-      <a class="nav-link" routerLink="/editor">Editor</a>
-      <a class="nav-link" routerLink="/stacks">Stacks</a>
-      <a class="nav-link" routerLink="/study">Study</a>
+      <a class="nav-link btn btn-primary" routerLink="/">Home</a>
+      <a class="nav-link btn btn-primary" routerLink="/editor">Editor</a>
+      <a class="nav-link btn btn-primary" routerLink="/stacks">Stacks</a>
+      <a class="nav-link btn btn-primary" routerLink="/study">Study</a>
     </nav>
+    <div class="theme-switcher">
+      <button class="btn" (click)="toggleTheme()">Toggle Theme</button>
+    </div>
   </header>
 
   <main class="main">

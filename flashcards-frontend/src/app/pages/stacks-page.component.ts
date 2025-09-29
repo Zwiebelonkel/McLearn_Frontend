@@ -100,6 +100,9 @@ import { Stack } from '../models';
       .add-form {
         flex-direction: column;
       }
+      .add-form > .btn {
+        align-self: flex-start;
+      }
       .stack-item {
         flex-direction: column;
         align-items: stretch;
@@ -107,6 +110,12 @@ import { Stack } from '../models';
       .stack-actions {
         margin-top: 1rem;
         justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 1rem;
       }
     }
   `]

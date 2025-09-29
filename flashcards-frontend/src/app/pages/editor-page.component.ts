@@ -112,8 +112,17 @@ import { Card } from '../models';
       .add-form {
         flex-direction: column;
       }
+      .add-form > .btn {
+        align-self: flex-start;
+      }
       .card-list {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 1rem;
       }
     }
   `]

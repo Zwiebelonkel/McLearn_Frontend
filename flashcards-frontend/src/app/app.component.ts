@@ -9,4 +9,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'flashcards-frontend';
+
+  toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+  }
 }

@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './app/services/auth.service';
+import { environment } from './environments/environments';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -17,14 +18,15 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
+    let headers = req.headers.set('X-API-Key', environment.apiKey);
 
     if (token) {
-      const cloned = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${token}`),
-      });
-      return next.handle(cloned);
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
-    return next.handle(req);
+    const cloned = req.clone({
+      headers,
+    });
+    return next.handle(cloned);
   }
 }

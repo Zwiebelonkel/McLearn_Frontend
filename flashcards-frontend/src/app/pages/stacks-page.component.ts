@@ -27,7 +27,8 @@ import { Stack } from '../models';
         <li *ngFor="let s of stacks()" class="stack-item">
           <span class="stack-name">
             {{ s.name }}
-            <span *ngIf="s.public">🌍</span>
+            <span *ngIf="s.is_public">🌍</span>
+            <span *ngIf="!s.is_public">🔒</span>
           </span>
           <div class="stack-actions">
             <a [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>

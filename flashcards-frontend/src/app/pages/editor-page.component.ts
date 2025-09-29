@@ -9,65 +9,83 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService, CreateCardPayload } from '../services/api.service';
-import { Card } from '../models';
+import { Card, Stack } from '../models';
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  template: `
-    <div class="container">
-      <a routerLink="/" class="back-link">← Back</a>
-      <h2 class="page-title">Edit Cards</h2>
-      <form (submit)="add($event)" class="add-form">
-        <!-- Vorderseite jetzt wieder Input -->
-        <input
-          type="text"
-          [(ngModel)]="front"
-          name="front"
-          placeholder="Question"
-          required
-          class="form-input" />
-      <!-- Markdown Toolbar (nur für Rückseite) -->
-      <div class="markdown-toolbar">
-        <button type="button" (click)="insert('bold')"><b>B</b></button>
-        <button type="button" (click)="insert('italic')"><i>I</i></button>
-        <button type="button" (click)="insert('code')">Code</button>
-        <button type="button" (click)="insert('ul')">Liste</button>
+  template: `<div class="container">
+  <a routerLink="/" class="back-link">← Back</a>
+  <h2 class="page-title">Edit Cards</h2>
+
+  <!-- Stack-Einstellungen -->
+  <div class="stack-meta">
+    <label>
+      Name:
+<input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
+    </label>
+
+    <label class="form-checkbox">
+      <input type="checkbox" [(ngModel)]="isPublic" name="isPublicStack" />
+      Öffentlich
+    </label>
+
+    <button (click)="saveStack()" class="btn btn-secondary">Stack speichern</button>
+  </div>
+
+  <!-- Karten-Hinzufügen -->
+  <form (submit)="add($event)" class="add-form">
+    <input
+      type="text"
+      [(ngModel)]="front"
+      name="front"
+      placeholder="Question"
+      required
+      class="form-input" />
+
+    <!-- Markdown Toolbar (nur für Rückseite) -->
+    <div class="markdown-toolbar">
+      <button type="button" (click)="insert('bold')"><b>B</b></button>
+      <button type="button" (click)="insert('italic')"><i>I</i></button>
+      <button type="button" (click)="insert('code')">Code</button>
+      <button type="button" (click)="insert('ul')">Liste</button>
+    </div>
+
+    <textarea
+      #backArea
+      [(ngModel)]="back"
+      name="back"
+      placeholder="Answer"
+      required
+      class="form-textarea"
+      rows="4">
+    </textarea>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+
+  <!-- Karten-Liste -->
+  <div class="card-list">
+    <div *ngFor="let c of cards()" class="card">
+      <div class="card-header">
+        <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
       </div>
-        <!-- Rückseite -->
-        <textarea
-          #backArea
-          [(ngModel)]="back"
-          name="back"
-          placeholder="Answer"
-          required
-          class="form-textarea"
-          rows="4">
-        </textarea>
-
-        <button type="submit" class="btn btn-primary">Add</button>
-      </form>
-
-      <div class="card-list">
-        <div *ngFor="let c of cards()" class="card">
-          <div class="card-header">
-            <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
-          </div>
-          <div class="card-body">
-            <label>Front:
-              <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
-            </label>
-            <label>Back:
-              <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
-            </label>
-          </div>
-          <div class="card-footer">
-            <button (click)="save(c)" class="btn btn-secondary">Save</button>
-            <button (click)="del(c)" class="btn btn-danger">Delete</button>
-          </div>
-        </div>
+      <div class="card-body">
+        <label>Front:
+          <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
+        </label>
+        <label>Back:
+          <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
+        </label>
+      </div>
+      <div class="card-footer">
+        <button (click)="save(c)" class="btn btn-secondary">Save</button>
+        <button (click)="del(c)" class="btn btn-danger">Delete</button>
       </div>
     </div>
+  </div>
+</div>
+
   `,
   styles: [`
     .container {
@@ -203,6 +221,17 @@ import { Card } from '../models';
         padding: 1rem;
       }
     }
+
+    .stack-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.stack-meta .form-input {
+  min-width: 200px;
+}
   `]
 })
 export class EditorPage {
@@ -212,10 +241,16 @@ export class EditorPage {
   cards = signal<Card[]>([]);
   front = '';
   back = '';
+  stack = signal<Stack | null>(null); // Signal für Stack
+  isPublic = false;
 
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
+    this.api.getStack(this.stackId).subscribe(s => {
+      this.stack.set(s);
+      this.isPublic = s.is_public; // Public-Status vorbefüllen
+    });
     this.reload();
   }
 
@@ -237,14 +272,26 @@ export class EditorPage {
     });
   }
 
-  save(c: Card) {
-    this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(() => this.reload());
+  saveStack() {
+    const s = this.stack();
+    if (!s) return;
+  
+    this.api.updateStack(s.id, s.name, this.isPublic).subscribe(() => {
+      alert('Stack gespeichert');
+    });
   }
+  
 
   del(c: Card) {
     if (confirm('Delete card?')) {
       this.api.deleteCard(c.id).subscribe(() => this.reload());
     }
+  }
+
+  save(c: Card) {
+    this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(() => {
+      // optional: reload oder toast
+    });
   }
 
   insert(type: 'bold' | 'italic' | 'code' | 'ul') {

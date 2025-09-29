@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { Card } from '../models';
 
-// Markdown + Sanitize
+// Markdown + Sanitize nur für Rückseite
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -19,9 +19,11 @@ import DOMPurify from 'dompurify';
       <ng-container *ngIf="current(); else empty">
         <div class="card" [class.flipped]="showBack()" (click)="flip()">
           <div class="card-inner">
+            <!-- Vorderseite: normaler Text, fett & zentriert -->
             <div class="card-front">
-              <div [innerHTML]="renderMarkdown(current()?.front || '')"></div>
+              <p>{{ current()?.front }}</p>
             </div>
+            <!-- Rückseite: Markdown gerendert -->
             <div class="card-back">
               <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
             </div>
@@ -74,7 +76,6 @@ import DOMPurify from 'dompurify';
       position: relative;
       width: 100%;
       height: 100%;
-      text-align: left;
       transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
       transform-style: preserve-3d;
     }
@@ -97,8 +98,22 @@ import DOMPurify from 'dompurify';
       box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
 
+    /* Vorderseite fett & zentriert */
+    .card-front {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .card-front p {
+      margin: 0;
+    }
+
     .card-back {
       transform: rotateY(180deg);
+      text-align: left; /* Markdown Listen links */
     }
 
     :host-context(body.dark-theme) .card-front,
@@ -140,24 +155,11 @@ import DOMPurify from 'dompurify';
       color: white;
     }
 
-    /* Optional Markdown Styling */
-    .card-front h1, .card-back h1 {
-      font-size: 1.5rem;
-      margin-top: 0;
-    }
-
-    .card-front ul, .card-back ul {
-      padding-left: 1.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .card-front li, .card-back li {
-      margin-bottom: 0.3rem;
-    }
-
-    .card-front p, .card-back p {
-      margin: 0.5rem 0;
-    }
+    /* Markdown Styling für Rückseite */
+    .card-back h1 { font-size: 1.5rem; margin-top: 0; }
+    .card-back ul { padding-left: 1.5rem; margin-top: 0.5rem; }
+    .card-back li { margin-bottom: 0.3rem; }
+    .card-back p { margin: 0.5rem 0; }
   `]
 })
 export class StudyPage {
@@ -172,8 +174,9 @@ export class StudyPage {
     this.loadCard();
   }
 
+  // Nur für Rückseite verwenden
   renderMarkdown(text: string): string {
-    return DOMPurify.sanitize(marked(text || '') as string);
+    return DOMPurify.sanitize(marked.parse(text || '') as string);
   }
 
   loadCard() {

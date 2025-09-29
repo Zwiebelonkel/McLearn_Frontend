@@ -107,6 +107,15 @@ import { Card } from '../models';
       justify-content: flex-end;
       gap: 1rem;
     }
+
+    @media (max-width: 768px) {
+      .add-form {
+        flex-direction: column;
+      }
+      .card-list {
+        grid-template-columns: 1fr;
+      }
+    }
   `]
 })
 export class EditorPage {

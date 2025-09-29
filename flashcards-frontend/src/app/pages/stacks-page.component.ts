@@ -95,6 +95,20 @@ import { Stack } from '../models';
       display: flex;
       gap: 1rem;
     }
+
+    @media (max-width: 768px) {
+      .add-form {
+        flex-direction: column;
+      }
+      .stack-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .stack-actions {
+        margin-top: 1rem;
+        justify-content: space-between;
+      }
+    }
   `]
 })
 export class StacksPage {

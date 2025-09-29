@@ -35,3 +35,17 @@
   bottom: 0;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+
+    .nav {
+      margin-top: 1rem;
+    }
+  }
+
+  .main {
+    padding: 1rem;
+  }
+}

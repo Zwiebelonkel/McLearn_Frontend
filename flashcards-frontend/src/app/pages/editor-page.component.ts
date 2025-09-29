@@ -18,7 +18,15 @@ import { Card } from '../models';
     <div class="container">
       <a routerLink="/" class="back-link">← Back</a>
       <h2 class="page-title">Edit Cards</h2>
-
+      <form (submit)="add($event)" class="add-form">
+        <!-- Vorderseite jetzt wieder Input -->
+        <input
+          type="text"
+          [(ngModel)]="front"
+          name="front"
+          placeholder="Question"
+          required
+          class="form-input" />
       <!-- Markdown Toolbar (nur für Rückseite) -->
       <div class="markdown-toolbar">
         <button type="button" (click)="insert('bold')"><b>B</b></button>
@@ -26,23 +34,12 @@ import { Card } from '../models';
         <button type="button" (click)="insert('code')">Code</button>
         <button type="button" (click)="insert('ul')">Liste</button>
       </div>
-
-      <form (submit)="add($event)" class="add-form">
-        <!-- Vorderseite jetzt wieder Input -->
-        <input
-          type="text"
-          [(ngModel)]="front"
-          name="front"
-          placeholder="Front (Question – einfach Text)"
-          required
-          class="form-input" />
-
         <!-- Rückseite -->
         <textarea
           #backArea
           [(ngModel)]="back"
           name="back"
-          placeholder="Back (Answer – Markdown möglich)"
+          placeholder="Answer"
           required
           class="form-textarea"
           rows="4">
@@ -161,7 +158,7 @@ import { Card } from '../models';
 
     .card {
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 10px;
     }
 
     .card-header {

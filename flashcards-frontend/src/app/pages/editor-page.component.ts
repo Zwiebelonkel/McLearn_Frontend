@@ -13,15 +13,19 @@ import { Card } from '../models';
       <a routerLink="/" class="back-link">← Back</a>
       <h2 class="page-title">Edit Cards</h2>
 
-      <form (submit)="add($event)" class="add-form">
-        <!-- MARKDOWN TOOLBAR -->
-        <div class="markdown-toolbar">
-          <button type="button" (click)="insert('bold')"><b>B</b></button>
-          <button type="button" (click)="insert('italic')"><i>I</i></button>
-          <button type="button" (click)="insert('code')">Code</button>
-          <button type="button" (click)="insert('ul')">Liste</button>
-        </div>
+      <!-- MARKDOWN TOOLBAR -->
+      <div class="markdown-toolbar">
+        <button type="button" (click)="insert('bold','front')"><b>Q-B</b></button>
+        <button type="button" (click)="insert('italic','front')"><i>Q-I</i></button>
+        <button type="button" (click)="insert('code','front')">Q-Code</button>
+        <button type="button" (click)="insert('ul','front')">Q-Liste</button>
+        <button type="button" (click)="insert('bold','back')"><b>A-B</b></button>
+        <button type="button" (click)="insert('italic','back')"><i>A-I</i></button>
+        <button type="button" (click)="insert('code','back')">A-Code</button>
+        <button type="button" (click)="insert('ul','back')">A-Liste</button>
+      </div>
 
+      <form (submit)="add($event)" class="add-form">
         <!-- TEXTAREA Front -->
         <textarea
           #frontArea
@@ -35,6 +39,7 @@ import { Card } from '../models';
 
         <!-- TEXTAREA Back -->
         <textarea
+          #backArea
           [(ngModel)]="back"
           name="back"
           placeholder="Back (Answer)"
@@ -83,6 +88,26 @@ import { Card } from '../models';
 
     .page-title {
       margin-bottom: 2rem;
+    }
+
+    .markdown-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .markdown-toolbar button {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #ccc;
+      background: #f7f7f7;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .markdown-toolbar button:hover {
+      background: #e0e0e0;
     }
 
     .add-form {
@@ -158,24 +183,6 @@ import { Card } from '../models';
       gap: 1rem;
     }
 
-    .markdown-toolbar {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .markdown-toolbar button {
-      padding: 0.25rem 0.5rem;
-      border: 1px solid #ccc;
-      background: #f7f7f7;
-      cursor: pointer;
-      border-radius: 4px;
-      font-family: inherit;
-    }
-
-    .markdown-toolbar button:hover {
-      background: #e0e0e0;
-    }
-
     @media (max-width: 768px) {
       .add-form {
         flex-direction: column;
@@ -205,6 +212,7 @@ export class EditorPage {
   front = ''; back = '';
 
   @ViewChild('frontArea') frontArea!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
     this.reload();
@@ -238,8 +246,8 @@ export class EditorPage {
     }
   }
 
-  insert(type: 'bold' | 'italic' | 'code' | 'ul') {
-    const textarea = this.frontArea.nativeElement;
+  insert(type: 'bold' | 'italic' | 'code' | 'ul', target: 'front' | 'back') {
+    const textarea = target === 'front' ? this.frontArea.nativeElement : this.backArea.nativeElement;
     const { selectionStart, selectionEnd, value } = textarea;
     const selected = value.slice(selectionStart, selectionEnd);
 
@@ -261,11 +269,13 @@ export class EditorPage {
         break;
     }
 
-    // Neuer Wert
     const newValue = value.slice(0, selectionStart) + inserted + value.slice(selectionEnd);
-    this.front = newValue;
+    if (target === 'front') {
+      this.front = newValue;
+    } else {
+      this.back = newValue;
+    }
 
-    // Cursor setzen
     setTimeout(() => {
       textarea.focus();
       const cursor = selectionStart + inserted.length;

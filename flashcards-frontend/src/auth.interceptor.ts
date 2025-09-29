@@ -6,7 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './app/services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -27,11 +27,4 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req);
   }
-}
-function SkipSelf(): (
-  target: typeof AuthInterceptor,
-  propertyKey: undefined,
-  parameterIndex: 0
-) => void {
-  throw new Error('Function not implemented.');
 }

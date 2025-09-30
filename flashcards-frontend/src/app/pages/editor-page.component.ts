@@ -67,6 +67,14 @@ import { LoaderComponent } from '../pages/loader/loader.component';
     <button type="submit" class="btn btn-primary">Add</button>
   </form>
 
+<!-- CSV-Import -->
+<div class="csv-import">
+  <label class="btn btn-secondary">
+    CSV hochladen
+    <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
+  </label>
+</div>
+
   <!-- Karten-Liste -->
   <div class="card-list">
     <div *ngFor="let c of cards()" class="card">
@@ -394,4 +402,49 @@ export class EditorPage {
       textarea.setSelectionRange(cursor, cursor);
     });
   }
+
+importCSV(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+  this.loading.set(true);
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = reader.result as string;
+
+    // 1. Zeilen splitten
+    const lines = text.trim().split('\n');
+
+    // 2. Header entfernen, falls vorhanden
+    const startIndex = lines[0].toLowerCase().includes('front') ? 1 : 0;
+
+    const cardsToCreate = lines.slice(startIndex).map(line => {
+      const [front, back] = line.split(',').map(x => x.trim().replace(/^"|"$/g, ''));
+      return { front, back };
+    });
+
+    // 3. Alle Karten nacheinander erstellen
+    let completed = 0;
+    for (const card of cardsToCreate) {
+      this.api.createCard({
+        stack_id: this.stackId,
+        front: card.front,
+        back: card.back
+      }).subscribe({
+        next: () => {
+          completed++;
+          if (completed === cardsToCreate.length) this.reload();
+        },
+        error: (err) => {
+          console.error('Fehler beim Import:', err);
+          this.loading.set(false);
+        }
+      });
+    }
+  };
+
+  reader.readAsText(file);
+}
 }

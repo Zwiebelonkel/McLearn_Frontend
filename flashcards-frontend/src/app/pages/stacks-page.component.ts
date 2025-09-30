@@ -57,6 +57,9 @@ import { AuthService } from '../services/auth.service';
       gap: 1rem;
       margin-bottom: 2rem;
       align-items: center;
+      border: 1px solid #d5d5d5;
+      padding: 1rem;
+      border-radius: 0.3rem;
     }
 
     .form-input {

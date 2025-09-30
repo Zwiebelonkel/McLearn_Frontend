@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -13,12 +13,16 @@ export class AppComponent {
   title = 'flashcards-frontend';
 
   authService = inject(AuthService);
+  router = inject(Router); // ✅ Router hier injecten
 
-  // Observable, das im Template genutzt wird
   isLoggedIn$ = computed(() => this.authService.isLoggedIn());
   username$ = computed(() => this.authService.getUsername());
 
   toggleTheme() {
     document.body.classList.toggle('dark-theme');
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
   }
 }

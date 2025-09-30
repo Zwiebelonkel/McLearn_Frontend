@@ -129,6 +129,9 @@ import { Card, Stack } from '../models';
       flex-direction: column;
       gap: 1rem;
       margin-bottom: 2rem;
+      border: 1px solid #d5d5d5;
+      padding: 1rem;
+      border-radius: 0.3rem;
     }
 
     .form-input,
@@ -162,6 +165,7 @@ import { Card, Stack } from '../models';
     .btn-secondary {
       background-color: var(--secondary-color);
       color: white;
+      margin-top: 1rem;
     }
 
     .btn-danger {
@@ -228,6 +232,9 @@ import { Card, Stack } from '../models';
   margin-bottom: 2rem;
   align-items: center;
   flex-wrap: wrap;
+  border: 1px solid #d5d5d5;
+  padding: 1rem;
+  border-radius: 0.3rem;
 }
 .stack-meta .form-input {
   min-width: 200px;

@@ -82,6 +82,7 @@ import DOMPurify from 'dompurify';
       width: 100%;
       height: 300px;
       position: relative;
+      transform-style: preserve-3d;
     }
 
     .card-inner {
@@ -90,10 +91,11 @@ import DOMPurify from 'dompurify';
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+      will-change: transform;
     }
 
     .card.flipped .card-inner {
-      transform: rotateY(180deg);
+      transform: rotateX(180deg);
     }
 
     .card-front,
@@ -131,7 +133,7 @@ import DOMPurify from 'dompurify';
     }
 
     .card-back {
-      transform: rotateY(180deg);
+      transform: rotateX(180deg);
       justify-content: flex-start;
       align-items: flex-start;
       text-align: left;

@@ -90,7 +90,7 @@ import DOMPurify from 'dompurify';
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+      transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
       will-change: transform;
     }
 
@@ -221,11 +221,15 @@ export class StudyPage {
   loadCard() {
     this.isTransitioning.set(true);
     this.showBack.set(false);
-    this.api.nextCard(this.stackId).subscribe(card => {
-      this.current.set(card);
-      this.isTransitioning.set(false);
-    });
+  
+    setTimeout(() => {
+      this.api.nextCard(this.stackId).subscribe(card => {
+        this.current.set(card);
+        this.isTransitioning.set(false);
+      });
+    }, 200);
   }
+  
 
   flip() {
     if (this.isTransitioning()) return;
@@ -236,7 +240,7 @@ export class StudyPage {
     if (this.isTransitioning()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
-
+  
     this.isTransitioning.set(true);
     this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
       if (rating === 'again') {
@@ -245,10 +249,11 @@ export class StudyPage {
         this.showBack.set(false);
         this.isTransitioning.set(false);
       } else {
-        // Neue Karte laden
+        // Neue Karte laden (Timeout ist jetzt in loadCard() enthalten)
         this.showBack.set(false);
-        setTimeout(() => this.loadCard(), 300);
+        this.loadCard();
       }
     });
   }
+  
 }

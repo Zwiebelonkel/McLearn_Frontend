@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { Card, Stack } from '../models';
 import { AuthService } from '../services/auth.service';
-import { LoaderComponent } from '../pages/loader/loader.component';
 
 // Markdown + Sanitize nur für Rückseite
 import { marked } from 'marked';
@@ -12,11 +11,10 @@ import DOMPurify from 'dompurify';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, LoaderComponent],
+  imports: [CommonModule, RouterLink],
   selector: 'app-study-page',
   template: `
-    <app-loader *ngIf="loading()" />
-    <div *ngIf="!loading()" class="container">
+    <div class="container">
       <a routerLink="/" class="back-link">← Back</a>
       <h2 class="page-title">Study</h2>
 
@@ -204,7 +202,6 @@ export class StudyPage {
   showBack = signal(false);
   isTransitioning = signal(false);
   userId = this.auth.getUserId();
-  loading = signal(false);
 
   constructor() {
     this.loadCard();
@@ -220,27 +217,24 @@ export class StudyPage {
   }
 
   loadCard() {
-    this.loading.set(true);
     this.isTransitioning.set(true);
     this.showBack.set(false);
     this.api.nextCard(this.stackId).subscribe(card => {
       this.current.set(card);
       this.isTransitioning.set(false);
-      this.loading.set(false);
     });
   }
 
   flip() {
-    if (this.isTransitioning() || this.loading()) return;
+    if (this.isTransitioning()) return;
     this.showBack.set(!this.showBack());
   }
 
   rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-    if (this.isTransitioning() || this.loading()) return;
+    if (this.isTransitioning()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
 
-    this.loading.set(true);
     this.isTransitioning.set(true);
     this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
       if (rating === 'again') {
@@ -248,11 +242,10 @@ export class StudyPage {
         this.current.set(updatedCard);
         this.showBack.set(false);
         this.isTransitioning.set(false);
-        this.loading.set(false);
       } else {
         // Neue Karte laden
         this.showBack.set(false);
-        setTimeout(() => this.loadCard(), 800);
+        setTimeout(() => this.loadCard(), 300);
       }
     });
   }

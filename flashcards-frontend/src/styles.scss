@@ -15,6 +15,11 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: var(--font-family-sans-serif);
   font-size: 1rem;
@@ -23,8 +28,13 @@ body {
   color: #212529;
   text-align: left;
   background-color: #f0f2f5;
-  margin: 0;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body.dark-theme {
@@ -64,6 +74,7 @@ h6 { font-size: 1rem; }
 
 .main {
     margin-top: 100px;
+    flex-grow: 1;
 }
 
 @media (min-width: 576px) {
@@ -219,6 +230,7 @@ body.dark-theme .card {
   padding: 1rem;
   background-color: #f8f9fa;
   border-top: 1px solid #e7e7e7;
+  flex-shrink: 0;
 }
 
 body.dark-theme .footer {

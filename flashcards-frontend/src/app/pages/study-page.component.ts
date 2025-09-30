@@ -2,7 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
-import { Card } from '../models';
+import { Card, Stack } from '../models';
+import { AuthService } from '../services/auth.service';
 
 // Markdown + Sanitize nur für Rückseite
 import { marked } from 'marked';
@@ -33,11 +34,16 @@ import DOMPurify from 'dompurify';
           </div>
         </div>
 
-        <div *ngIf="showBack()" class="ratings">
-          <button (click)="rate('again')" class="btn btn-danger">Again</button>
-          <button (click)="rate('hard')" class="btn btn-warning">Hard</button>
-          <button (click)="rate('good')" class="btn btn-success">Good</button>
-          <button (click)="rate('easy')" class="btn btn-info">Easy</button>
+        <div *ngIf="showBack()">
+          <div *ngIf="isOwner()" class="ratings">
+            <button (click)="rate('again')" class="btn btn-danger">Again</button>
+            <button (click)="rate('hard')" class="btn btn-warning">Hard</button>
+            <button (click)="rate('good')" class="btn btn-success">Good</button>
+            <button (click)="rate('easy')" class="btn btn-info">Easy</button>
+          </div>
+          <div *ngIf="!isOwner()">
+            <button (click)="loadCard()" class="btn btn-primary">Next</button>
+          </div>
         </div>
       </ng-container>
 
@@ -152,6 +158,11 @@ import DOMPurify from 'dompurify';
       cursor: pointer;
     }
 
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
     .btn-danger {
       background-color: var(--danger-color);
       color: white;
@@ -182,13 +193,21 @@ import DOMPurify from 'dompurify';
 export class StudyPage {
   private route = inject(ActivatedRoute);
   private api = inject(ApiService);
+  private auth = inject(AuthService);
   stackId = this.route.snapshot.paramMap.get('id')!;
+  stack = signal<Stack | null>(null);
   current = signal<Card | null>(null);
   showBack = signal(false);
   isTransitioning = signal(false);
+  userId = this.auth.getUserId();
 
   constructor() {
     this.loadCard();
+    this.api.getStack(this.stackId).subscribe(stack => this.stack.set(stack));
+  }
+
+  isOwner(): boolean {
+    return this.stack()?.user_id === this.userId;
   }
 
   renderMarkdown(text: string): string {
@@ -197,9 +216,9 @@ export class StudyPage {
 
   loadCard() {
     this.isTransitioning.set(true);
+    this.showBack.set(false);
     this.api.nextCard(this.stackId).subscribe(card => {
       this.current.set(card);
-      this.showBack.set(false);
       this.isTransitioning.set(false);
     });
   }
@@ -209,23 +228,23 @@ export class StudyPage {
     this.showBack.set(!this.showBack());
   }
 
-rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-  if (this.isTransitioning()) return;
-  const cardId = this.current()?.id;
-  if (!cardId) return;
+  rate(rating: 'again' | 'hard' | 'good' | 'easy') {
+    if (this.isTransitioning()) return;
+    const cardId = this.current()?.id;
+    if (!cardId) return;
 
-  this.isTransitioning.set(true);
-  this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
-    if (rating === 'again') {
-      // Gleiche Karte nochmal zeigen → flip zurück auf Vorderseite
-      this.current.set(updatedCard);
-      this.showBack.set(false);
-      this.isTransitioning.set(false);
-    } else {
-      // Neue Karte laden
-      this.showBack.set(false);
-      setTimeout(() => this.loadCard(), 800);
-    }
-  });
-}
+    this.isTransitioning.set(true);
+    this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
+      if (rating === 'again') {
+        // Gleiche Karte nochmal zeigen → flip zurück auf Vorderseite
+        this.current.set(updatedCard);
+        this.showBack.set(false);
+        this.isTransitioning.set(false);
+      } else {
+        // Neue Karte laden
+        this.showBack.set(false);
+        setTimeout(() => this.loadCard(), 800);
+      }
+    });
+  }
 }

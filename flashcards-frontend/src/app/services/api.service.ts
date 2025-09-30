@@ -95,8 +95,8 @@ export class ApiService {
 
   review(stackId: string, cardId: string, rating: 'again' | 'hard' | 'good' | 'easy') {
     return this.http.post<Card>(
-      `${environment.apiBase}/stacks/${stackId}/study/review`,
-      { cardId, rating },
+      `${environment.apiBase}/stacks/${stackId}/cards/${cardId}/review`,
+      { rating },
       { headers: this.getHeaders() }
     );
   }

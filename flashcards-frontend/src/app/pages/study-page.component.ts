@@ -217,7 +217,11 @@ import DOMPurify from 'dompurify';
 .box-4 { background-color: #5cb85c; } /* Grün */
 .box-5 { background-color: #428bca; } /* Blau – sehr einfach */
 
-
+.card-front *,
+.card-back * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
   `]
 })
 export class StudyPage {

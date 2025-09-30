@@ -102,11 +102,7 @@ public isLoggedIn$ = this.loggedIn$.asObservable();
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiry');
     this.loggedIn$.next(false); // ❌ Loginstatus entfernen
-  
-    this.loginGuest().subscribe({
-      next: () => this.router.navigateByUrl('/'),
-      error: () => this.router.navigateByUrl('/'),
-    });
+    this.router.navigateByUrl('/')
   }
   
 

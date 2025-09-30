@@ -86,17 +86,16 @@ export class ApiService {
   // -------- STUDY --------
   nextCard(stackId: string) {
     return this.http.get<Card | null>(
-      `${environment.apiBase}/study/next`,
+      `${environment.apiBase}/stacks/${stackId}/study/next`,
       {
-        params: { stackId },
         headers: this.getHeaders(),
       }
     );
   }
 
-  review(cardId: string, rating: 'again' | 'hard' | 'good' | 'easy') {
+  review(stackId: string, cardId: string, rating: 'again' | 'hard' | 'good' | 'easy') {
     return this.http.post<Card>(
-      `${environment.apiBase}/study/review`,
+      `${environment.apiBase}/stacks/${stackId}/study/review`,
       { cardId, rating },
       { headers: this.getHeaders() }
     );

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { Stack } from '../models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ import { Stack } from '../models';
     <div class="container">
       <h2 class="page-title">Stacks</h2>
 
-      <form (submit)="create($event)" class="add-form">
+      <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
         <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
 
         <label class="form-checkbox">
@@ -27,13 +28,14 @@ import { Stack } from '../models';
         <li *ngFor="let s of stacks()" class="stack-item">
           <span class="stack-name">
             {{ s.name }}
-            <span *ngIf="s.is_public">🌍</span>
-            <span *ngIf="!s.is_public">🔒</span>
+            <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{s.owner_name}}</span>
+            <span *ngIf="s.is_public && isOwner(s)">🌍</span>
+            <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
           </span>
           <div class="stack-actions">
-            <a [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
+            <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
             <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">Study</a>
-            <button (click)="remove(s)" class="btn btn-danger">Delete</button>
+            <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">Delete</button>
           </div>
         </li>
       </ul>
@@ -156,16 +158,32 @@ import { Stack } from '../models';
 })
 export class StacksPage {
   private api = inject(ApiService);
+  private auth = inject(AuthService);
   stacks = signal<Stack[]>([]);
   name = '';
   isPublic = false;
+  userId = this.auth.getUserId();
 
   constructor() {
     this.load();
   }
 
+  isLoggedIn(): boolean {
+    return !!this.userId;
+  }
+
+  isOwner(stack: Stack): boolean {
+    return stack.user_id === this.userId;
+  }
+
   load() {
-    this.api.stacks().subscribe(s => this.stacks.set(s));
+    this.api.stacks().subscribe(s => {
+      if (this.isLoggedIn()) {
+        this.stacks.set(s);
+      } else {
+        this.stacks.set(s.filter(stack => stack.is_public));
+      }
+    });
   }
 
   create(e: Event) {

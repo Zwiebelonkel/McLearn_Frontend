@@ -4,7 +4,7 @@
 
     <nav class="nav">
       <a class="nav-link btn btn-primary" routerLink="/">Home</a>
-      <a class="nav-link btn btn-primary" routerLink="/help">Help</a>
+      <a class="nav-link btn btn-primary" routerLink="/help">?</a>
 
       <!-- Dynamischer Login / Logout -->
       <ng-container *ngIf="authService.isLoggedIn$ | async; else loginLink">

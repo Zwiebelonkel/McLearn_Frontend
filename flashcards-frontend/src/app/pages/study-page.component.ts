@@ -214,7 +214,7 @@ rate(rating: 'again' | 'hard' | 'good' | 'easy') {
   if (!cardId) return;
 
   this.isTransitioning.set(true);
-  this.api.review(cardId, rating).subscribe((updatedCard) => {
+  this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
     if (rating === 'again') {
       // Gleiche Karte nochmal zeigen → flip zurück auf Vorderseite
       this.current.set(updatedCard);

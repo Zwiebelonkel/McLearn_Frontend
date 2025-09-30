@@ -22,25 +22,25 @@ import { LoaderComponent } from '../pages/loader/loader.component';
         </form>
 
         <div class="filter-controls">
-  <input
-    type="text"
-    [(ngModel)]="search"           <!-- ❌ kein () -->
-    placeholder="🔍 Search stacks..."
-    class="form-input"
-  />
+          <input
+            type="text"
+            [(ngModel)]="search"
+            placeholder="🔍 Search stacks..."
+            class="form-input"
+          />
 
-  <select [(ngModel)]="filter" class="form-input">
-    <option value="all">All</option>
-    <option value="public">🌍 Public only</option>
-    <option value="own">🔒 My stacks</option>
-  </select>
-</div>
+          <select [(ngModel)]="filter" class="form-input">
+            <option value="all">All</option>
+            <option value="public">🌍 Public only</option>
+            <option value="own">🔒 My stacks</option>
+          </select>
+        </div>
 
         <ul class="stack-list">
-          <li *ngFor="let s of filteredStacks()" class="stack-item">
+          <li *ngFor="let s of filteredStacks" class="stack-item">
             <span class="stack-name">
               {{ s.name }}
-              <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{s.owner_name}}</span>
+              <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{ s.owner_name }}</span>
               <span *ngIf="s.is_public && isOwner(s)">🌍</span>
               <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
             </span>
@@ -187,7 +187,7 @@ export class StacksPage {
   userId = this.auth.getUserId();
   loading = signal(false);
 
-  // 🟢 einfache Variablen statt Signals für Filter/Search
+  // ✅ einfache Variablen statt Signals
   search: string = '';
   filter: 'all' | 'public' | 'own' = 'all';
 
@@ -203,7 +203,6 @@ export class StacksPage {
     return stack.user_id === this.userId;
   }
 
-  // jetzt einfach als Getter
   get filteredStacks(): Stack[] {
     return this.stacks().filter(s => {
       const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
@@ -220,7 +219,7 @@ export class StacksPage {
   load() {
     this.loading.set(true);
     this.api.stacks().subscribe(s => {
-      this.stacks.set(this.isLoggedIn() ? s : s.filter(st => st.is_public));
+      this.stacks.set(this.isLoggedIn() ? s : s.filter(stack => stack.is_public));
       this.loading.set(false);
     });
   }
@@ -241,5 +240,4 @@ export class StacksPage {
       this.api.deleteStack(s.id).subscribe(() => this.load());
     }
   }
-}
 }

@@ -208,6 +208,7 @@ import DOMPurify from 'dompurify';
   border-radius: 5px;
   z-index: 10;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* Fü
 }
 
 .box-1 { background-color: #d9534f; } /* Rot – sehr schwer */

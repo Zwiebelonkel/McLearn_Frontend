@@ -27,10 +27,11 @@ import { LoaderComponent } from '../pages/loader/loader.component';
 <input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
     </label>
 
-    <label class="form-checkbox">
-      <input type="checkbox" [(ngModel)]="isPublic" name="isPublicStack" />
-      Öffentlich
-    </label>
+<label class="toggle-switch">
+  <input type="checkbox" [(ngModel)]="isPublic" />
+  <span class="slider"></span>
+  <span class="toggle-label">Öffentlich</span>
+</label>
 
     <button (click)="saveStack()" class="btn btn-secondary">Stack speichern</button>
   </div>
@@ -238,6 +239,54 @@ import { LoaderComponent } from '../pages/loader/loader.component';
 }
 .stack-meta .form-input {
   min-width: 200px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.toggle-switch .slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-switch .toggle-label {
+  font-size: 0.9rem;
 }
   `]
 })

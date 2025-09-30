@@ -111,6 +111,7 @@ import DOMPurify from 'dompurify';
       text-align: center;
       font-size: 1.2rem;
       box-sizing: border-box;
+      border: 5px solid;
     }
 
     .card-front {

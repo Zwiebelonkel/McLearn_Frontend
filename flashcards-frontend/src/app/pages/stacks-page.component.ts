@@ -20,11 +20,6 @@ import { LoaderComponent } from '../pages/loader/loader.component';
         <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
           <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
 
-          <label class="form-checkbox">
-            <input type="checkbox" [(ngModel)]="isPublic" name="isPublic" />
-            Öffentlich
-          </label>
-
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
 

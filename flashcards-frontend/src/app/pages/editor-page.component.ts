@@ -10,11 +10,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService, CreateCardPayload } from '../services/api.service';
 import { Card, Stack } from '../models';
+import { LoaderComponent } from '../pages/loader/loader.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  template: `<div class="container">
+  imports: [CommonModule, FormsModule, RouterLink, LoaderComponent],
+  template: `<app-loader *ngIf="loading()" />
+    <div *ngIf="!loading()" class="container">
   <a routerLink="/" class="back-link">← Back</a>
   <h2 class="page-title">Edit Cards</h2>
 
@@ -85,7 +87,6 @@ import { Card, Stack } from '../models';
     </div>
   </div>
 </div>
-
   `,
   styles: [`
     .container {
@@ -165,7 +166,6 @@ import { Card, Stack } from '../models';
     .btn-secondary {
       background-color: var(--secondary-color);
       color: white;
-      margin-top: 1rem;
     }
 
     .btn-danger {
@@ -250,23 +250,31 @@ export class EditorPage {
   back = '';
   stack = signal<Stack | null>(null); // Signal für Stack
   isPublic = false;
+  loading = signal(false);
 
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
+    this.loading.set(true);
     this.api.getStack(this.stackId).subscribe(s => {
       this.stack.set(s);
       this.isPublic = s.is_public; // Public-Status vorbefüllen
+      this.loading.set(false);
     });
     this.reload();
   }
 
   reload() {
-    this.api.cards(this.stackId).subscribe(cs => this.cards.set(cs));
+    this.loading.set(true);
+    this.api.cards(this.stackId).subscribe(cs => {
+      this.cards.set(cs);
+      this.loading.set(false);
+    });
   }
 
   add(e: Event) {
     e.preventDefault();
+    this.loading.set(true);
     const payload: CreateCardPayload = {
       stack_id: this.stackId,
       front: this.front,
@@ -282,22 +290,26 @@ export class EditorPage {
   saveStack() {
     const s = this.stack();
     if (!s) return;
-  
+
+    this.loading.set(true);
     this.api.updateStack(s.id, s.name, this.isPublic).subscribe(() => {
       alert('Stack gespeichert');
+      this.loading.set(false);
     });
   }
-  
+
 
   del(c: Card) {
     if (confirm('Delete card?')) {
+      this.loading.set(true);
       this.api.deleteCard(c.id).subscribe(() => this.reload());
     }
   }
 
   save(c: Card) {
+    this.loading.set(true);
     this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(() => {
-      // optional: reload oder toast
+      this.loading.set(false);
     });
   }
 

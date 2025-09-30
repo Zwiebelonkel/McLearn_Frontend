@@ -1,3 +1,4 @@
+
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -5,40 +6,44 @@ import { ApiService } from '../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { Stack } from '../models';
 import { AuthService } from '../services/auth.service';
+import { LoaderComponent } from '../pages/loader/loader.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, LoaderComponent],
   template: `
-    <div class="container">
-      <h2 class="page-title">Stacks</h2>
+    <app-loader *ngIf="loading()" />
+    <div *ngIf="!loading()">
+      <div class="container">
+        <h2 class="page-title">Stacks</h2>
 
-      <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
-        <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
+        <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
+          <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
 
-        <label class="form-checkbox">
-          <input type="checkbox" [(ngModel)]="isPublic" name="isPublic" />
-          Öffentlich
-        </label>
+          <label class="form-checkbox">
+            <input type="checkbox" [(ngModel)]="isPublic" name="isPublic" />
+            Öffentlich
+          </label>
 
-        <button type="submit" class="btn btn-primary">Create</button>
-      </form>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
 
-      <ul class="stack-list">
-        <li *ngFor="let s of stacks()" class="stack-item">
-          <span class="stack-name">
-            {{ s.name }}
-            <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{s.owner_name}}</span>
-            <span *ngIf="s.is_public && isOwner(s)">🌍</span>
-            <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
-          </span>
-          <div class="stack-actions">
-            <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
-            <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">Study</a>
-            <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">Delete</button>
-          </div>
-        </li>
-      </ul>
+        <ul class="stack-list">
+          <li *ngFor="let s of stacks()" class="stack-item">
+            <span class="stack-name">
+              {{ s.name }}
+              <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{s.owner_name}}</span>
+              <span *ngIf="s.is_public && isOwner(s)">🌍</span>
+              <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
+            </span>
+            <div class="stack-actions">
+              <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
+              <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">Study</a>
+              <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">Delete</button>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   `,
   styles: [`
@@ -166,6 +171,7 @@ export class StacksPage {
   name = '';
   isPublic = false;
   userId = this.auth.getUserId();
+  loading = signal(false);
 
   constructor() {
     this.load();
@@ -180,17 +186,20 @@ export class StacksPage {
   }
 
   load() {
+    this.loading.set(true);
     this.api.stacks().subscribe(s => {
       if (this.isLoggedIn()) {
         this.stacks.set(s);
       } else {
         this.stacks.set(s.filter(stack => stack.is_public));
       }
+      this.loading.set(false);
     });
   }
 
   create(e: Event) {
     e.preventDefault();
+    this.loading.set(true);
     this.api.createStack(this.name, this.isPublic).subscribe(() => {
       this.name = '';
       this.isPublic = false;
@@ -200,6 +209,7 @@ export class StacksPage {
 
   remove(s: Stack) {
     if (confirm('Delete stack?')) {
+      this.loading.set(true);
       this.api.deleteStack(s.id).subscribe(() => this.load());
     }
   }

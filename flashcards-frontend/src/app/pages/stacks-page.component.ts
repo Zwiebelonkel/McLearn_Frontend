@@ -22,20 +22,19 @@ import { LoaderComponent } from '../pages/loader/loader.component';
         </form>
 
         <div class="filter-controls">
-          <input
-            type="text"
-            [(ngModel)]="search()"
-            (ngModelChange)="search.set($event)"
-            placeholder="🔍 Search stacks..."
-            class="form-input"
-          />
+  <input
+    type="text"
+    [(ngModel)]="search"           <!-- ❌ kein () -->
+    placeholder="🔍 Search stacks..."
+    class="form-input"
+  />
 
-          <select [(ngModel)]="filter()" (ngModelChange)="filter.set($event)" class="form-input">
-            <option value="all">All</option>
-            <option value="public">🌍 Public only</option>
-            <option value="own">🔒 My stacks</option>
-          </select>
-        </div>
+  <select [(ngModel)]="filter" class="form-input">
+    <option value="all">All</option>
+    <option value="public">🌍 Public only</option>
+    <option value="own">🔒 My stacks</option>
+  </select>
+</div>
 
         <ul class="stack-list">
           <li *ngFor="let s of filteredStacks()" class="stack-item">
@@ -181,13 +180,16 @@ import { LoaderComponent } from '../pages/loader/loader.component';
 export class StacksPage {
   private api = inject(ApiService);
   private auth = inject(AuthService);
+
   stacks = signal<Stack[]>([]);
   name = '';
   isPublic = false;
   userId = this.auth.getUserId();
   loading = signal(false);
-  search = signal('');
-  filter = signal<'all' | 'public' | 'own'>('all');
+
+  // 🟢 einfache Variablen statt Signals für Filter/Search
+  search: string = '';
+  filter: 'all' | 'public' | 'own' = 'all';
 
   constructor() {
     this.load();
@@ -201,12 +203,13 @@ export class StacksPage {
     return stack.user_id === this.userId;
   }
 
+  // jetzt einfach als Getter
   get filteredStacks(): Stack[] {
     return this.stacks().filter(s => {
-      const matchesSearch = s.name.toLowerCase().includes(this.search().toLowerCase());
+      const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
       const isMine = s.user_id === this.userId;
 
-      switch (this.filter()) {
+      switch (this.filter) {
         case 'public': return s.is_public && matchesSearch;
         case 'own': return isMine && matchesSearch;
         case 'all': default: return matchesSearch;
@@ -217,11 +220,7 @@ export class StacksPage {
   load() {
     this.loading.set(true);
     this.api.stacks().subscribe(s => {
-      if (this.isLoggedIn()) {
-        this.stacks.set(s);
-      } else {
-        this.stacks.set(s.filter(stack => stack.is_public));
-      }
+      this.stacks.set(this.isLoggedIn() ? s : s.filter(st => st.is_public));
       this.loading.set(false);
     });
   }
@@ -242,4 +241,5 @@ export class StacksPage {
       this.api.deleteStack(s.id).subscribe(() => this.load());
     }
   }
+}
 }

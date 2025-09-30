@@ -24,6 +24,9 @@ import DOMPurify from 'dompurify';
             <div class="card-inner">
               <!-- Vorderseite: Frage fett & zentriert -->
               <div class="card-front">
+                  <span class="difficulty-label box-{{ current()?.box }}">
+    {{ getBoxLabel(current()?.box) }}
+  </span>
                 <p>{{ current()?.front }}</p>
               </div>
               <!-- Rückseite: Markdown gerendert -->
@@ -192,6 +195,28 @@ import DOMPurify from 'dompurify';
     .card-back ul { padding-left: 1.5rem; margin-top: 0.5rem; }
     .card-back li { margin-bottom: 0.3rem; }
     .card-back p { margin: 0.5rem 0; }
+
+    .difficulty-label {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 5px;
+  z-index: 10;
+  backface-visibility: hidden;
+}
+
+.box-1 { background-color: #d9534f; } /* Rot – sehr schwer */
+.box-2 { background-color: #f0ad4e; } /* Orange */
+.box-3 { background-color: #5bc0de; } /* Hellblau */
+.box-4 { background-color: #5cb85c; } /* Grün */
+.box-5 { background-color: #428bca; } /* Blau – sehr einfach */
+
+
   `]
 })
 export class StudyPage {
@@ -255,5 +280,17 @@ export class StudyPage {
       }
     });
   }
+
+  getBoxLabel(box: number | undefined | null): string {
+    switch (box) {
+      case 1: return 'Very hard';
+      case 2: return 'Hard';
+      case 3: return 'Normal';
+      case 4: return 'Easy';
+      case 5: return 'Very easy';
+      default: return '';
+    }
+  }
+  
   
 }

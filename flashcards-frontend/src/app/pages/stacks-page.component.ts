@@ -1,4 +1,3 @@
-
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -19,12 +18,27 @@ import { LoaderComponent } from '../pages/loader/loader.component';
 
         <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
           <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
-
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
 
+        <div class="filter-controls">
+          <input
+            type="text"
+            [(ngModel)]="search()"
+            (ngModelChange)="search.set($event)"
+            placeholder="🔍 Search stacks..."
+            class="form-input"
+          />
+
+          <select [(ngModel)]="filter()" (ngModelChange)="filter.set($event)" class="form-input">
+            <option value="all">All</option>
+            <option value="public">🌍 Public only</option>
+            <option value="own">🔒 My stacks</option>
+          </select>
+        </div>
+
         <ul class="stack-list">
-          <li *ngFor="let s of stacks()" class="stack-item">
+          <li *ngFor="let s of filteredStacks()" class="stack-item">
             <span class="stack-name">
               {{ s.name }}
               <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{s.owner_name}}</span>
@@ -69,11 +83,16 @@ import { LoaderComponent } from '../pages/loader/loader.component';
       border-radius: 4px;
     }
 
-    .form-checkbox {
+    .filter-controls {
       display: flex;
-      align-items: center;
-      font-size: 0.9rem;
-      gap: 0.3rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-controls .form-input {
+      flex: 1;
+      min-width: 200px;
     }
 
     .btn {
@@ -167,6 +186,8 @@ export class StacksPage {
   isPublic = false;
   userId = this.auth.getUserId();
   loading = signal(false);
+  search = signal('');
+  filter = signal<'all' | 'public' | 'own'>('all');
 
   constructor() {
     this.load();
@@ -178,6 +199,19 @@ export class StacksPage {
 
   isOwner(stack: Stack): boolean {
     return stack.user_id === this.userId;
+  }
+
+  get filteredStacks(): Stack[] {
+    return this.stacks().filter(s => {
+      const matchesSearch = s.name.toLowerCase().includes(this.search().toLowerCase());
+      const isMine = s.user_id === this.userId;
+
+      switch (this.filter()) {
+        case 'public': return s.is_public && matchesSearch;
+        case 'own': return isMine && matchesSearch;
+        case 'all': default: return matchesSearch;
+      }
+    });
   }
 
   load() {

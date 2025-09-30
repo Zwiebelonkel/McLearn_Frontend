@@ -3,7 +3,7 @@ name: Deploy to Firebase Hosting on Push
 on:
   push:
     branches:
-      - main  # oder dein Branch-Name, z. B. 3D-packOpening
+      - main  # oder z. B. 3D-packOpening
 
 jobs:
   build_and_deploy:
@@ -34,5 +34,6 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MCLEARN }}
-          channelId: live
           projectId: mclearn-d113a
+          channelId: live
+          entryPoint: flashcards-frontend  # 👉 hier wird der Pfad zur firebase.json gesetzt

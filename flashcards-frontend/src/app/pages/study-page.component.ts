@@ -5,7 +5,6 @@ import { ApiService } from '../services/api.service';
 import { Card, Stack } from '../models';
 import { AuthService } from '../services/auth.service';
 
-// Markdown + Sanitize nur für Rückseite
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -22,14 +21,12 @@ import DOMPurify from 'dompurify';
         <div class="card-wrapper">
           <div class="card" [class.flipped]="showBack()" (click)="flip()">
             <div class="card-inner">
-              <!-- Vorderseite: Frage fett & zentriert -->
               <div class="card-front">
-                  <span class="difficulty-label box-{{ current()?.box }}">
-    {{ getBoxLabel(current()?.box) }}
-  </span>
+                <span class="difficulty-label box-{{ current()?.box }}">
+                  {{ getBoxLabel(current()?.box) }}
+                </span>
                 <p>{{ current()?.front }}</p>
               </div>
-              <!-- Rückseite: Markdown gerendert -->
               <div class="card-back">
                 <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
               </div>
@@ -85,7 +82,7 @@ import DOMPurify from 'dompurify';
       width: 100%;
       height: 300px;
       position: relative;
-      transform-style: preserve-3d;
+      perspective: 1000px;
     }
 
     .card-inner {
@@ -190,38 +187,30 @@ import DOMPurify from 'dompurify';
       color: white;
     }
 
-    /* Markdown Styling für Rückseite */
     .card-back h1 { font-size: 1.5rem; margin-top: 0; }
     .card-back ul { padding-left: 1.5rem; margin-top: 0.5rem; }
     .card-back li { margin-bottom: 0.3rem; }
     .card-back p { margin: 0.5rem 0; }
 
     .difficulty-label {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 5px;
-  z-index: 1;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      border-radius: 5px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
 
-.box-1 { background-color: #d9534f; } /* Rot – sehr schwer */
-.box-2 { background-color: #f0ad4e; } /* Orange */
-.box-3 { background-color: #5bc0de; } /* Hellblau */
-.box-4 { background-color: #5cb85c; } /* Grün */
-.box-5 { background-color: #428bca; } /* Blau – sehr einfach */
-
-.card-front *,
-.card-back * {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
+    .box-1 { background-color: #d9534f; }
+    .box-2 { background-color: #f0ad4e; }
+    .box-3 { background-color: #5bc0de; }
+    .box-4 { background-color: #5cb85c; }
+    .box-5 { background-color: #428bca; }
   `]
 })
 export class StudyPage {
@@ -251,7 +240,6 @@ export class StudyPage {
   loadCard() {
     this.isTransitioning.set(true);
     this.showBack.set(false);
-  
     setTimeout(() => {
       this.api.nextCard(this.stackId).subscribe(card => {
         this.current.set(card);
@@ -259,7 +247,6 @@ export class StudyPage {
       });
     }, 200);
   }
-  
 
   flip() {
     if (this.isTransitioning()) return;
@@ -270,16 +257,13 @@ export class StudyPage {
     if (this.isTransitioning()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
-  
     this.isTransitioning.set(true);
     this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
       if (rating === 'again') {
-        // Gleiche Karte nochmal zeigen → flip zurück auf Vorderseite
         this.current.set(updatedCard);
         this.showBack.set(false);
         this.isTransitioning.set(false);
       } else {
-        // Neue Karte laden (Timeout ist jetzt in loadCard() enthalten)
         this.showBack.set(false);
         this.loadCard();
       }
@@ -296,6 +280,4 @@ export class StudyPage {
       default: return '';
     }
   }
-  
-  
 }

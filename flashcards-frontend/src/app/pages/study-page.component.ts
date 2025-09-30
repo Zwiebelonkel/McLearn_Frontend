@@ -206,7 +206,7 @@ import DOMPurify from 'dompurify';
   font-size: 0.8rem;
   font-weight: bold;
   border-radius: 5px;
-  z-index: 10;
+  z-index: 1;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }

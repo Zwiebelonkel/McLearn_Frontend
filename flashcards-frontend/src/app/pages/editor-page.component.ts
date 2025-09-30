@@ -37,43 +37,44 @@ import { LoaderComponent } from '../pages/loader/loader.component';
   </div>
 
   <!-- Karten-Hinzufügen -->
-  <form (submit)="add($event)" class="add-form">
-    <input
-      type="text"
-      [(ngModel)]="front"
-      name="front"
-      placeholder="Question"
-      required
-      class="form-input" />
+<form (submit)="add($event)" class="add-form">
+  <input
+    type="text"
+    [(ngModel)]="front"
+    name="front"
+    placeholder="Question"
+    required
+    class="form-input" />
 
-    <!-- Markdown Toolbar (nur für Rückseite) -->
-    <div class="markdown-toolbar">
-      <button type="button" (click)="insert('bold')"><b>B</b></button>
-      <button type="button" (click)="insert('italic')"><i>I</i></button>
-      <button type="button" (click)="insert('code')">Code</button>
-      <button type="button" (click)="insert('ul')">Liste</button>
-    </div>
+  <!-- Markdown Toolbar (nur für Rückseite) -->
+  <div class="markdown-toolbar">
+    <button type="button" (click)="insert('bold')"><b>B</b></button>
+    <button type="button" (click)="insert('italic')"><i>I</i></button>
+    <button type="button" (click)="insert('code')">Code</button>
+    <button type="button" (click)="insert('ul')">Liste</button>
+  </div>
 
-    <textarea
-      #backArea
-      [(ngModel)]="back"
-      name="back"
-      placeholder="Answer"
-      required
-      class="form-textarea"
-      rows="4">
-    </textarea>
+  <textarea
+    #backArea
+    [(ngModel)]="back"
+    name="back"
+    placeholder="Answer"
+    required
+    class="form-textarea"
+    rows="4">
+  </textarea>
 
+  <!-- Buttons nebeneinander -->
+  <div class="form-actions">
     <button type="submit" class="btn btn-primary">Add</button>
-  </form>
 
-<!-- CSV-Import -->
-<div class="csv-import">
-  <label class="btn btn-secondary">
-    CSV hochladen
-    <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
-  </label>
-</div>
+    <!-- CSV-Import -->
+    <label class="btn btn-success csv-upload">
+      CSV hochladen
+      <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
+    </label>
+  </div>
+</form>
 
   <!-- Karten-Liste -->
   <div class="card-list">

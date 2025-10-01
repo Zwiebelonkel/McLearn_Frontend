@@ -22,7 +22,7 @@
             />
           </div>
         
-          <select [(ngModel)]="filter" class="form-input select-input">
+          <select *ngIf="isLoggedIn()" [(ngModel)]="filter" class="form-input select-input">
             <option value="all">All</option>
             <option value="public">🌍 Public only</option>
             <option value="own">🔒 My stacks</option>

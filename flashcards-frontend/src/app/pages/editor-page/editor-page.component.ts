@@ -124,50 +124,93 @@ import {
       });
     }
   
-  importCSV(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
-  
-    this.loading.set(true);
-  
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = reader.result as string;
-  
-      // 1. Zeilen splitten
-      const lines = text.trim().split('\n');
-  
-      // 2. Header entfernen, falls vorhanden
-      const startIndex = lines[0].toLowerCase().includes('front') ? 1 : 0;
-  
-      const cardsToCreate = lines.slice(startIndex).map(line => {
-        const [front, back] = line.split(',').map(x => x.trim().replace(/^"|"$/g, ''));
-        return { front, back };
-      });
-  
-      // 3. Alle Karten nacheinander erstellen
-      let completed = 0;
-      for (const card of cardsToCreate) {
-        this.api.createCard({
-          stack_id: this.stackId,
-          front: card.front,
-          back: card.back
-        }).subscribe({
-          next: () => {
-            completed++;
-            if (completed === cardsToCreate.length) this.reload();
-          },
-          error: (err) => {
-            console.error('Fehler beim Import:', err);
-            this.loading.set(false);
+    importCSV(event: Event) {
+      const input = event.target as HTMLInputElement;
+      const file = input.files?.[0];
+      if (!file) return;
+    
+      this.loading.set(true);
+    
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result as string;
+    
+        const lines = text.trim().split('\n');
+    
+        // Header prüfen und überspringen
+        const startIndex = lines[0].toLowerCase().includes('front') ? 1 : 0;
+    
+        // Karten zum Erstellen vorbereiten
+        const cardsToCreate: { front: string; back: string }[] = [];
+    
+        for (let i = startIndex; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue; // leere Zeilen überspringen
+    
+          // Nur am ersten Komma splitten
+          const firstCommaIndex = line.indexOf(',');
+          if (firstCommaIndex === -1) {
+            console.warn(`Ungültige Zeile ohne Komma (Überspringen): "${line}"`);
+            continue;
           }
-        });
-      }
-    };
-  
-    reader.readAsText(file);
-  }
+    
+          let front = line.slice(0, firstCommaIndex).trim();
+          let back = line.slice(firstCommaIndex + 1).trim();
+    
+          // Anführungszeichen am Anfang und Ende entfernen
+          if (front.startsWith('"') && front.endsWith('"')) {
+            front = front.slice(1, -1);
+          }
+          if (back.startsWith('"') && back.endsWith('"')) {
+            back = back.slice(1, -1);
+          }
+    
+          // Noch vorhandene Anführungszeichen in Mitte ersetzen (optional)
+          front = front.replace(/""/g, '"');
+          back = back.replace(/""/g, '"');
+    
+          if (!front || !back) {
+            console.warn(`Leeres front oder back (Überspringen): Front="${front}" Back="${back}"`);
+            continue;
+          }
+    
+          cardsToCreate.push({ front, back });
+        }
+    
+        if (cardsToCreate.length === 0) {
+          this.loading.set(false);
+          alert('Keine gültigen Karten zum Import gefunden.');
+          return;
+        }
+    
+        let completed = 0;
+        for (const card of cardsToCreate) {
+          this.api.createCard({
+            stack_id: this.stackId,
+            front: card.front,
+            back: card.back
+          }).subscribe({
+            next: () => {
+              completed++;
+              if (completed === cardsToCreate.length) {
+                this.reload();
+                this.loading.set(false);
+                alert(`${completed} Karten erfolgreich importiert.`);
+              }
+            },
+            error: (err) => {
+              console.error('Fehler beim Import:', err);
+              this.loading.set(false);
+              alert('Fehler beim Import. Details siehe Konsole.');
+            }
+          });
+        }
+      };
+    
+      reader.readAsText(file);
+    }
+    
+    
 
   get filteredCards(): Card[] {
     const cardsArray = this.cards();

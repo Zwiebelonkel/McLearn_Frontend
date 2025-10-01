@@ -1,0 +1,82 @@
+<app-loader *ngIf="loading()" />
+    <div *ngIf="!loading()" class="container">
+  <a routerLink="/" class="back-link">← Back</a>
+  <h2 class="page-title">Edit Cards</h2>
+
+  <!-- Stack-Einstellungen -->
+  <div class="stack-meta">
+    <label>
+      Name:
+<input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
+    </label>
+
+<label class="toggle-switch">
+  <input type="checkbox" [(ngModel)]="isPublic" />
+  <span class="slider"></span>
+  <span class="toggle-label">Öffentlich</span>
+</label>
+
+    <button (click)="saveStack()" class="btn btn-secondary">Stack speichern</button>
+  </div>
+
+  <!-- Karten-Hinzufügen -->
+<form (submit)="add($event)" class="add-form">
+  <input
+    type="text"
+    [(ngModel)]="front"
+    name="front"
+    placeholder="Question"
+    required
+    class="form-input" />
+
+  <!-- Markdown Toolbar (nur für Rückseite) -->
+  <div class="markdown-toolbar">
+    <button type="button" (click)="insert('bold')"><b>B</b></button>
+    <button type="button" (click)="insert('italic')"><i>I</i></button>
+    <button type="button" (click)="insert('code')">Code</button>
+    <button type="button" (click)="insert('ul')">Liste</button>
+  </div>
+
+  <textarea
+    #backArea
+    [(ngModel)]="back"
+    name="back"
+    placeholder="Answer"
+    required
+    class="form-textarea"
+    rows="4">
+  </textarea>
+
+  <!-- Buttons nebeneinander -->
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Add</button>
+
+    <!-- CSV-Import -->
+    <label class="btn btn-success csv-upload">
+      CSV hochladen
+      <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
+    </label>
+  </div>
+</form>
+
+  <!-- Karten-Liste -->
+  <div class="card-list">
+    <div *ngFor="let c of cards()" class="card">
+      <div class="card-header">
+        <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
+      </div>
+      <div class="card-body">
+        <label>Front:
+          <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
+        </label>
+        <label>Back:
+          <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
+        </label>
+      </div>
+      <div class="card-footer">
+        <button (click)="save(c)" class="btn btn-secondary">Save</button>
+        <button (click)="del(c)" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<app-loader *ngIf="loading()" />
+    <div *ngIf="!loading()">
+      <div class="container">
+        <h2 class="page-title">Stacks</h2>
+
+        <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
+          <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+
+        <div class="filter-controls">
+          <input
+            type="text"
+            [(ngModel)]="search"
+            placeholder="🔍 Search stacks..."
+            class="form-input"
+          />
+
+          <select [(ngModel)]="filter" class="form-input">
+            <option value="all">All</option>
+            <option value="public">🌍 Public only</option>
+            <option value="own">🔒 My stacks</option>
+          </select>
+        </div>
+
+        <ul class="stack-list">
+          <li *ngFor="let s of filteredStacks" class="stack-item">
+            <span class="stack-name">
+              {{ s.name }}
+              <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 by {{ s.owner_name }}</span>
+              <span *ngIf="s.is_public && isOwner(s)">🌍</span>
+              <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
+            </span>
+            <div class="stack-actions">
+              <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
+              <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">Study</a>
+              <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">Delete</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>

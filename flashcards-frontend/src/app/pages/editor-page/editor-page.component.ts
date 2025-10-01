@@ -26,6 +26,7 @@ import {
     front = '';
     back = '';
     stack = signal<Stack | null>(null); // Signal für Stack
+    search: string = '';
     isPublic = false;
     loading = signal(false);
   
@@ -167,5 +168,15 @@ import {
   
     reader.readAsText(file);
   }
+
+  get filteredCards(): Card[] {
+    const cardsArray = this.cards();
+    return cardsArray.filter(c => {
+      const searchLower = this.search.toLowerCase();
+      return c.front.toLowerCase().includes(searchLower);
+    });
   }
   
+  
+  
+}

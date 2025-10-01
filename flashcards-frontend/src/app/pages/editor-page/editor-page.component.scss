@@ -196,3 +196,37 @@ transform: translateX(20px);
 .toggle-switch .toggle-label {
 font-size: 0.9rem;
 }
+
+.search-wrapper {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem; /* rechts und links Platz fürs Icon */
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 30px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 6px var(--primary-color);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #888;
+  pointer-events: none;
+  user-select: none;
+}

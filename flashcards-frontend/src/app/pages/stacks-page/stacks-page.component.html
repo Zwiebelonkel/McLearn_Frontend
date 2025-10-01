@@ -5,23 +5,30 @@
 
         <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
           <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
-          <button type="submit" class="btn btn-primary">Create</button>
+          <button type="submit" class="btn btn-primary">Erstellen</button>
         </form>
-
         <div class="filter-controls">
-          <input
-            type="text"
-            [(ngModel)]="search"
-            placeholder="🔍 Search stacks..."
-            class="form-input"
-          />
-
-          <select [(ngModel)]="filter" class="form-input">
+          <div class="search-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="search"
+              placeholder="Search stacks..."
+              class="form-input search-input"
+            />
+          </div>
+        
+          <select [(ngModel)]="filter" class="form-input select-input">
             <option value="all">All</option>
             <option value="public">🌍 Public only</option>
             <option value="own">🔒 My stacks</option>
           </select>
         </div>
+        
 
         <ul class="stack-list">
           <li *ngFor="let s of filteredStacks" class="stack-item">
@@ -32,6 +39,8 @@
               <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
             </span>
             <div class="stack-actions">
+              <span class="card-amount">{{ s.card_amount }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d5d5d5"><path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/></svg>              
               <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">Edit</a>
               <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">Study</a>
               <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">Delete</button>

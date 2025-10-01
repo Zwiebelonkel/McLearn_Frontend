@@ -1,12 +1,17 @@
 <app-loader *ngIf="loading()" />
     <div *ngIf="!loading()">
       <div class="container">
-        <h2 class="page-title">Stacks</h2>
+        <h2 *ngIf="isLoggedIn()" class="page-title">New</h2>
 
         <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
           <input [(ngModel)]="name" name="name" placeholder="New Stack" required class="form-input" />
-          <button type="submit" class="btn btn-primary">Erstellen</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!name || name.trim() === ''">
+            Erstellen
+          </button>
         </form>
+
+        <h2 class="page-title">Stacks</h2>
+
         <div class="filter-controls">
           <div class="search-wrapper">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"

@@ -23,6 +23,7 @@
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    outline: none;
   }
 
   .filter-controls {
@@ -47,10 +48,7 @@
     text-align: center;
   }
 
-  .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-  }
+
 
   .btn-secondary {
     background-color: var(--secondary-color);
@@ -149,7 +147,7 @@
     outline: none;
   }
   
-  .search-input:focus {
+  .search-input:focus, .form-input:focus {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
   }
   

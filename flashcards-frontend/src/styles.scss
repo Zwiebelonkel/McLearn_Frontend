@@ -2,6 +2,7 @@
 
 :root {
   --primary-color: #ff6b6b;
+  --disabled: #999999;
   --primary-color-hover: #e05555;
   --secondary-color: #51c05a;
   --success-color: #51e2f5;
@@ -128,12 +129,18 @@ h6 { font-size: 1rem; }
   border-color: var(--primary-color);
 }
 
-.btn-primary:hover {
-  background-color: #ff4747;
-  border-color: #ff4747;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+.btn-primary:disabled{
+  background-color: var(--disabled);
 }
+
+.btn-primary:disabled:hover {
+  background-color: var(--disabled);
+  border-color: var(--disabled);
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
 
 .form-control {
   display: block;

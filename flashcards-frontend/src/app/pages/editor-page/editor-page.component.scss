@@ -229,3 +229,23 @@ font-size: 0.9rem;
   pointer-events: none;
   user-select: none;
 }
+
+.csv-upload {
+  margin-left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--secondary-color); /* klassisches Bootstrap "success"-Grün */
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.csv-upload svg {
+  fill: white;
+}
+

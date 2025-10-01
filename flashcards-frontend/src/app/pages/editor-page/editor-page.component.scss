@@ -215,8 +215,7 @@ font-size: 0.9rem;
 }
 
 .search-input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 6px var(--primary-color);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
 }
 
 .search-icon {

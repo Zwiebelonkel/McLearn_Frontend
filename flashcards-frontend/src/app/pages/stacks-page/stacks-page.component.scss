@@ -74,6 +74,7 @@
   }
 
   .stack-item {
+    transition: 0.2s;;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,6 +82,12 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 1rem;
+  }
+
+  .stack-item:hover{
+    transition: 0.22s;;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
 
   .stack-name {

@@ -183,6 +183,8 @@ body.dark-theme .card {
 }
 
 .header {
+  transition: 0.2s;
+  height: 90px;
   position: fixed;
   top: 0;
   left: 0;
@@ -192,6 +194,12 @@ body.dark-theme .card {
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: white;
+}
+
+.header:hover{
+  transition: 0.2s;
+  height: 95px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.253);
 }
 
 .header .container {

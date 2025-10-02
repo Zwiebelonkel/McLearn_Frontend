@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
+
 
 @Component({
   standalone: true,
@@ -17,20 +19,19 @@ export class RegisterComponent {
   username = '';
   password = '';
   error = false;
-  errorMessage = '';
   success = false;
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {}
 
   register() {
     this.isLoading = true;
     this.authService.register(this.username, this.password).subscribe({
       next: () => {
+        this.toastService.show('Register successful', 'success');
         this.success = true;
         this.error = false;
         this.isLoading = false;
-        this.errorMessage = '';
         this.username = '';
         this.password = '';
         setTimeout(() => this.goToLogin(), 1000);
@@ -40,9 +41,11 @@ export class RegisterComponent {
         this.success = false;
         this.error = true;
         if (err.status === 409) {
-          this.errorMessage = 'Username already taken';
+          this.toastService.show('Username already taken', 'error');
+
         } else {
-          this.errorMessage = 'Registration failed';
+          this.toastService.show('Registration failed', 'error');
+
         }
       },
     });

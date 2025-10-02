@@ -20,10 +20,6 @@
     <button class="btn" (click)="register()" [disabled]="!username || !password">
       Registrieren
     </button>
-
-    <div *ngIf="success" class="success-msg">Registrierung erfolgreich 🎉</div>
-    <div *ngIf="error" class="error-msg">{{ errorMessage }}</div>
-
     <p class="small-link">
       Schon registriert?
       <a routerLink="/login">Hier einloggen</a>

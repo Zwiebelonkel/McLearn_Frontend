@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   standalone: true,
@@ -16,26 +17,26 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   username = '';
   password = '';
-  error = false;
   isLoading = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private toastService: ToastService
   ) {
   }
 
   login() {
     this.isLoading = true;
-    this.error = false;
     this.authService.login(this.username, this.password).subscribe({
       next: () => {
         this.isLoading = false;
+        this.toastService.show('Login successful', 'success');
         this.router.navigate(['/']);
       },
       error: (err) => {
         this.isLoading = false;
-        this.error = true;
+        this.toastService.show('Login failed. Please check your credentials.', 'error');
         console.error('Login failed:', err);
       },
     });

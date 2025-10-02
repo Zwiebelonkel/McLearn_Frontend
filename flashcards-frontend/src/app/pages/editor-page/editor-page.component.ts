@@ -11,6 +11,8 @@ import {
   import { ApiService, CreateCardPayload } from '../../services/api.service';
   import { Card, Stack } from '../../models';
   import { LoaderComponent } from '../../pages/loader/loader.component';
+  import { ToastService } from '../../services/toast.service';
+  
   
   @Component({
     standalone: true,
@@ -21,6 +23,8 @@ import {
   export class EditorPage {
     private route = inject(ActivatedRoute);
     private api = inject(ApiService);
+    private toast = inject(ToastService);
+    
     stackId = this.route.snapshot.paramMap.get('id')!;
     cards = signal<Card[]>([]);
     front = '';
@@ -58,38 +62,75 @@ import {
         front: this.front,
         back: this.back
       };
-      this.api.createCard(payload).subscribe(() => {
-        this.front = '';
-        this.back = '';
-        this.reload();
+      this.api.createCard(payload).subscribe({
+        next: () => {
+          this.toast.show('Card added: ' + this.front, 'success');
+          this.front = '';
+          this.back = '';
+          this.reload();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toast.show('Error adding card', 'error');
+          this.loading.set(false);
+        }
       });
     }
+    
   
     saveStack() {
       const s = this.stack();
       if (!s) return;
-  
+    
       this.loading.set(true);
-      this.api.updateStack(s.id, s.name, this.isPublic).subscribe(() => {
-        alert('Stack gespeichert');
-        this.loading.set(false);
+      this.api.updateStack(s.id, s.name, this.isPublic).subscribe({
+        next: () => {
+          this.toast.show('Stack saved', 'success');
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.toast.show('Error saving stack', 'error');
+          this.loading.set(false);
+        }
       });
     }
+    
   
   
     del(c: Card) {
       if (confirm('Delete card?')) {
         this.loading.set(true);
-        this.api.deleteCard(c.id).subscribe(() => this.reload());
+        this.api.deleteCard(c.id).subscribe({
+          next: () => {
+            this.reload();
+            this.toast.show('Card deleted', 'success');
+          },
+          error: (err) => {
+            console.error(err);
+            this.toast.show('Error deleting card', 'error');
+            this.loading.set(false);
+          }
+        });
       }
     }
+    
   
     save(c: Card) {
       this.loading.set(true);
-      this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe(() => {
-        this.loading.set(false);
+      this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.toast.show('Card updated', 'success');
+        },
+        error: (err) => {
+          console.error(err);
+          this.toast.show('Error updating card', 'error');
+          this.loading.set(false);
+        }
       });
     }
+    
   
     insert(type: 'bold' | 'italic' | 'code' | 'ul') {
       const textarea = this.backArea.nativeElement;
@@ -179,7 +220,7 @@ import {
     
         if (cardsToCreate.length === 0) {
           this.loading.set(false);
-          alert('Keine gültigen Karten zum Import gefunden.');
+          this.toast.show('Keine gültigen Karten zum Import gefunden.', 'warning');
           return;
         }
     
@@ -195,13 +236,13 @@ import {
               if (completed === cardsToCreate.length) {
                 this.reload();
                 this.loading.set(false);
-                alert(`${completed} Karten erfolgreich importiert.`);
+                this.toast.show(`${completed} Karten erfolgreich importiert.`, 'success');
               }
             },
             error: (err) => {
               console.error('Fehler beim Import:', err);
               this.loading.set(false);
-              alert('Fehler beim Import. Details siehe Konsole.');
+              this.toast.show('Fehler beim Import. Details siehe Konsole.', 'error');
             }
           });
         }

@@ -18,7 +18,7 @@ export class AppComponent {
   router = inject(Router);
   translate = inject(TranslateService);
 
-  isLoggedIn$ = computed(() => this.authService.isLoggedIn());
+  isLoggedIn$ = this.authService.isLoggedIn$;
   username$ = computed(() => this.authService.getUsername());
 
   constructor() {

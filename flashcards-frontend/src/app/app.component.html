@@ -7,7 +7,7 @@
       <nav class="nav">
         <a class="nav-link btn btn-primary" routerLink="/help">{{ 'help' | translate }}</a>
 
-        <ng-container *ngIf="isLoggedIn$(); else loginLink">
+        <ng-container *ngIf="isLoggedIn$ | async; else loginLink">
           <a
             class="nav-link btn btn-primary"
             href="#"
@@ -18,6 +18,7 @@
         <ng-template #loginLink>
           <a class="nav-link btn btn-primary" routerLink="/login">{{ 'login' | translate }}</a>
         </ng-template>
+        
       </nav>
 
       <div class="theme-switcher">

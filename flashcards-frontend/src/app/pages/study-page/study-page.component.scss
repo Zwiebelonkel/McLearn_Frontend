@@ -72,10 +72,17 @@
 
 .card-front {
   font-weight: bold;
+  flex-direction: column;
 }
 
 .card-front p {
   margin: 0;
+}
+
+.card-image {
+  max-width: 100%;
+  max-height: 150px;
+  margin-bottom: 1rem;
 }
 
 .card-back {

@@ -23,6 +23,7 @@
             <span class="difficulty-label box-{{ current()?.box }}">
               {{ getBoxLabel(current()?.box) }}
             </span>
+            <img *ngIf="current()?.front_image" [src]="current()?.front_image" alt="Card image" class="card-image">
             <p>{{ current()?.front }}</p>
           </div>
           <div class="card-back">

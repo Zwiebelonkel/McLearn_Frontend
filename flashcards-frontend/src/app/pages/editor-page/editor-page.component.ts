@@ -3,7 +3,8 @@ import {
     inject,
     signal,
     ViewChild,
-    ElementRef
+    ElementRef,
+    NgZone
   } from '@angular/core';
   import { ActivatedRoute, RouterLink } from '@angular/router';
   import { CommonModule } from '@angular/common';
@@ -12,8 +13,10 @@ import {
   import { Card, Stack } from '../../models';
   import { LoaderComponent } from '../../pages/loader/loader.component';
   import { ToastService } from '../../services/toast.service';
-  
-  
+  import { environment } from '../../../environments/environments';
+
+  declare var cloudinary: any;
+
   @Component({
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, LoaderComponent],
@@ -24,11 +27,13 @@ import {
     private route = inject(ActivatedRoute);
     private api = inject(ApiService);
     private toast = inject(ToastService);
+    private zone = inject(NgZone);
     
     stackId = this.route.snapshot.paramMap.get('id')!;
     cards = signal<Card[]>([]);
     front = '';
     back = '';
+    frontImage = '';
     stack = signal<Stack | null>(null); // Signal für Stack
     search: string = '';
     isPublic = false;
@@ -53,6 +58,51 @@ import {
         this.loading.set(false);
       });
     }
+
+    openImageUploader() {
+      if (typeof cloudinary === 'undefined') {
+        this.toast.show('Error: Cloudinary script not loaded. Please try again later.', 'error');
+        return;
+      }
+      const widget = cloudinary.createUploadWidget({
+        cloudName: environment.cloudinary.cloudName,
+        uploadPreset: environment.cloudinary.uploadPreset
+      }, (error: any, result: any) => {
+        if (!error && result && result.event === 'success') {
+          this.zone.run(() => {
+            this.frontImage = result.info.secure_url;
+          });
+        }
+      });
+      widget.open();
+    }
+
+    removeImage() {
+      this.frontImage = '';
+    }
+
+    openCardImageUploader(card: Card) {
+      if (typeof cloudinary === 'undefined') {
+        this.toast.show('Error: Cloudinary script not loaded. Please try again later.', 'error');
+        return;
+      }
+      const widget = cloudinary.createUploadWidget({
+        cloudName: environment.cloudinary.cloudName,
+        uploadPreset: environment.cloudinary.uploadPreset
+      }, (error: any, result: any) => {
+        if (!error && result && result.event === 'success') {
+          this.zone.run(() => {
+            card.front_image = result.info.secure_url;
+          });
+        }
+      });
+      widget.open();
+    }
+
+    removeCardImage(card: Card) {
+      card.front_image = '';
+      this.save(card);
+    }
   
     add(e: Event) {
       e.preventDefault();
@@ -60,13 +110,15 @@ import {
       const payload: CreateCardPayload = {
         stack_id: this.stackId,
         front: this.front,
-        back: this.back
+        back: this.back,
+        front_image: this.frontImage
       };
       this.api.createCard(payload).subscribe({
         next: () => {
           this.toast.show('Card added: ' + this.front, 'success');
           this.front = '';
           this.back = '';
+          this.frontImage = '';
           this.reload();
         },
         error: (err) => {
@@ -118,7 +170,7 @@ import {
   
     save(c: Card) {
       this.loading.set(true);
-      this.api.updateCard(c.id, { front: c.front, back: c.back }).subscribe({
+      this.api.updateCard(c.id, { front: c.front, back: c.back, front_image: c.front_image }).subscribe({
         next: () => {
           this.loading.set(false);
           this.toast.show('Card updated', 'success');

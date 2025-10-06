@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { Card, Stack } from '../models';
 
-export type CreateCardPayload = Partial<Card> & { stack_id: string };
+export type CreateCardPayload = Partial<Card> & { stack_id: string; front_image?: string };
 export type CreateStackPayload = { name: string; is_public?: boolean };
 
 @Injectable({ providedIn: 'root' })
@@ -71,7 +71,7 @@ export class ApiService {
     });
   }
 
-  updateCard(id: string, payload: Partial<Card>) {
+  updateCard(id: string, payload: Partial<Card> & { front_image?: string }) {
     return this.http.patch<Card>(`${environment.apiBase}/cards/${id}`, payload, {
       headers: this.getHeaders(),
     });

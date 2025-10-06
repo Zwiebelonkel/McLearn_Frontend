@@ -1,5 +1,5 @@
 <app-loader *ngIf="loading()" />
-    <div *ngIf="!loading()" class="container">
+<div *ngIf="!loading()" class="container">
   <a routerLink="/" class="back-link">← Back</a>
   <h2 class="page-title">Edit Cards</h2>
 
@@ -7,71 +7,80 @@
   <div class="stack-meta">
     <label>
       Name:
-<input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
+      <input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
     </label>
 
-<label class="toggle-switch">
-  <input type="checkbox" [(ngModel)]="isPublic" />
-  <span class="slider"></span>
-  <span class="toggle-label">Public</span>
-</label>
+    <label class="toggle-switch">
+      <input type="checkbox" [(ngModel)]="isPublic" />
+      <span class="slider"></span>
+      <span class="toggle-label">Public</span>
+    </label>
 
     <button (click)="saveStack()" class="btn btn-secondary">Save Meta</button>
   </div>
 
   <!-- Karten-Hinzufügen -->
-<form (submit)="add($event)" class="add-form">
-  <input
-    type="text"
-    [(ngModel)]="front"
-    name="front"
-    placeholder="Question"
-    required
-    class="form-input" />
+  <form (submit)="add($event)" class="add-form">
+    <input
+      type="text"
+      [(ngModel)]="front"
+      name="front"
+      placeholder="Question"
+      required
+      class="form-input"
+    />
 
-  <!-- Markdown Toolbar (nur für Rückseite) -->
-  <div class="markdown-toolbar">
-    <button type="button" (click)="insert('bold')"><b>B</b></button>
-    <button type="button" (click)="insert('italic')"><i>I</i></button>
-    <button type="button" (click)="insert('code')">Code</button>
-    <button type="button" (click)="insert('ul')">List</button>
+    <div class="image-upload-container">
+      <button type="button" (click)="openImageUploader()" class="btn btn-secondary">Upload Image</button>
+      <div *ngIf="frontImage" class="image-preview-container">
+        <img [src]="frontImage" class="image-preview" />
+        <button type="button" (click)="removeImage()" class="btn btn-danger remove-image-btn">Remove</button>
+      </div>
+    </div>
+
+    <!-- Markdown Toolbar (nur für Rückseite) -->
+    <div class="markdown-toolbar">
+      <button type="button" (click)="insert('bold')"><b>B</b></button>
+      <button type="button" (click)="insert('italic')"><i>I</i></button>
+      <button type="button" (click)="insert('code')">Code</button>
+      <button type="button" (click)="insert('ul')">List</button>
+    </div>
+
+    <textarea
+      #backArea
+      [(ngModel)]="back"
+      name="back"
+      placeholder="Answer"
+      required
+      class="form-textarea"
+      rows="4"
+    ></textarea>
+
+    <!-- Buttons nebeneinander -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Add</button>
+
+      <!-- CSV-Import -->
+      <label class="btn btn-success csv-upload">
+        Upload CSV <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+        <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
+      </label>
+    </div>
+  </form>
+
+  <div class="search-wrapper">
+    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+    <input
+      type="text"
+      [(ngModel)]="search"
+      placeholder="Search cards..."
+      class="form-input search-input"
+    />
   </div>
-
-  <textarea
-    #backArea
-    [(ngModel)]="back"
-    name="back"
-    placeholder="Answer"
-    required
-    class="form-textarea"
-    rows="4">
-  </textarea>
-
-  <!-- Buttons nebeneinander -->
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Add</button>
-
-    <!-- CSV-Import -->
-    <label class="btn btn-success csv-upload">
-      Upload CSV <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
-      <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
-    </label>
-  </div>
-</form>
-
-<div class="search-wrapper">
-  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-    stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-    <circle cx="11" cy="11" r="7" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-  <input
-    type="text"
-    [(ngModel)]="search"
-    placeholder="Search cards..."
-    class="form-input search-input"
-  />
-</div>
 
   <!-- Karten-Liste -->
   <div class="card-list">
@@ -83,6 +92,13 @@
         <label>Front:
           <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
         </label>
+        <div class="image-upload-container">
+            <button type="button" (click)="openCardImageUploader(c)" class="btn btn-secondary">Upload Image</button>
+            <div *ngIf="c.front_image" class="image-preview-container">
+                <img [src]="c.front_image" class="image-preview" />
+                <button type="button" (click)="removeCardImage(c)" class="btn btn-danger remove-image-btn">Remove</button>
+            </div>
+        </div>
         <label>Back:
           <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
         </label>

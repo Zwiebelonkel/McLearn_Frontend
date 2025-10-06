@@ -1,17 +1,17 @@
 <div class="login-wrapper">
   <div class="login-card">
-    <h2 class="title">🔐 Login</h2>
+    <h2 class="title">🔐 {{ 'login' | translate }}</h2>
 
     <input
       type="text"
       [(ngModel)]="username"
-      placeholder="Benutzername"
+      placeholder="{{ 'username' | translate }}"
       class="form-input"
     />
     <input
       type="password"
       [(ngModel)]="password"
-      placeholder="Passwort"
+      placeholder="{{ 'password' | translate }}"
       class="form-input"
       (keydown.enter)="login()"
     />
@@ -21,14 +21,14 @@
       (click)="login()"
       [disabled]="!username || !password || isLoading"
     >
-      Einloggen
+      {{ 'login_button' | translate }}
     </button>
 
     <app-loader *ngIf="isLoading"></app-loader>
 
     <p class="small-link">
-      Noch kein Konto?
-      <a routerLink="/register">Hier registrieren</a>
+      {{ 'no_account' | translate }}
+      <a routerLink="/register">{{ 'register_here' | translate }}</a>
     </p>
   </div>
 </div>

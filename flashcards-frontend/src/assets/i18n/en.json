@@ -1,0 +1,10 @@
+{
+  "help": "Help",
+  "login": "Login",
+  "logout": "Logout",
+  "username": "Username",
+  "password": "Password",
+  "login_button": "Login",
+  "no_account": "No account yet?",
+  "register_here": "Register here"
+}

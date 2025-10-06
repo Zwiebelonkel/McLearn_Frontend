@@ -5,24 +5,29 @@
       <h1 class="title" (click)="goHome()">McLearn</h1>
 
       <nav class="nav">
-        <a class="nav-link btn btn-primary" routerLink="/help">?</a>
+        <a class="nav-link btn btn-primary" routerLink="/help">{{ 'help' | translate }}</a>
 
-        <!-- Dynamischer Login / Logout -->
-        <ng-container *ngIf="authService.isLoggedIn$ | async; else loginLink">
+        <ng-container *ngIf="isLoggedIn$(); else loginLink">
           <a
             class="nav-link btn btn-primary"
             href="#"
             (click)="authService.logout()"
-            >Logout</a
+            >{{ 'logout' | translate }}</a
           >
         </ng-container>
         <ng-template #loginLink>
-          <a class="nav-link btn btn-primary" routerLink="/login">Login</a>
+          <a class="nav-link btn btn-primary" routerLink="/login">{{ 'login' | translate }}</a>
         </ng-template>
       </nav>
 
+      <div class="language-switcher">
+        <select (change)="switchLanguage($event)">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+
       <div class="theme-switcher">
-        <!-- hier ggf. Theme-Toggle -->
       </div>
     </div>
   </header>

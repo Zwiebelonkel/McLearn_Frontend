@@ -1,0 +1,10 @@
+{
+  "help": "Ayuda",
+  "login": "Iniciar sesión",
+  "logout": "Cerrar sesión",
+  "username": "Nombre de usuario",
+  "password": "Contraseña",
+  "login_button": "Iniciar sesión",
+  "no_account": "¿Aún no tienes cuenta?",
+  "register_here": "Regístrate aquí"
+}

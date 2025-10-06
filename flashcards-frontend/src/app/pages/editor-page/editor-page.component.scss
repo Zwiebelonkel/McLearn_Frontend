@@ -134,6 +134,13 @@
   padding: 0.25rem 0.5rem;
 }
 
+.image-upload-container .btn {
+  padding: 0.5rem 0.25rem;
+  width: 40px;
+  height: 40px;
+}
+
+
 @media (max-width: 768px) {
   .add-form {
     flex-direction: column;
@@ -275,3 +282,11 @@
   justify-content: center;
   align-self: center;
 }
+
+.divider {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+

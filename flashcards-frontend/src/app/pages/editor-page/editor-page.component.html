@@ -9,7 +9,6 @@
       Name:
       <input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
     </label>
-
     <label class="toggle-switch">
       <input type="checkbox" [(ngModel)]="isPublic" />
       <span class="slider"></span>
@@ -29,8 +28,7 @@
       required
       class="form-input"
     />
-
-    <div class="image-upload-container">
+        <div class="image-upload-container">
       <button type="button" (click)="openImageUploader()" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
       <div *ngIf="frontImage" class="image-preview-container">
         <img [src]="frontImage" class="image-preview" />
@@ -95,12 +93,12 @@
           <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
         </label>
         <div class="image-upload-container">
-            <button type="button" (click)="openCardImageUploader(c)" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
-            <div *ngIf="c.front_image" class="image-preview-container">
-                <img [src]="c.front_image" class="image-preview" />
-                <button type="button" (click)="removeCardImage(c)" class="btn btn-danger remove-image-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
-            </div>
-        </div>
+          <button type="button" (click)="openCardImageUploader(c)" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
+          <div *ngIf="c.front_image" class="image-preview-container">
+              <img [src]="c.front_image" class="image-preview" />
+              <button type="button" (click)="removeCardImage(c)" class="btn btn-danger remove-image-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
+          </div>
+      </div>
         <div class="divider"></div> <!-- <<< Neuer Trenner -->
         <label>Back:
           <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>

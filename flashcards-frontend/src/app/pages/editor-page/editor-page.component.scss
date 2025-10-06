@@ -4,6 +4,12 @@
   padding: 2rem;
 }
 
+.input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .back-link {
   text-decoration: none;
   color: var(--primary-color);
@@ -288,5 +294,4 @@
   width: 100%;
   border-bottom: 1px solid #ccc;
 }
-
 

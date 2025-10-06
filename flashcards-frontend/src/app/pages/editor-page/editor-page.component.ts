@@ -65,6 +65,8 @@ import {
         return;
       }
       const widget = cloudinary.createUploadWidget({
+        cropping: true,
+        showSkipCropButton: true,
         cloudName: environment.cloudinary.cloudName,
         uploadPreset: environment.cloudinary.uploadPreset
       }, (error: any, result: any) => {

@@ -186,7 +186,7 @@ import {
     }
     
   
-    insert(type: 'bold' | 'italic' | 'code' | 'ul') {
+    insert(type: 'bold' | 'italic' | 'code' | 'ul' | 'center') {
       const textarea = this.backArea.nativeElement;
       const { selectionStart, selectionEnd, value } = textarea;
       const selected = value.slice(selectionStart, selectionEnd);
@@ -206,6 +206,9 @@ import {
           inserted = selected
             ? selected.split('\n').map(line => `- ${line}`).join('\n')
             : '- ';
+          break;
+        case 'center':
+          inserted = `<center>${selected || 'zentriert'}</center>`;
           break;
       }
   

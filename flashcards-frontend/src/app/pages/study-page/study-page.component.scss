@@ -87,11 +87,14 @@
 
 .card-back {
   transform: rotateX(180deg);
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
   font-weight: normal;
   overflow-y: auto;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.card-back ::ng-deep > * {
+  width: 100%;
 }
 
 :host-context(body.dark-theme) .card-front,
@@ -140,19 +143,23 @@
   color: white;
 }
 
-.card-back h1 {
+.card-back ::ng-deep h1 {
   font-size: 1.5rem;
   margin-top: 0;
 }
-.card-back ul {
+.card-back ::ng-deep ul {
   padding-left: 1.5rem;
   margin-top: 0.5rem;
 }
-.card-back li {
+.card-back ::ng-deep li {
   margin-bottom: 0.3rem;
 }
-.card-back p {
+.card-back ::ng-deep p {
   margin: 0.5rem 0;
+}
+
+.card-back ::ng-deep center {
+  text-align: center;
 }
 
 .difficulty-label {

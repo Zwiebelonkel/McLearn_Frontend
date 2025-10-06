@@ -40,7 +40,8 @@ export class StudyPage {
   }
 
   renderMarkdown(text: string): string {
-    return DOMPurify.sanitize(marked.parse(text || '') as string);
+    const dirty = marked.parse(text || '') as string;
+    return DOMPurify.sanitize(dirty, { ADD_TAGS: ['center'] });
   }
 
   loadCard() {

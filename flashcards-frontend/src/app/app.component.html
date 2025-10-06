@@ -5,7 +5,7 @@
       <h1 class="title" (click)="goHome()">McLearn</h1>
 
       <nav class="nav">
-        <a class="nav-link btn btn-primary" routerLink="/help">{{ 'help' | translate }}</a>
+        <a class="nav-link btn btn-primary" routerLink="/help">?</a>
 
         <ng-container *ngIf="isLoggedIn$ | async; else loginLink">
           <a

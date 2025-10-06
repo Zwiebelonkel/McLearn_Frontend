@@ -1,28 +1,28 @@
 <div class="login-wrapper">
   <div class="login-card">
-    <h2 class="title">📝 Registrieren</h2>
+    <h2 class="title">📝 {{ 'register' | translate }}</h2>
 
     <input
       type="text"
       class="form-input"
-      placeholder="Benutzername"
+      placeholder="{{ 'username' | translate }}"
       [(ngModel)]="username"
     />
 
     <input
       type="password"
       class="form-input"
-      placeholder="Passwort"
+      placeholder="{{ 'password' | translate }}"
       [(ngModel)]="password"
       (keydown.enter)="register()"
     />
 
     <button class="btn" (click)="register()" [disabled]="!username || !password">
-      Registrieren
+      {{ 'register' | translate }}
     </button>
     <p class="small-link">
-      Schon registriert?
-      <a routerLink="/login">Hier einloggen</a>
+      {{ 'already_registered' | translate }}
+      <a routerLink="/login">{{ 'login_here' | translate }}</a>
     </p>
 
     <app-loader *ngIf="isLoading"></app-loader>

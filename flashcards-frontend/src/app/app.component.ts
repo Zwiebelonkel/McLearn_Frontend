@@ -26,10 +26,6 @@ export class AppComponent {
     this.translate.use('en');
   }
 
-  switchLanguage(event: any) {
-    this.translate.use(event.target.value);
-  }
-
   toggleTheme() {
     document.body.classList.toggle('dark-theme');
   }

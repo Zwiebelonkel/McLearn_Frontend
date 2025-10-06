@@ -14,12 +14,14 @@ import {
   import { LoaderComponent } from '../../pages/loader/loader.component';
   import { ToastService } from '../../services/toast.service';
   import { environment } from '../../../environments/environments';
+  import { TranslateModule } from '@ngx-translate/core';
+
 
   declare var cloudinary: any;
 
   @Component({
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, LoaderComponent],
+    imports: [CommonModule, FormsModule, RouterLink, LoaderComponent, TranslateModule],
     templateUrl: './editor-page.component.html',
     styleUrls: ['./editor-page.component.scss']
   })

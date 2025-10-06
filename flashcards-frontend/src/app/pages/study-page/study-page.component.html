@@ -1,12 +1,12 @@
-<a routerLink="/" class="back-link">← Back</a>
+<a routerLink="/" class="back-link">← {{ 'back' | translate }}</a>
 <div class="container">
-  <h2 class="page-title">Study</h2>
+  <h2 class="page-title">{{ 'study' | translate }}</h2>
 
   <div *ngIf="isOwner()" class="progress-container">
     <div class="progress-bar">
       <div class="progress-fill" [style.width.%]="getProgressPercent()"></div>
     </div>
-    <p class="progress-label">{{ getProgressPercent() }} % completed</p>
+    <p class="progress-label">{{ getProgressPercent() }} % {{ 'completed' | translate }}</p>
   </div>
 
   <ng-container *ngIf="current(); else empty">
@@ -35,18 +35,18 @@
 
     <div *ngIf="showBack() && !isTransitioning()">
       <div *ngIf="isOwner()" class="ratings">
-        <button (click)="rate('again')" class="btn btn-danger">Again</button>
-        <button (click)="rate('hard')" class="btn btn-warning">Hard</button>
-        <button (click)="rate('good')" class="btn btn-success">Good</button>
-        <button (click)="rate('easy')" class="btn btn-info">Easy</button>
+        <button (click)="rate('again')" class="btn btn-danger">{{ 'again' | translate }}</button>
+        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }}</button>
+        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }}</button>
+        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }}</button>
       </div>
       <div *ngIf="!isOwner()">
-        <button (click)="loadCard()" class="btn btn-primary">Next</button>
+        <button (click)="loadCard()" class="btn btn-primary">{{ 'next' | translate }}</button>
       </div>
     </div>
   </ng-container>
 
   <ng-template #empty>
-    <p>No card found. Create cards or wait until some are due.</p>
+    <p>No card found. Create cards or wait until some are due.{{ 'no_card_found' | translate }}</p>
   </ng-template>
 </div>

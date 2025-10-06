@@ -7,10 +7,12 @@ import { Stack } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { LoaderComponent } from '../../pages/loader/loader.component';
 import { ToastService } from '../../services/toast.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, LoaderComponent],
+  imports: [CommonModule, RouterLink, FormsModule, LoaderComponent, TranslateModule],
   templateUrl: './stacks-page.component.html',
   styleUrls: ['./stacks-page.component.scss'] 
 })

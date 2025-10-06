@@ -1,21 +1,21 @@
 <app-loader *ngIf="loading()" />
 <div *ngIf="!loading()" class="container">
-  <a routerLink="/" class="back-link">← Back</a>
-  <h2 class="page-title">Edit Cards</h2>
+  <a routerLink="/" class="back-link">← {{ 'back' | translate }}</a>
+  <h2 class="page-title">{{ 'edit_cards' | translate }}</h2>
 
   <!-- Stack-Einstellungen -->
   <div class="stack-meta">
     <label>
-      Name:
+      {{ 'name' | translate }}:
       <input *ngIf="stack()" [(ngModel)]="stack()!.name" name="stackName" class="form-input" />
     </label>
     <label class="toggle-switch">
       <input type="checkbox" [(ngModel)]="isPublic" />
       <span class="slider"></span>
-      <span class="toggle-label">Public</span>
+      <span class="toggle-label">{{ 'public' | translate }}</span>
     </label>
 
-    <button (click)="saveStack()" class="btn btn-secondary">Save Meta</button>
+    <button (click)="saveStack()" class="btn btn-secondary">{{ 'save_meta' | translate }}</button>
   </div>
 
   <!-- Karten-Hinzufügen -->
@@ -24,7 +24,7 @@
       type="text"
       [(ngModel)]="front"
       name="front"
-      placeholder="Question"
+      placeholder="{{ 'question' | translate }}"
       required
       class="form-input"
     />
@@ -50,7 +50,7 @@
       #backArea
       [(ngModel)]="back"
       name="back"
-      placeholder="Answer"
+      placeholder="{{ 'answer' | translate }}"
       required
       class="form-textarea"
       rows="4"
@@ -59,7 +59,7 @@
 
     <!-- Buttons nebeneinander -->
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Add</button>
+      <button type="submit" class="btn btn-primary">{{ 'add' | translate }}</button>
 
       <!-- CSV-Import -->
       <label class="btn btn-success csv-upload">
@@ -90,7 +90,7 @@
         <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
       </div>
       <div class="card-body">
-        <label>Front:
+        <label>{{ 'front' | translate }}:
           <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" />
         </label>
         <div class="image-upload-container">
@@ -101,13 +101,13 @@
           </div>
       </div>
         <div class="divider"></div> <!-- <<< Neuer Trenner -->
-        <label>Back:
+        <label>{{ 'back' | translate }}:
           <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3"></textarea>
         </label>
       </div>
       <div class="card-footer">
-        <button (click)="save(c)" class="btn btn-secondary">Save</button>
-        <button (click)="del(c)" class="btn btn-danger">Delete</button>
+        <button (click)="save(c)" class="btn btn-secondary">{{ 'save' | translate }}</button>
+        <button (click)="del(c)" class="btn btn-danger">{{ 'delete' | translate }}</button>
       </div>
     </div>
   </div>

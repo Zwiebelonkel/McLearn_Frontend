@@ -50,3 +50,20 @@ body.dark-theme {
     background: linear-gradient(135deg, #232323, #4a4a4a);
   }
 }
+
+.language-selector {
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  border: 1.5px solid #ccc;
+  font-size: 1rem;
+  min-width: 150px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+.language-selector:focus {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
+}

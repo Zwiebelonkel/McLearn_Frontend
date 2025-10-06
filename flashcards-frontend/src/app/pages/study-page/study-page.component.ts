@@ -4,13 +4,15 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { Card, Stack } from '../../models';
 import { AuthService } from '../../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   selector: 'app-study-page',
   templateUrl: './study-page.component.html',
   styleUrls: ['./study-page.component.scss'],

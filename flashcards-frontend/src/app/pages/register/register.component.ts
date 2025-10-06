@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 
 @Component({
@@ -13,7 +15,7 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent, TranslateModule],
 })
 export class RegisterComponent {
   username = '';

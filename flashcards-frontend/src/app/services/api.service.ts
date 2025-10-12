@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
-import { Card, Stack } from '../models';
+import { Card, Stack, StackCollaborator, User } from '../models';
 
 export type CreateCardPayload = Partial<Card> & { stack_id: string; front_image?: string };
 export type CreateStackPayload = { name: string; is_public?: boolean };
@@ -99,5 +99,34 @@ export class ApiService {
       { rating },
       { headers: this.getHeaders() }
     );
+  }
+
+  // -------- USERS --------
+
+  searchUsers(query: string) {
+    return this.http.get<User[]>(`${environment.apiBase}/users/search`, {
+      params: { query },
+      headers: this.getHeaders(),
+    });
+  }
+
+  // -------- COLLABORATORS --------
+
+  getCollaborators(stackId: string) {
+    return this.http.get<StackCollaborator[]>(`${environment.apiBase}/stacks/${stackId}/collaborators`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  addCollaborator(stackId: string, userId: number) {
+    return this.http.post<StackCollaborator>(`${environment.apiBase}/stacks/${stackId}/collaborators`, { userId }, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  removeCollaborator(stackId: string, collaboratorId: string) {
+    return this.http.delete(`${environment.apiBase}/stacks/${stackId}/collaborators/${collaboratorId}`, {
+      headers: this.getHeaders(),
+    });
   }
 }

@@ -1,52 +1,46 @@
-<a routerLink="/" class="back-link">← {{ 'back' | translate }}</a>
 <div class="container">
-  <h2 class="page-title">{{ 'study' | translate }}</h2>
-
-  <div *ngIf="isOwner()" class="progress-container">
-    <div class="progress-bar">
-      <div class="progress-fill" [style.width.%]="getProgressPercent()"></div>
+    <div *ngIf="stack() as s" class="stack-header">
+        <h2 class="stack-title">{{ s.name }}</h2>
+        <a [routerLink]="['/stacks']" class="back-link">{{ 'back_to_stacks' | translate }}</a>
     </div>
-    <p class="progress-label">{{ getProgressPercent() }} % {{ 'completed' | translate }}</p>
-  </div>
 
-  <ng-container *ngIf="current(); else empty">
-    <div class="card-wrapper">
-      <div
-        class="card"
-        [class.flipped]="showBack()"
-        [class.fly-left]="flyDirection() === 'left'"
-        [class.fly-right]="flyDirection() === 'right'"
-        (click)="flip()"
-      >
-        <div class="card-inner">
-          <div class="card-front">
-            <span class="difficulty-label box-{{ current()?.box }}">
-              {{ getBoxLabel(current()?.box) }}
-            </span>
-            <img *ngIf="current()?.front_image" [src]="current()?.front_image" alt="Card image" class="card-image">
-            <p>{{ current()?.front }}</p>
-          </div>
-          <div class="card-back">
-            <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
-          </div>
+    <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="getProgressPercent()"></div>
+    </div>
+
+    <div class="card-container" [class.is-transitioning]="isTransitioning()">
+        <div *ngIf="current() as card; else noMoreCards" class="card-wrapper"
+            [class.fly-left]="flyDirection() === 'left'" [class.fly-right]="flyDirection() === 'right'"
+            (click)="flip()">
+            <div class="card-inner" [class.is-flipped]="showBack()">
+                <div class="card-face card-front">
+                    <div *ngIf="card.front_image" class="card-image-container">
+                        <img [src]="card.front_image" alt="Card Image" class="card-image" />
+                    </div>
+                    <div [innerHTML]="renderMarkdown(card.front)"></div>
+                </div>
+                <div class="card-face card-back">
+                    <div [innerHTML]="renderMarkdown(card.back)"></div>
+                </div>
+            </div>
         </div>
-      </div>
+        <ng-template #noMoreCards>
+            <div class="no-cards-message">{{ 'no_more_cards' | translate }}</div>
+        </ng-template>
     </div>
 
-    <div *ngIf="showBack() && !isTransitioning()">
-      <div *ngIf="isOwner()" class="ratings">
-        <button (click)="rate('again')" class="btn btn-danger">{{ 'again' | translate }}</button>
-        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }}</button>
-        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }}</button>
-        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }}</button>
-      </div>
-      <div *ngIf="!isOwner()">
-        <button (click)="loadCard()" class="btn btn-primary">{{ 'next' | translate }}</button>
-      </div>
+    <div class="rating-buttons">
+        <button (click)="rate('again')" class="btn btn-danger" [disabled]="!current() || !showBack() || !isOwner()">{{ 'again' | translate }}</button>
+        <button (click)="rate('hard')" class="btn btn-warning" [disabled]="!current() || !showBack() || !isOwner()">{{ 'hard' | translate }}</button>
+        <button (click)="rate('good')" class="btn btn-primary" [disabled]="!current() || !showBack() || !isOwner()">{{ 'good' | translate }}</button>
+        <button (click)="rate('easy')" class="btn btn-success" [disabled]="!current() || !showBack() || !isOwner()">{{ 'easy' | translate }}</button>
     </div>
-  </ng-container>
 
-  <ng-template #empty>
-    <p>No card found. Create cards or wait until some are due.{{ 'no_card_found' | translate }}</p>
-  </ng-template>
+    <div class="study-progress">
+        <ul class="card-list-by-box">
+            <li *ngFor="let card of cards()" class="card-item-in-box">
+                <span>{{ getBoxLabel(card.box) }}</span>
+            </li>
+        </ul>
+    </div>
 </div>

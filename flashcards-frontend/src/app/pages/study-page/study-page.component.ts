@@ -69,7 +69,7 @@ export class StudyPage {
   }
 
   rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-    if (this.isTransitioning()) return;
+    if (this.isTransitioning() || !this.isOwner()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
     this.isTransitioning.set(true);

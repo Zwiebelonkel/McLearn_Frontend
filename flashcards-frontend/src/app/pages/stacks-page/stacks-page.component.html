@@ -27,6 +27,7 @@
         <option value="all">{{ 'all' | translate }}</option>
         <option value="public">🌍 {{ 'public_only' | translate }}</option>
         <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
+        <option value="shared">🤝 {{ 'shared_with_me' | translate }}</option>
       </select>
     </div>
 
@@ -45,7 +46,7 @@
             <path
               d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z" />
           </svg>
-          <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">{{ 'edit' |
+          <a *ngIf="canEdit(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">{{ 'edit' |
             translate }}</a>
           <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">{{ 'study' | translate }}</a>
           <button *ngIf="isOwner(s)" (click)="openCollaboratorsModal(s)" class="btn btn-info">{{ 'collaborators' | translate

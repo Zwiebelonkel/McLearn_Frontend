@@ -119,7 +119,7 @@ export class ApiService {
   }
 
   addCollaborator(stackId: string, userId: number) {
-    return this.http.post<StackCollaborator>(`${environment.apiBase}/stacks/${stackId}/collaborators`, { userId }, {
+    return this.http.post<StackCollaborator>(`${environment.apiBase}/stacks/${stackId}/collaborators`, { userId, can_edit: true }, {
       headers: this.getHeaders(),
     });
   }

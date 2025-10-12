@@ -8,6 +8,7 @@ export type StackCollaborator = {
   stack_id: string;
   user_id: number;
   user_name: string;
+  can_edit: boolean;
 };
 export type User = {
   id: number;

@@ -1,3 +1,4 @@
+
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -9,18 +10,16 @@ import { LoaderComponent } from '../../pages/loader/loader.component';
 import { ToastService } from '../../services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
 
-
 @Component({
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, LoaderComponent, TranslateModule],
   templateUrl: './stacks-page.component.html',
-  styleUrls: ['./stacks-page.component.scss'] 
+  styleUrls: ['./stacks-page.component.scss']
 })
 export class StacksPage {
   private api = inject(ApiService);
   private auth = inject(AuthService);
   private toast = inject(ToastService);
-
 
   stacks = signal<Stack[]>([]);
   name = '';
@@ -32,9 +31,8 @@ export class StacksPage {
   inviteeSearch = '';
   searchedUsers: User[] = [];
 
-  // ✅ einfache Variablen statt Signals
   search: string = '';
-  filter: 'all' | 'public' | 'own' = 'all';
+  filter: 'all' | 'public' | 'own' | 'shared' = 'all';
 
   constructor() {
     this.load();
@@ -48,15 +46,36 @@ export class StacksPage {
     return stack.user_id === this.userId;
   }
 
+  canEdit(stack: Stack): boolean {
+    if (this.isOwner(stack)) {
+      return true;
+    }
+    // On the stacks list, we don't have detailed collaborator info.
+    // We assume that if a stack is private and not owned by the user,
+    // but is visible in their list, they are a collaborator with edit rights.
+    return !stack.is_public && !this.isOwner(stack);
+  }
+
   get filteredStacks(): Stack[] {
     return this.stacks().filter(s => {
       const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
+      if (!matchesSearch) {
+        return false;
+      }
+
       const isMine = s.user_id === this.userId;
+      // A stack is shared if it's not public and not mine, as the API only sends stacks the user can see.
+      const isSharedWithMe = !s.is_public && s.user_id !== this.userId;
 
       switch (this.filter) {
-        case 'public': return s.is_public && matchesSearch;
-        case 'own': return isMine && matchesSearch;
-        case 'all': default: return matchesSearch;
+        case 'public':
+          return s.is_public;
+        case 'own':
+          return isMine;
+        case 'shared':
+          return isSharedWithMe;
+        default:
+          return true;
       }
     });
   }
@@ -64,6 +83,8 @@ export class StacksPage {
   load() {
     this.loading.set(true);
     this.api.stacks().subscribe(s => {
+      // If logged in, the API returns all visible stacks (public, own, shared).
+      // If not logged in, we must filter for public stacks only.
       this.stacks.set(this.isLoggedIn() ? s : s.filter(stack => stack.is_public));
       this.loading.set(false);
     });
@@ -86,7 +107,6 @@ export class StacksPage {
       complete: () => this.loading.set(false)
     });
   }
-  
 
   remove(s: Stack) {
     if (confirm('Delete stack?')) {
@@ -138,9 +158,8 @@ export class StacksPage {
     if (this.selectedStack) {
       this.api.addCollaborator(this.selectedStack.id, userId).subscribe(() => {
         this.toast.show('Collaborator added', 'success');
-        this.openCollaboratorsModal(this.selectedStack as Stack);
-        this.inviteeSearch = '';
-        this.searchedUsers = [];
+        this.closeCollaboratorsModal();
+        this.load();
       });
     }
   }
@@ -149,9 +168,9 @@ export class StacksPage {
     if (this.selectedStack) {
       this.api.removeCollaborator(this.selectedStack.id, collaboratorId).subscribe(() => {
         this.toast.show('Collaborator removed', 'success');
-        this.openCollaboratorsModal(this.selectedStack as Stack);
+        this.closeCollaboratorsModal();
+        this.load();
       });
     }
   }
-  
 }

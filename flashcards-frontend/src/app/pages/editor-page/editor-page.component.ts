@@ -15,6 +15,7 @@ import {
   import { ToastService } from '../../services/toast.service';
   import { environment } from '../../../environments/environments';
   import { TranslateModule } from '@ngx-translate/core';
+import { AuthService } from '../../services/auth.service';
 
 
   declare var cloudinary: any;
@@ -30,7 +31,8 @@ import {
     private api = inject(ApiService);
     private toast = inject(ToastService);
     private zone = inject(NgZone);
-    
+    private auth = inject(AuthService);
+
     stackId = this.route.snapshot.paramMap.get('id')!;
     cards = signal<Card[]>([]);
     front = '';
@@ -40,6 +42,9 @@ import {
     search: string = '';
     isPublic = false;
     loading = signal(false);
+    canEdit = false;
+    isOwner = false;
+    userId = this.auth.getUserId();
   
     @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
   
@@ -48,6 +53,8 @@ import {
       this.api.getStack(this.stackId).subscribe(s => {
         this.stack.set(s);
         this.isPublic = s.is_public; // Public-Status vorbefüllen
+        this.isOwner = s.user_id === this.userId;
+        this.canEdit = this.isOwner || (s.collaborators?.some(c => c.user_id === this.userId && c.can_edit) ?? false);
         this.loading.set(false);
       });
       this.reload();

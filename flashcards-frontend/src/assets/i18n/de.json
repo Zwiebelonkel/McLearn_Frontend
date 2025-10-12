@@ -43,6 +43,13 @@
     "howto_title": "So benutzt du die App",
     "howto_text": "Die App ist eine einfache Karteikarten-Anwendung. Du kannst Stapel von Karteikarten erstellen. Ein Stapel ist eine Sammlung von Karten. Du kannst einen Stapel bearbeiten, um Karten hinzuzufügen, zu löschen oder zu ändern. Du kannst auch einen Stapel lernen. Beim Lernen wird der Leitner-Algorithmus verwendet, um zu bestimmen, welche Karte als Nächstes angezeigt wird. Außerdem kannst du deinen Fortschritt für jeden Stapel anzeigen.",
     "search_stacks": "Stapel suchen",
-    "new_stack": "Neuer Stapel"
+    "new_stack": "Neuer Stapel",
+    "collaborators": "👥",
+    "manage_collaborators": "Mitwirkende verwalten",
+    "current_collaborators": "Aktuelle Mitwirkende",
+    "remove": "Entfernen",
+    "close": "Schließen",
+    "add_collaborator": "Mitwirkenden hinzufügen",
+    "search_user": "Benutzer suchen"
   }
   

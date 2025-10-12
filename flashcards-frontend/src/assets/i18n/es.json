@@ -43,5 +43,12 @@
   "howto_title": "Cómo usar la aplicación",
   "howto_text": "La aplicación es una herramienta sencilla de tarjetas de estudio. Puedes crear colecciones de tarjetas. Una colección es un conjunto de tarjetas. Puedes editar una colección para añadir, eliminar o modificar tarjetas. También puedes estudiar una colección. Cuando estudias, el algoritmo de Leitner decide qué tarjeta mostrar a continuación. Además, puedes ver tu progreso para cada colección.",
   "search_stacks": "Buscar colecciones",
-  "new_stack": "Nueva colección"
+  "new_stack": "Nueva colección",
+  "collaborators": "👥",
+  "manage_collaborators": "Gestionar colaboradores",
+  "current_collaborators": "Colaboradores actuales",
+  "remove": "Eliminar",
+  "close": "Cerrar",
+  "add_collaborator": "Agregar colaborador",
+  "search_user": "Buscar usuario"
 }

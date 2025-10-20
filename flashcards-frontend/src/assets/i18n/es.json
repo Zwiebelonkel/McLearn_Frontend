@@ -50,5 +50,6 @@
   "remove": "Eliminar",
   "close": "Cerrar",
   "add_collaborator": "Agregar colaborador",
-  "search_user": "Buscar usuario"
+  "search_user": "Buscar usuario",
+  "shared_with_me": "Compartido conmigo"
 }

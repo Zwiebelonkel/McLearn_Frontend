@@ -446,21 +446,6 @@
   width: 100%;
 }
 
-/* ===== Input Style ===== */
-input[type="text"] {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-input[type="text"]:focus {
-  border-color: #666;
-  outline: none;
-}
-
 /* ===== Responsive Design ===== */
 @media (max-width: 600px) {
   .modal-content {

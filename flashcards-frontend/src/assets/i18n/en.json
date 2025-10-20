@@ -50,6 +50,7 @@
   "remove": "Remove",
   "close": "Close",
   "add_collaborator": "Add collaborator",
-  "search_user": "Search user"
+  "search_user": "Search user",
+  "shared_with_me": "Shared with me"
   
 }

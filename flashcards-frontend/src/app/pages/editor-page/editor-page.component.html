@@ -146,6 +146,7 @@
       <section class="add-collaborator-section">
         <h4>{{ 'add_collaborator' | translate }}</h4>
         <input
+        class="form-input"
           type="text"
           [(ngModel)]="inviteeSearch"
           (input)="searchUsers()"
@@ -154,7 +155,7 @@
         <ul *ngIf="searchedUsers.length">
           <li *ngFor="let user of searchedUsers">
             <div class="collaborator-info">
-              {{ user.name }} ({{ user.email }})
+              {{ user.name }}
               <button (click)="addCollaborator(user.id)" class="btn btn-primary btn-sm">
                 {{ 'add' | translate }}
               </button>

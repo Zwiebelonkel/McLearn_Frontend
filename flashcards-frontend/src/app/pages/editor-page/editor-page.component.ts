@@ -10,7 +10,7 @@ import {
   import { CommonModule } from '@angular/common';
   import { FormsModule } from '@angular/forms';
   import { ApiService, CreateCardPayload } from '../../services/api.service';
-  import { Card, Stack } from '../../models';
+  import { Card, Stack, User } from '../../models';
   import { LoaderComponent } from '../../pages/loader/loader.component';
   import { ToastService } from '../../services/toast.service';
   import { environment } from '../../../environments/environments';
@@ -45,6 +45,9 @@ import { AuthService } from '../../services/auth.service';
     canEdit = false;
     isOwner = false;
     userId = this.auth.getUserId();
+    showCollaboratorsModal = signal(false);
+    inviteeSearch = '';
+    searchedUsers: User[] = [];
   
     @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
   
@@ -326,7 +329,54 @@ import { AuthService } from '../../services/auth.service';
       return c.front.toLowerCase().includes(searchLower);
     });
   }
-  
-  
-  
+
+  openCollaboratorsModal() {
+    const stack = this.stack();
+    if (stack) {
+      this.showCollaboratorsModal.set(true);
+      this.api.getCollaborators(stack.id).subscribe(collaborators => {
+        const newStack = this.stack();
+        if (newStack) {
+          newStack.collaborators = collaborators;
+          this.stack.set(newStack);
+        }
+      });
+    }
+  }
+
+  closeCollaboratorsModal() {
+    this.showCollaboratorsModal.set(false);
+    this.inviteeSearch = '';
+    this.searchedUsers = [];
+  }
+
+  searchUsers() {
+    if (this.inviteeSearch.trim() === '') {
+      this.searchedUsers = [];
+      return;
+    }
+    this.api.searchUsers(this.inviteeSearch).subscribe(users => {
+      this.searchedUsers = users;
+    });
+  }
+
+  addCollaborator(userId: number) {
+    const stack = this.stack();
+    if (stack) {
+      this.api.addCollaborator(stack.id, userId).subscribe(() => {
+        this.toast.show('Collaborator added', 'success');
+        this.openCollaboratorsModal(); // Refresh collaborator list
+      });
+    }
+  }
+
+  removeCollaborator(collaboratorId: string) {
+    const stack = this.stack();
+    if (stack) {
+      this.api.removeCollaborator(stack.id, collaboratorId).subscribe(() => {
+        this.toast.show('Collaborator removed', 'success');
+        this.openCollaboratorsModal(); // Refresh collaborator list
+      });
+    }
+  }
 }

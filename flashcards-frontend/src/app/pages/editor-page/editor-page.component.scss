@@ -295,3 +295,201 @@
   border-bottom: 1px solid #ccc;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* hidden by default */
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  backdrop-filter: blur(3px);
+  z-index: 2000;
+  transition: opacity 0.3s ease;
+  overflow-y: auto;
+}
+
+/* ===== Modal Open State ===== */
+.modal.is-open {
+  display: flex;
+  opacity: 1;
+}
+
+/* ===== Modal Content ===== */
+.modal-content {
+  background: #fff;
+  color: #000;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: fadeInUp 0.25s ease;
+}
+
+/* ===== Title ===== */
+.modal-title {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* ===== Lists & Buttons ===== */
+.collaborators-list,
+.add-collaborator-form {
+  margin-bottom: 1.5rem;
+}
+
+.collaborators-list ul,
+.add-collaborator-form ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collaborators-list li,
+.add-collaborator-form li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Modal Layout Struktur ===== */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===== Header ===== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #000;
+}
+
+/* ===== Body ===== */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===== Footer ===== */
+.modal-footer {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ===== Section Titles ===== */
+.collaborators-section h4,
+.add-collaborator-section h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Collaborator Info Block ===== */
+.collaborators-list li,
+.add-collaborator-form li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+  gap: 1rem;
+}
+
+.collaborator-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== Input Style ===== */
+input[type="text"] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #666;
+  outline: none;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+  }
+
+  .collaborator-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .collaborator-info button {
+    align-self: flex-end;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}
+
+

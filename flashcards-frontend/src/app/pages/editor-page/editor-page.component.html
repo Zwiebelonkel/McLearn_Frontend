@@ -16,6 +16,7 @@
     </label>
 
     <button (click)="saveStack()" class="btn btn-secondary">{{ 'save_meta' | translate }}</button>
+    <button *ngIf="isOwner" (click)="openCollaboratorsModal()" class="btn btn-secondary">{{ 'collaborators' | translate }}</button>
   </div>
 
   <!-- Karten-Hinzufügen -->
@@ -109,6 +110,63 @@
         <button (click)="save(c)" class="btn btn-secondary">{{ 'save' | translate }}</button>
         <button (click)="del(c)" class="btn btn-danger">{{ 'delete' | translate }}</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Collaborators Modal -->
+<div class="modal" [class.is-open]="showCollaboratorsModal()">
+  <div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'manage_collaborators' | translate }}</h3>
+      <button class="modal-close" (click)="closeCollaboratorsModal()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body" *ngIf="stack()">
+      
+      <!-- Collaborators List -->
+      <section class="collaborators-section">
+        <h4>{{ 'current_collaborators' | translate }}</h4>
+        <ul *ngIf="stack()?.collaborators?.length">
+          <li *ngFor="let c of stack()?.collaborators">
+            <div class="collaborator-info">
+              {{ c.user_name }}
+              <button (click)="removeCollaborator(c.id)" class="btn btn-danger btn-sm">
+                {{ 'remove' | translate }}
+              </button>
+            </div>
+          </li>
+        </ul>
+        <p *ngIf="!stack()?.collaborators?.length">No collaborators yet.</p>
+      </section>
+
+      <!-- Add Collaborator -->
+      <section class="add-collaborator-section">
+        <h4>{{ 'add_collaborator' | translate }}</h4>
+        <input
+          type="text"
+          [(ngModel)]="inviteeSearch"
+          (input)="searchUsers()"
+          placeholder="{{ 'search_user' | translate }}"
+        />
+        <ul *ngIf="searchedUsers.length">
+          <li *ngFor="let user of searchedUsers">
+            <div class="collaborator-info">
+              {{ user.name }} ({{ user.email }})
+              <button (click)="addCollaborator(user.id)" class="btn btn-primary btn-sm">
+                {{ 'add' | translate }}
+              </button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
     </div>
   </div>
 </div>

@@ -49,40 +49,9 @@
           <a *ngIf="canEdit(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">{{ 'edit' |
             translate }}</a>
           <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">{{ 'study' | translate }}</a>
-          <button *ngIf="isOwner(s)" (click)="openCollaboratorsModal(s)" class="btn btn-info">{{ 'collaborators' | translate
-            }}</button>
           <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">{{ 'delete' | translate }}</button>
         </div>
       </li>
     </ul>
-  </div>
-</div>
-
-<div class="modal" [class.is-open]="showCollaboratorsModal()">
-  <div class="modal-content">
-    <h3 class="modal-title">{{ 'manage_collaborators' | translate }}</h3>
-    <div *ngIf="selectedStack">
-      <div class="collaborators-list">
-        <h4>{{ 'current_collaborators' | translate }}</h4>
-        <ul>
-          <li *ngFor="let c of selectedStack.collaborators">
-            {{ c.user_name }}
-            <button (click)="removeCollaborator(c.id)" class="btn btn-danger btn-sm">{{ 'remove' | translate }}</button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="add-collaborator-form">
-        <h4>{{ 'add_collaborator' | translate }}</h4>
-        <input type="text" [(ngModel)]="inviteeSearch" (input)="searchUsers()" placeholder="{{ 'search_user' | translate }}" />
-        <ul *ngIf="searchedUsers.length">
-          <li *ngFor="let user of searchedUsers">
-            {{ user.name }} ({{ user.email }})
-            <button (click)="addCollaborator(user.id)" class="btn btn-primary btn-sm">{{ 'add' | translate }}</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <button (click)="closeCollaboratorsModal()" class="btn btn-secondary">{{ 'close' | translate }}</button>
   </div>
 </div>

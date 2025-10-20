@@ -44,7 +44,7 @@
     "howto_text": "L'application est un outil simple de cartes mémoire. Vous pouvez créer des piles de cartes. Une pile est un ensemble de cartes. Vous pouvez modifier une pile pour ajouter, supprimer ou changer des cartes. Vous pouvez également étudier une pile. Lors de l'étude, l'algorithme de Leitner détermine quelle carte afficher ensuite. Vous pouvez aussi consulter votre progression pour chaque pile.",
     "search_stacks": "Rechercher des piles",
     "new_stack": "Nouvelle pile",
-    "collaborators": "👥",
+    "collaborators": "👥 Collaborateur",
     "manage_collaborators": "Gérer les collaborateurs",
     "current_collaborators": "Collaborateurs actuels",
     "remove": "Supprimer",

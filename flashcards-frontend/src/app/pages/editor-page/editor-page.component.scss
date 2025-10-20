@@ -446,35 +446,4 @@
   width: 100%;
 }
 
-/* ===== Responsive Design ===== */
-@media (max-width: 600px) {
-  .modal-content {
-    padding: 1.5rem;
-    width: 95%;
-  }
-
-  .modal-title {
-    font-size: 1.25rem;
-  }
-
-  .collaborator-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .collaborator-info button {
-    align-self: flex-end;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .modal-footer button {
-    width: 100%;
-  }
-}
-
 

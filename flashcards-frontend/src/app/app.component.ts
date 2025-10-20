@@ -26,6 +26,10 @@ export class AppComponent {
     this.translate.use('en');
   }
 
+  logout(): void {
+    this.authService.logout();
+  }
+
   toggleTheme() {
     document.body.classList.toggle('dark-theme');
   }

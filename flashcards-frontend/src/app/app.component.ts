@@ -1,15 +1,17 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { ToastComponent } from './pages/toast/toast.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, ToastComponent, TranslateModule],
+  imports: [CommonModule, RouterOutlet, ToastComponent, TranslateModule, SidebarComponent],
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'flashcards-frontend';
@@ -20,6 +22,7 @@ export class AppComponent {
 
   isLoggedIn$ = this.authService.isLoggedIn$;
   username$ = computed(() => this.authService.getUsername());
+  isSidebarOpen = true;
 
   constructor() {
     this.translate.setDefaultLang('en');
@@ -30,11 +33,12 @@ export class AppComponent {
     this.authService.logout();
   }
 
-  toggleTheme() {
-    document.body.classList.toggle('dark-theme');
-  }
-
   goHome() {
     this.router.navigate(['/']);
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    console.log("Sidebar is: "+this.isSidebarOpen)
   }
 }

@@ -1,0 +1,6 @@
+<a routerLink="/" class="sidebar-link">Home</a>
+<div class="sidebar-bottom">
+  <a routerLink="/help" class="sidebar-link">Help</a>
+  <button (click)="login()" *ngIf="!(isLoggedIn$ | async)" class="sidebar-link">Login</button>
+  <button (click)="logout()" *ngIf="isLoggedIn$ | async" class="sidebar-link">Logout</button>
+</div>

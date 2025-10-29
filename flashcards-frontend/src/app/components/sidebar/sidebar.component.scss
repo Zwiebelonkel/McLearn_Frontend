@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  width: 250px;
+  border-left: 1px solid #dee2e6;
+  transition: width 0.3s, padding 0.3s;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding-top: 6rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 0;
+}
+
+:host(:not(.open)) {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.sidebar-link:hover {
+  background-color: #e9ecef;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}

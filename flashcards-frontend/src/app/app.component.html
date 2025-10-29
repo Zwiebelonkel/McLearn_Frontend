@@ -1,16 +1,18 @@
 <app-toast></app-toast>
-<div class="main-content" [class.sidebar-open]="isSidebarOpen">
-  <header class="header">
-    <div class="container">
-      <h1 class="title" (click)="goHome()">McLearn</h1>
-      <button class="sidebar-toggle" (click)="toggleSidebar()">&#9776;</button>
-    </div>
-  </header>
-  <main class="main">
-    <router-outlet></router-outlet>
-  </main>
-  <footer class="footer">
-    <p>&copy; 2025 McLearn</p>
-  </footer>
+<div class="page-container">
+  <div class="main-content">
+    <header class="header">
+      <div class="container">
+        <h1 class="title" (click)="goHome()">McLearn</h1>
+        <button class="sidebar-toggle" (click)="toggleSidebar()">&#9776;</button>
+      </div>
+    </header>
+    <main class="main">
+      <router-outlet></router-outlet>
+    </main>
+    <footer class="footer">
+      <p>&copy; 2025 McLearn</p>
+    </footer>
+  </div>
+  <app-sidebar [class.open]="isSidebarOpen"></app-sidebar>
 </div>
-<app-sidebar [class.open]="isSidebarOpen"></app-sidebar>

@@ -22,7 +22,7 @@ export class AppComponent {
 
   isLoggedIn$ = this.authService.isLoggedIn$;
   username$ = computed(() => this.authService.getUsername());
-  isSidebarOpen = true;
+  isSidebarOpen = false;
 
   constructor() {
     this.translate.setDefaultLang('en');

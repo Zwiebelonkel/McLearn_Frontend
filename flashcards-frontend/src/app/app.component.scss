@@ -1,23 +1,28 @@
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  transition: margin-right 0.3s;
-}
-
-.main-content.sidebar-open {
-  margin-right: 250px;
-}
-
-.header > .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sidebar-toggle {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
+  :host {
+    display: block;
+  }
+  
+  .page-container {
+    position: relative;
+  }
+  
+  .main-content {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header > .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  

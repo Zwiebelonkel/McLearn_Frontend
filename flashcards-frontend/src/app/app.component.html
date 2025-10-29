@@ -4,7 +4,7 @@
     <header class="header">
       <div class="container">
         <h1 class="title" (click)="goHome()">McLearn</h1>
-        <button class="sidebar-toggle" (click)="toggleSidebar()">&#9776;</button>
+        <button #toggleButton class="sidebar-toggle" (click)="toggleSidebar($event)">&#9776;</button>
       </div>
     </header>
     <main class="main">
@@ -14,5 +14,5 @@
       <p>&copy; 2025 McLearn</p>
     </footer>
   </div>
-  <app-sidebar [class.open]="isSidebarOpen"></app-sidebar>
+  <app-sidebar #sidebar [class.open]="isSidebarOpen"></app-sidebar>
 </div>

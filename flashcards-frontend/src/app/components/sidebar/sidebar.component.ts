@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, ElementRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,8 +14,13 @@ import { Observable } from 'rxjs';
 })
 export class SidebarComponent {
   isLoggedIn$: Observable<boolean>;
+  themeService = inject(ThemeService);
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    public elementRef: ElementRef
+  ) {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
@@ -24,5 +30,9 @@ export class SidebarComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

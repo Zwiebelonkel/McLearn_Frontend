@@ -4,10 +4,12 @@
   padding: 2rem;
 }
 
-.friends-container, .friends-page-container {
+.friends-container,
+.friends-page-container {
   padding: 20px;
 
-  h1, h2 {
+  h1,
+  h2 {
     margin-bottom: 20px;
   }
 
@@ -26,7 +28,8 @@
   .friends-page-container {
     display: block;
   }
-  .friends-column, .requests-column {
+  .friends-column,
+  .requests-column {
     width: 100%;
   }
 }

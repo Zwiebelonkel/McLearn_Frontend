@@ -5,7 +5,9 @@
   </div>
   <ul *ngIf="friends.length > 0" class="friend-list">
     <li *ngFor="let friend of friends" class="friend-item">
-      <a [routerLink]="['/profile', friend.id]" class="friend-link">{{ friend.name }}</a>
+      <a [routerLink]="['/profile', friend.id]" class="friend-link">{{
+        friend.name
+      }}</a>
       <button (click)="removeFriend(friend.id)" class="remove-btn">
         {{ "remove_friend" | translate }}
       </button>

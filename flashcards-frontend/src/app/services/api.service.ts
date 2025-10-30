@@ -3,7 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { Card, Stack, StackCollaborator, User } from '../models';
 
-export type CreateCardPayload = Partial<Card> & { stack_id: string; front_image?: string };
+export type CreateCardPayload = Partial<Card> & {
+  stack_id: string;
+  front_image?: string;
+};
 export type CreateStackPayload = { name: string; is_public?: boolean };
 
 @Injectable({ providedIn: 'root' })
@@ -14,16 +17,15 @@ export class ApiService {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       'X-API-Key': environment.apiKey,
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     });
   }
 
   // -------- STACKS --------
   getStack(id: string) {
-    return this.http.get<Stack>(
-      `${environment.apiBase}/stacks/${id}`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<Stack>(`${environment.apiBase}/stacks/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   stacks() {
@@ -72,9 +74,13 @@ export class ApiService {
   }
 
   updateCard(id: string, payload: Partial<Card> & { front_image?: string }) {
-    return this.http.patch<Card>(`${environment.apiBase}/cards/${id}`, payload, {
-      headers: this.getHeaders(),
-    });
+    return this.http.patch<Card>(
+      `${environment.apiBase}/cards/${id}`,
+      payload,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   deleteCard(id: string) {
@@ -93,7 +99,11 @@ export class ApiService {
     );
   }
 
-  review(stackId: string, cardId: string, rating: 'again' | 'hard' | 'good' | 'easy') {
+  review(
+    stackId: string,
+    cardId: string,
+    rating: 'again' | 'hard' | 'good' | 'easy'
+  ) {
     return this.http.post<Card>(
       `${environment.apiBase}/stacks/${stackId}/cards/${cardId}/review`,
       { rating },
@@ -119,20 +129,30 @@ export class ApiService {
   // -------- COLLABORATORS --------
 
   getCollaborators(stackId: string) {
-    return this.http.get<StackCollaborator[]>(`${environment.apiBase}/stacks/${stackId}/collaborators`, {
-      headers: this.getHeaders(),
-    });
+    return this.http.get<StackCollaborator[]>(
+      `${environment.apiBase}/stacks/${stackId}/collaborators`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   addCollaborator(stackId: string, userId: number) {
-    return this.http.post<StackCollaborator>(`${environment.apiBase}/stacks/${stackId}/collaborators`, { userId, can_edit: true }, {
-      headers: this.getHeaders(),
-    });
+    return this.http.post<StackCollaborator>(
+      `${environment.apiBase}/stacks/${stackId}/collaborators`,
+      { userId, can_edit: true },
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   removeCollaborator(stackId: string, collaboratorId: string) {
-    return this.http.delete(`${environment.apiBase}/stacks/${stackId}/collaborators/${collaboratorId}`, {
-      headers: this.getHeaders(),
-    });
+    return this.http.delete(
+      `${environment.apiBase}/stacks/${stackId}/collaborators/${collaboratorId}`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 }

@@ -5,11 +5,14 @@ import { StudyPage } from './pages/study-page/study-page.component';
 import { HelpPageComponent } from './pages/help-page/help-page.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: StacksPage },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
   { path: 'stack/:id/edit', component: EditorPage },
   { path: 'stack/:id/study', component: StudyPage },
   { path: 'help', component: HelpPageComponent },

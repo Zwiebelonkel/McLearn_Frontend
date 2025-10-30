@@ -1,0 +1,80 @@
+.profile-container {
+  padding: 20px;
+  text-align: center;
+
+  .profile-header {
+    margin-bottom: 30px;
+
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 5px solid var(--primary-color);
+    }
+
+    .user-name {
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .user-email {
+      font-size: 1.2em;
+      color: #666;
+      margin: 5px 0 0;
+    }
+  }
+
+  .stacks-container {
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .stack-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 800px;
+    }
+
+    .stack-item {
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid var(--card-border-color);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .stack-item:hover {
+      transition: 0.22s;
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stack-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .stack-name {
+      font-weight: bold;
+    }
+
+    .card-amount {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
+
+h1:hover{
+  transition: 0s;
+  transform: translateY(0px)
+}

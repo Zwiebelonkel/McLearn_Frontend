@@ -1,4 +1,7 @@
 {
+    "home": "Startseite",
+    "profile": "Profil",
+    "toggle_theme": "Theme wechseln",
     "help": "Hilfe",
     "login": "Anmelden",
     "logout": "Abmelden",
@@ -51,6 +54,7 @@
     "close": "Schließen",
     "add_collaborator": "Mitwirkenden hinzufügen",
     "search_user": "Benutzer suchen",
-    "shared_with_me": "Mit mir geteilt"
+    "shared_with_me": "Mit mir geteilt",
+    "cards": "Karten"
   }
   

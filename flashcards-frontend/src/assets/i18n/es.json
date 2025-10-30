@@ -1,4 +1,7 @@
 {
+  "home": "Inicio",
+  "profile": "Perfil",
+  "toggle_theme": "Cambiar tema",
   "help": "Ayuda",
   "login": "Iniciar sesión",
   "logout": "Cerrar sesión",
@@ -51,5 +54,6 @@
   "close": "Cerrar",
   "add_collaborator": "Agregar colaborador",
   "search_user": "Buscar usuario",
-  "shared_with_me": "Compartido conmigo"
+  "shared_with_me": "Compartido conmigo",
+  "cards": "tarjetas"
 }

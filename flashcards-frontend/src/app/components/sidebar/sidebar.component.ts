@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule,TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })

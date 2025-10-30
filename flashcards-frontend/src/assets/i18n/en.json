@@ -1,7 +1,10 @@
 {
+  "home": "Home",
+  "profile": "Profile",
   "help": "Help",
   "login": "Login",
   "logout": "Logout",
+  "toggle_theme": "Toggle Theme",
   "username": "Username",
   "password": "Password",
   "login_button": "Login",
@@ -51,6 +54,7 @@
   "close": "Close",
   "add_collaborator": "Add collaborator",
   "search_user": "Search user",
-  "shared_with_me": "Shared with me"
+  "shared_with_me": "Shared with me",
+  "cards": "cards"
   
 }

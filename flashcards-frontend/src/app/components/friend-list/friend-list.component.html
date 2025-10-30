@@ -1,0 +1,12 @@
+<div class="friend-list-container">
+  <h2>{{ 'friends' | translate }}</h2>
+  <div *ngIf="friends.length === 0" class="empty-message">
+    {{ 'no_friends_found' | translate }}
+  </div>
+  <ul *ngIf="friends.length > 0" class="friend-list">
+    <li *ngFor="let friend of friends" class="friend-item">
+      <span>{{ friend.username }}</span>
+      <button (click)="removeFriend(friend.id)" class="remove-btn">{{ 'remove_friend' | translate }}</button>
+    </li>
+  </ul>
+</div>

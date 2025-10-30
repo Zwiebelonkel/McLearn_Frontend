@@ -1,5 +1,7 @@
 <a routerLink="/" class="sidebar-link"><i class="fa-solid fa-house"></i>{{ 'home' | translate }}</a>
 <a routerLink="/profile" class="sidebar-link" *ngIf="isLoggedIn$ | async"><i class="fa-solid fa-user"></i>{{ 'profile' | translate }}</a>
+<a [routerLink]="['/friends']" routerLinkActive="active"><i class="fa-solid fa-users"></i> <span>{{ 'friends' | translate }}</span></a>
+
 <div class="sidebar-bottom">
   <a routerLink="/help" class="sidebar-link"><i class="fa-solid fa-circle-info"></i>{{ 'help' | translate }}</a>
   <button (click)="login()" *ngIf="!(isLoggedIn$ | async)" class="sidebar-link"><i class="fa-solid fa-right-to-bracket"></i>{{ 'login' | translate }}</button>

@@ -55,5 +55,16 @@
   "add_collaborator": "Agregar colaborador",
   "search_user": "Buscar usuario",
   "shared_with_me": "Compartido conmigo",
-  "cards": "tarjetas"
+  "cards": "tarjetas",
+  "friends": "Amigos",
+  "requests": "Solicitudes",
+  "add_friend": "Añadir amigo",
+  "friend_requests": "Solicitudes de amistad",
+  "no_friend_requests": "No hay solicitudes de amistad",
+  "accept": "Aceptar",
+  "decline": "Rechazar",
+  "remove_friend": "Eliminar amigo",
+  "cancel_request": "Cancelar solicitud",
+  "pending": "Pendiente",
+  "no_friends_found": "No se encontraron amigos"
 }

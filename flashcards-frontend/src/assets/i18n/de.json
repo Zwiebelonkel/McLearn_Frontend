@@ -55,6 +55,17 @@
     "add_collaborator": "Mitwirkenden hinzufügen",
     "search_user": "Benutzer suchen",
     "shared_with_me": "Mit mir geteilt",
-    "cards": "Karten"
+    "cards": "Karten",
+    "friends": "Freunde",
+    "requests": "Anfragen",
+    "add_friend": "Freund hinzufügen",
+    "friend_requests": "Freundschaftsanfragen",
+    "no_friend_requests": "Keine Freundschaftsanfragen",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "remove_friend": "Freund entfernen",
+    "cancel_request": "Anfrage zurückziehen",
+    "pending": "Ausstehend",
+    "no_friends_found": "Keine Freunde gefunden"
   }
   

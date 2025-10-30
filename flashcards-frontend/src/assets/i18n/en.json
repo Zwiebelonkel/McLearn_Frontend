@@ -55,6 +55,16 @@
   "add_collaborator": "Add collaborator",
   "search_user": "Search user",
   "shared_with_me": "Shared with me",
-  "cards": "cards"
-  
+  "cards": "cards",
+  "friends": "Friends",
+  "requests": "Requests",
+  "add_friend": "Add friend",
+  "friend_requests": "Friend requests",
+  "no_friend_requests": "No friend requests",
+  "accept": "Accept",
+  "decline": "Decline",
+  "remove_friend": "Remove friend",
+  "cancel_request": "Cancel request",
+  "pending": "Pending",
+  "no_friends_found": "No friends found"
 }

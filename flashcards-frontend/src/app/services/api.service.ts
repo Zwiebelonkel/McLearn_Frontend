@@ -110,6 +110,12 @@ export class ApiService {
     });
   }
 
+  getUser(userId: number) {
+    return this.http.get<User>(`${environment.apiBase}/users/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
   // -------- COLLABORATORS --------
 
   getCollaborators(stackId: string) {

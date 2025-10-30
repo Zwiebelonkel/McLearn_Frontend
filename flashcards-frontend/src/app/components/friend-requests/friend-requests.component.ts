@@ -1,37 +1,38 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { User } from '../../models';
-import { FriendsService } from '../../services/friends.service';
+import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { FriendsService } from '../../services/friends.service';
+import { FriendRequest } from '../../models';
 
 @Component({
   selector: 'app-friend-requests',
-  imports: [TranslateModule],
+  standalone: true,
+  imports: [CommonModule, TranslateModule],
   templateUrl: './friend-requests.component.html',
-  styleUrls: ['./friend-requests.component.scss']
+  styleUrls: ['./friend-requests.component.scss'],
 })
 export class FriendRequestsComponent implements OnInit {
   friendsService = inject(FriendsService);
-  requests: User[] = [];
+  requests: FriendRequest[] = [];
 
   ngOnInit(): void {
     this.loadRequests();
   }
 
   loadRequests() {
-    this.friendsService.getFriendRequests().subscribe(requests => {
+    this.friendsService.getFriendRequests().subscribe((requests) => {
       this.requests = requests;
     });
   }
 
-  acceptRequest(userId: number) {
-    this.friendsService.acceptFriendRequest(userId).subscribe(() => {
+  acceptRequest(senderId: number) {
+    this.friendsService.acceptFriendRequest(senderId).subscribe(() => {
       this.loadRequests();
     });
   }
 
-  declineRequest(userId: number) {
-    this.friendsService.declineFriendRequest(userId).subscribe(() => {
+  declineRequest(senderId: number) {
+    this.friendsService.declineFriendRequest(senderId).subscribe(() => {
       this.loadRequests();
     });
   }

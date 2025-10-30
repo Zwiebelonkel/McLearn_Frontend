@@ -1,14 +1,18 @@
 <div class="friend-requests-container">
-  <h2>{{ 'friend_requests' | translate }}</h2>
+  <h2>{{ "friend_requests" | translate }}</h2>
   <div *ngIf="requests.length === 0" class="empty-message">
-    {{ 'no_friend_requests' | translate }}
+    {{ "no_friend_requests" | translate }}
   </div>
   <ul *ngIf="requests.length > 0" class="request-list">
     <li *ngFor="let request of requests" class="request-item">
-      <span>{{ request.username }}</span>
+      <span>{{ request.name }}</span>
       <div class="actions">
-        <button (click)="acceptRequest(request.id)" class="accept-btn">{{ 'accept' | translate }}</button>
-        <button (click)="declineRequest(request.id)" class="decline-btn">{{ 'decline' | translate }}</button>
+        <button (click)="acceptRequest(request.sender_id)" class="accept-btn">
+          {{ "accept" | translate }}
+        </button>
+        <button (click)="declineRequest(request.sender_id)" class="decline-btn">
+          {{ "decline" | translate }}
+        </button>
       </div>
     </li>
   </ul>

@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { FriendsService } from '../../services/friends.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { FriendsService } from '../../services/friends.service';
 
 @Component({
   selector: 'app-friend-add',
-  imports: [TranslateModule, FormsModule],
   standalone: true,
+  imports: [CommonModule, TranslateModule, FormsModule],
   templateUrl: './friend-add.component.html',
-  styleUrls: ['./friend-add.component.scss']
+  styleUrls: ['./friend-add.component.scss'],
 })
 export class FriendAddComponent {
   friendsService = inject(FriendsService);

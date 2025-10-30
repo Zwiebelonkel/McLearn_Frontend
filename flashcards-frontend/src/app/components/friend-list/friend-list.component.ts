@@ -1,15 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { User } from '../../models';
-import { FriendsService } from '../../services/friends.service';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { FriendsService } from '../../services/friends.service';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-friend-list',
-  imports: [TranslateModule],
   standalone: true,
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './friend-list.component.html',
-  styleUrls: ['./friend-list.component.scss']
+  styleUrls: ['./friend-list.component.scss'],
 })
 export class FriendListComponent implements OnInit {
   friendsService = inject(FriendsService);
@@ -20,7 +21,7 @@ export class FriendListComponent implements OnInit {
   }
 
   loadFriends() {
-    this.friendsService.getFriends().subscribe(friends => {
+    this.friendsService.getFriends().subscribe((friends) => {
       this.friends = friends;
     });
   }

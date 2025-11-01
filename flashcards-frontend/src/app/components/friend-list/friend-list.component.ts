@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FriendsService } from '../../services/friends.service';
 import { User } from '../../models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-friend-list',
@@ -14,6 +15,7 @@ import { User } from '../../models';
 })
 export class FriendListComponent implements OnInit {
   friendsService = inject(FriendsService);
+  toastService = inject(ToastService);
   friends: User[] = [];
 
   ngOnInit(): void {
@@ -27,8 +29,14 @@ export class FriendListComponent implements OnInit {
   }
 
   removeFriend(userId: number) {
-    this.friendsService.removeFriend(userId).subscribe(() => {
-      this.loadFriends();
+    this.friendsService.removeFriend(userId).subscribe({
+      next: () => {
+        this.loadFriends();
+        this.toastService.show('Friend removed successfully!', 'success');
+      },
+      error: (err) => {
+        this.toastService.show(`Error: ${err.error.message}`, 'error');
+      },
     });
   }
 }

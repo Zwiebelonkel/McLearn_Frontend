@@ -1,7 +1,11 @@
-<div class="friend-add-container">
-  <h2>{{ 'add_friend' | translate }}</h2>
-  <div class="form-group">
-    <input type="text" [(ngModel)]="username" placeholder="{{ 'username' | translate }}">
-    <button (click)="sendRequest()">{{ 'add' | translate }}</button>
-  </div>
+<div class="add-form">
+  <input
+    type="text"
+    [(ngModel)]="username"
+    placeholder="{{ 'username' | translate }}"
+    class="form-input"
+  />
+  <button (click)="sendRequest()" class="btn btn-primary">
+    {{ "add" | translate }}
+  </button>
 </div>

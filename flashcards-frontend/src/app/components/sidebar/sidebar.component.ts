@@ -32,6 +32,7 @@ export class SidebarComponent {
 
   logout() {
     this.authService.logout();
+    this.router.navigate(['/logout']);
   }
 
   toggleTheme() {

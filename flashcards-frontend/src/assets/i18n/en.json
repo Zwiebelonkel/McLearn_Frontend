@@ -66,5 +66,8 @@
   "remove_friend": "Remove friend",
   "cancel_request": "Cancel request",
   "pending": "Pending",
-  "no_friends_found": "No friends found"
+  "no_friends_found": "No friends found",
+  "logged_out_title": "You have been logged out",
+  "logged_out_message": "Thank you for using our application. You can log in again at any time.",
+  "log_in_again": "Log in again"
 }

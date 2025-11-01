@@ -66,5 +66,8 @@
   "remove_friend": "Eliminar amigo",
   "cancel_request": "Cancelar solicitud",
   "pending": "Pendiente",
-  "no_friends_found": "No se encontraron amigos"
+  "no_friends_found": "No se encontraron amigos",
+  "logged_out_title": "Has cerrado sesión",
+  "logged_out_message": "Gracias por usar nuestra aplicación. Puedes volver a iniciar sesión en cualquier momento.",
+  "log_in_again": "Iniciar sesión de nuevo"
 }

@@ -8,11 +8,13 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { authGuard } from './guards/auth.guard';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
+import { LogoutComponent } from './pages/logout/logout.component';
 
 export const routes: Routes = [
   { path: '', component: StacksPage },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'logout', component: LogoutComponent },
   {
     path: 'profile',
     component: ProfilePageComponent,

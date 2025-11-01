@@ -59,13 +59,15 @@
     "friends": "Amis",
     "requests": "Demandes",
     "add_friend": "Ajouter un ami",
-    "friend_requests": "Demandes d'amis",
+  "friend_requests": "Demandes d'amis",
     "no_friend_requests": "Aucune demande d'ami",
     "accept": "Accepter",
     "decline": "Refuser",
     "remove_friend": "Supprimer un ami",
     "cancel_request": "Annuler la demande",
     "pending": "En attente",
-    "no_friends_found": "Aucun ami trouvé"
+    "no_friends_found": "Aucun ami trouvé",
+    "logged_out_title": "Vous avez été déconnecté",
+    "logged_out_message": "Merci d'utiliser notre application. Vous pouvez vous reconnecter à tout moment.",
+    "log_in_again": "Se reconnecter"
   }
-  

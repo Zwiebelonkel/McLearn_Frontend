@@ -1,35 +1,46 @@
+
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.friends-container,
-.friends-page-container {
-  padding: 20px;
+.page-title {
+  margin-bottom: 2rem;
+}
 
-  h1,
-  h2 {
-    margin-bottom: 20px;
-  }
+.friends-actions {
+  margin-bottom: 20px;
+}
 
-  .friends-actions {
-    margin-bottom: 20px;
-  }
+.friends-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
 
-  .friends-lists {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
+.card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.card-header {
+  padding: 1rem;
+  background-color: #ec4949;
+  color: white;
+  border-bottom: 1px solid #ccc;
+  border-radius: 9px 9px 0px 0px;
+}
+
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {
-  .friends-page-container {
-    display: block;
-  }
-  .friends-column,
-  .requests-column {
-    width: 100%;
+  .friends-lists {
+    grid-template-columns: 1fr;
   }
 }

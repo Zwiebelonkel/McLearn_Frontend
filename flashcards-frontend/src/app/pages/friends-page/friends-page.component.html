@@ -1,12 +1,31 @@
-<div class="page">
-  <h2>{{ "friends" | translate }}</h2>
-  <div class="container friends-page-container">
-    <div class="friends-column">
-      <app-friend-list></app-friend-list>
+<div class="container">
+  <h1 class="page-title">{{ "friends" | translate }}</h1>
+  <div class="friends-lists">
+    <div class="card">
+      <div class="card-header">
+        <h2>{{ 'friends' | translate }}</h2>
+      </div>
+      <div class="card-body">
+        <app-friend-list></app-friend-list>
+      </div>
     </div>
-    <div class="requests-column">
-      <app-friend-requests></app-friend-requests>
-      <app-friend-add></app-friend-add>
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h2>{{ 'friend_requests' | translate }}</h2>
+        </div>
+        <div class="card-body">
+          <app-friend-requests></app-friend-requests>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 1rem">
+        <div class="card-header">
+          <h2>{{ 'add_friend' | translate }}</h2>
+        </div>
+        <div class="card-body">
+          <app-friend-add></app-friend-add>
+        </div>
+      </div>
     </div>
   </div>
 </div>

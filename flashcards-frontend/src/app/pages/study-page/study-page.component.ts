@@ -174,14 +174,27 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
    const shareTitle = `${stack.name}`;
    const shareText = `Check out "${stack.name}" by ${stack.owner_name || 'Unknown'} - A flashcard stack to learn from!`;
 
-   // Check if Web Share API is available (mostly mobile)
+   // Update meta tags for social media preview
+   this.updateMetaTags(shareTitle, shareText, shareUrl);
+
+   // Check if Web Share API with files is available (mostly mobile)
    if (navigator.share) {
      try {
-       await navigator.share({
-         title: shareTitle,
-         text: shareText,
-         url: shareUrl
-       });
+       // Try to share with image if available
+       if (navigator.share) {
+         await navigator.share({
+           title: shareTitle,
+           text: shareText,
+           url: shareUrl
+         });
+       } else {
+         // Fallback without image check
+         await navigator.share({
+           title: shareTitle,
+           text: shareText,
+           url: shareUrl
+         });
+       }
      } catch (err) {
        // User cancelled or error occurred
        console.log('Share cancelled or failed:', err);
@@ -196,5 +209,36 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
        prompt('Copy this link:', `${shareText}\n${shareUrl}`);
      }
    }
+ }
+
+ private updateMetaTags(title: string, description: string, url: string) {
+   // Get logo URL - using apple-touch-icon.png
+   const logoUrl = `${window.location.origin}/assets/apple-touch-icon.png`;
+   
+   // Update or create Open Graph meta tags for social media previews
+   this.setMetaTag('og:title', title);
+   this.setMetaTag('og:description', description);
+   this.setMetaTag('og:url', url);
+   this.setMetaTag('og:image', logoUrl);
+   this.setMetaTag('og:type', 'website');
+   
+   // Twitter Card meta tags
+   this.setMetaTag('twitter:card', 'summary');
+   this.setMetaTag('twitter:title', title);
+   this.setMetaTag('twitter:description', description);
+   this.setMetaTag('twitter:image', logoUrl);
+ }
+
+ private setMetaTag(property: string, content: string) {
+   const prefix = property.startsWith('og:') ? 'property' : 'name';
+   let element = document.querySelector(`meta[${prefix}="${property}"]`);
+   
+   if (!element) {
+     element = document.createElement('meta');
+     element.setAttribute(prefix, property);
+     document.head.appendChild(element);
+   }
+   
+   element.setAttribute('content', content);
  }
 }

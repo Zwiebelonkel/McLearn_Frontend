@@ -31,6 +31,11 @@ export class StudyPage {
   userId = this.auth.getUserId();
   flyDirection = signal<'left' | 'right' | null>(null);
 
+
+hasCards  = this.cards().length > 0;
+canFlip = !this.isTransitioning() && this.current() !== null;
+canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
+
   constructor() {
     this.loadCard();
     this.loadCards();
@@ -130,4 +135,66 @@ export class StudyPage {
     const percent = ((scoreSum - total) / (total * (maxBox - 1))) * 100;
     return Math.round(Math.max(0, Math.min(100, percent)));
   }
+
+ // Touch gestures for mobile
+ private touchStartX = 0;
+ private touchStartY = 0;
+
+ handleTouchStart(event: TouchEvent) {
+   this.touchStartX = event.touches[0].clientX;
+   this.touchStartY = event.touches[0].clientY;
+ }
+
+ handleTouchEnd(event: TouchEvent) {
+   if (!this.showBack() || !this.canRate) return;
+
+   const touchEndX = event.changedTouches[0].clientX;
+   const touchEndY = event.changedTouches[0].clientY;
+   
+   const deltaX = touchEndX - this.touchStartX;
+   const deltaY = touchEndY - this.touchStartY;
+
+   // Swipe detection (horizontal swipe > 50px)
+   if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+     if (deltaX > 0) {
+       // Swipe right - good
+       this.rate('good');
+     } else {
+       // Swipe left - again
+       this.rate('again');
+     }
+   }
+ }
+
+ async shareStack() {
+   const stack = this.stack();
+   if (!stack) return;
+
+   const shareUrl = window.location.href;
+   const shareTitle = `${stack.name}`;
+   const shareText = `Check out "${stack.name}" by ${stack.owner_name || 'Unknown'} - A flashcard stack to learn from!`;
+
+   // Check if Web Share API is available (mostly mobile)
+   if (navigator.share) {
+     try {
+       await navigator.share({
+         title: shareTitle,
+         text: shareText,
+         url: shareUrl
+       });
+     } catch (err) {
+       // User cancelled or error occurred
+       console.log('Share cancelled or failed:', err);
+     }
+   } else {
+     // Fallback: Copy to clipboard
+     try {
+       await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+       alert('Link copied to clipboard!');
+     } catch (err) {
+       // If clipboard fails, show a prompt
+       prompt('Copy this link:', `${shareText}\n${shareUrl}`);
+     }
+   }
+ }
 }

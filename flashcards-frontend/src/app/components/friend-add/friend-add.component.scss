@@ -8,9 +8,16 @@
   padding: 0.5rem;
   font-family: inherit;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border);
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+.form-textarea {
+  resize: vertical;
+  background-color: var(--input-bg);
 }
 
 .btn {

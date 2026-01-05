@@ -319,6 +319,45 @@ import { AuthService } from '../../services/auth.service';
     
       reader.readAsText(file);
     }
+
+    exportCSV() {
+      const cardsArray = this.cards();
+      if (cardsArray.length === 0) {
+        this.toast.show('No cards to export', 'warning');
+        return;
+      }
+    
+      // CSV-Header
+      let csv = 'Front,Back\n';
+    
+      // Karten hinzufügen
+      for (const card of cardsArray) {
+        // Escape-Funktion für CSV (Anführungszeichen verdoppeln, bei Komma/Zeilenumbruch in Quotes setzen)
+        const escapeCsv = (text: string) => {
+          if (text.includes(',') || text.includes('\n') || text.includes('"')) {
+            return `"${text.replace(/"/g, '""')}"`;
+          }
+          return text;
+        };
+    
+        csv += `${escapeCsv(card.front)},${escapeCsv(card.back)}\n`;
+      }
+    
+      // Blob erstellen und Download auslösen
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${this.stack()?.name || 'cards'}_export.csv`);
+      link.style.visibility = 'hidden';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    
+      this.toast.show('CSV exported successfully', 'success');
+    }
     
     
 

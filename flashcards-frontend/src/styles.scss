@@ -24,6 +24,7 @@
   --input-border-color: #ced4da;
   --header-background: rgb(236, 73, 73);
   --header-text-color: white;
+  --border: #d5d5d5;
 }
 
 body.dark-theme {
@@ -36,6 +37,7 @@ body.dark-theme {
   --input-border-color: #424242;
   --header-background: #1f1f1f;
   --header-text-color: #f8f9fa;
+  --border: #444444;
 }
 
 html, body {

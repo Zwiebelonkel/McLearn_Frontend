@@ -28,16 +28,17 @@
 }
 
 .markdown-toolbar button {
+  color: var(--text-color);
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc;
-  background: #f7f7f7;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   cursor: pointer;
   border-radius: 4px;
   font-family: inherit;
 }
 
 .markdown-toolbar button:hover {
-  background: #e0e0e0;
+  background: var(--primary-color);
 }
 
 .add-form {
@@ -45,7 +46,7 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   padding: 1rem;
   border-radius: 0.3rem;
 }
@@ -56,13 +57,26 @@
   padding: 0.5rem;
   font-family: inherit;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border);
   border-radius: 4px;
   box-sizing: border-box;
 }
 
+.form-input {
+  color: var(--input-color);
+  font-size: 1rem;
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--card-border-color);
+  border-radius: 4px;
+  outline: none;
+  background-color: var(--input-bg);
+}
+
 .form-textarea {
+  color:var(--input-color);
   resize: vertical;
+  background-color: var(--input-bg);
 }
 
 .btn {
@@ -95,15 +109,15 @@
 }
 
 .card {
-  border: 1px solid #ccc;
+  border: 1px solid var(--card-border-color);
   border-radius: 10px;
 }
 
 .card-header {
   padding: 1rem;
   background-color: #ec4949;
-  color: white;
-  border-bottom: 1px solid #ccc;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--card-border-color);
   border-radius: 9px 9px 0px 0px;
 }
 
@@ -116,7 +130,7 @@
 
 .card-footer {
   padding: 1rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--border);
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -173,7 +187,7 @@
   margin-bottom: 2rem;
   align-items: center;
   flex-wrap: wrap;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border);
   padding: 1rem;
   border-radius: 0.3rem;
 }
@@ -283,6 +297,31 @@
   fill: white;
 }
 
+.csv-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--secondary-color);
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.csv-export svg {
+  fill: white;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .stack-meta button {
   flex-basis: 100%;
   justify-content: center;
@@ -292,7 +331,7 @@
 .divider {
   display: block;
   width: 100%;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border);
 }
 
 .modal {
@@ -319,8 +358,8 @@
 
 /* ===== Modal Content ===== */
 .modal-content {
-  background: #fff;
-  color: #000;
+  background: var(--background-color);
+  color: var(--text-color);
   border-radius: 10px;
   max-width: 500px;
   width: 90%;
@@ -356,7 +395,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.4rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .btn-sm {
@@ -388,7 +427,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
@@ -415,7 +454,7 @@
 
 /* ===== Footer ===== */
 .modal-footer {
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   padding-top: 1rem;
   display: flex;
   justify-content: flex-end;
@@ -435,7 +474,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   gap: 1rem;
 }
 

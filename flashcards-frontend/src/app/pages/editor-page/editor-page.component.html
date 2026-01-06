@@ -117,16 +117,16 @@
           <textarea (click)="$event.stopPropagation()" [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3" [disabled]="!canEdit"></textarea>
         </label>
       </div>
-      <div *ngIf="canEdit" class="card-footer">
-        <!-- Checkbox links -->
+      <!--<div *ngIf="canEdit" class="card-footer">
+
       
-        <!-- Buttons rechts 
         <div class="btn-group">
           <button (click)="save(c); $event.stopPropagation()" class="btn btn-secondary">{{ 'save' | translate }}</button>
           <button (click)="del(c); $event.stopPropagation()" class="btn btn-danger">{{ 'delete' | translate }}</button>
         </div>
-        -->
+        
       </div>
+      -->
       
     </div>
   </div>

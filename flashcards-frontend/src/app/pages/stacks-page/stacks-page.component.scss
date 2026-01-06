@@ -53,7 +53,7 @@
   gap: 0.5rem;
   text-align: center;
   white-space: nowrap;
-  flex-shrink: 0; /* Verhindert Schrumpfen */
+  flex-shrink: 0;
 }
 
 .btn-icon {
@@ -101,7 +101,7 @@
 
 .stack-name {
   font-weight: bold;
-  flex: 1; /* Nimmt verfügbaren Platz ein */
+  flex: 1;
   margin-right: 1rem;
 }
 
@@ -109,8 +109,8 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-shrink: 0; /* Verhindert Schrumpfen der Button-Gruppe */
-  margin-left: auto; /* Schiebt Buttons nach rechts */
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .card-count {
@@ -195,15 +195,21 @@
 
   .stack-actions {
     margin-top: 0;
-    justify-content: flex-end; /* Rechtsbündig */
+    justify-content: space-between; /* Kartenanzahl links, Buttons rechts */
     margin-left: 0;
+    width: 100%;
+  }
+
+  .card-count {
+    order: -1; /* Verschiebt Kartenanzahl an den Anfang */
+    margin-right: auto; /* Schiebt nach links */
   }
 
   /* Buttons: nur Icons anzeigen */
   .btn {
     padding: 0.5rem;
     min-width: 40px;
-    width: 40px; /* Feste Breite für einheitliche Icon-Buttons */
+    width: 40px;
   }
 
   .btn-text {

@@ -53,6 +53,7 @@
   gap: 0.5rem;
   text-align: center;
   white-space: nowrap;
+  flex-shrink: 0; /* Verhindert Schrumpfen */
 }
 
 .btn-icon {
@@ -100,12 +101,16 @@
 
 .stack-name {
   font-weight: bold;
+  flex: 1; /* Nimmt verfügbaren Platz ein */
+  margin-right: 1rem;
 }
 
 .stack-actions {
   display: flex;
   gap: 1rem;
   align-items: center;
+  flex-shrink: 0; /* Verhindert Schrumpfen der Button-Gruppe */
+  margin-left: auto; /* Schiebt Buttons nach rechts */
 }
 
 .card-count {
@@ -183,15 +188,22 @@
     align-items: stretch;
   }
 
+  .stack-name {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
   .stack-actions {
-    margin-top: 1rem;
-    justify-content: space-between;
+    margin-top: 0;
+    justify-content: flex-end; /* Rechtsbündig */
+    margin-left: 0;
   }
 
   /* Buttons: nur Icons anzeigen */
   .btn {
     padding: 0.5rem;
     min-width: 40px;
+    width: 40px; /* Feste Breite für einheitliche Icon-Buttons */
   }
 
   .btn-text {

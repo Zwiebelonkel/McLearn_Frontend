@@ -48,14 +48,47 @@
     
     <div class="divider"></div>
 
-    <!-- Markdown Toolbar (nur für Rückseite) -->
-    <div class="markdown-toolbar">
-      <button type="button" (click)="insert('bold')"><b>B</b></button>
-      <button type="button" (click)="insert('italic')"><i>I</i></button>
-      <button type="button" (click)="insert('code')">Code</button>
-      <button type="button" (click)="insert('ul')">List</button>
-      <button type="button" (click)="insert('center')">Center</button>
-    </div>
+<div class="markdown-toolbar">
+
+  <!-- Text -->
+  <button type="button" (click)="insert('bold')" title="Bold"><b>B</b></button>
+  <button type="button" (click)="insert('italic')" title="Italic"><i>I</i></button>
+  <button type="button" (click)="insert('underline')" title="Underline"><u>U</u></button>
+  <button type="button" (click)="insert('strikethrough')" title="Strike"><s>S</s></button>
+  <button type="button" (click)="insert('highlight')" title="Highlight">🖍</button>
+
+  <span class="toolbar-divider"></span>
+
+  <!-- Headings -->
+  <button type="button" (click)="insert('h1')" title="H1">H1</button>
+  <button type="button" (click)="insert('h2')" title="H2">H2</button>
+  <button type="button" (click)="insert('h3')" title="H3">H3</button>
+
+  <span class="toolbar-divider"></span>
+
+  <!-- Code -->
+  <button type="button" (click)="insert('code')" title="Inline Code">{ }</button>
+  <button type="button" (click)="insert('codeblock')" title="Code Block">```</button>
+
+  <span class="toolbar-divider"></span>
+
+  <!-- Lists -->
+  <button type="button" (click)="insert('ul')" title="Bullet List">• List</button>
+  <button type="button" (click)="insert('ol')" title="Numbered List">1. List</button>
+
+  <span class="toolbar-divider"></span>
+
+  <!-- Quotes / Layout -->
+  <button type="button" (click)="insert('blockquote')" title="Quote">❝</button>
+  <button type="button" (click)="insert('center')" title="Center">⎯⎯⎯</button>
+
+  <span class="toolbar-divider"></span>
+
+  <!-- Extras -->
+  <button type="button" (click)="insert('link')" title="Link">🔗</button>
+  <button type="button" (click)="insert('table')" title="Table">▦</button>
+
+</div>
 
     <textarea
       #backArea

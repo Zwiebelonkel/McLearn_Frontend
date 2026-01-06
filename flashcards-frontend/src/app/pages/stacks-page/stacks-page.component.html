@@ -1,56 +1,69 @@
 <app-loader *ngIf="loading()" />
-    <div *ngIf="!loading()">
-      <div class="container">
-        <h2 *ngIf="isLoggedIn()" class="page-title">{{ 'new' | translate }}</h2>
-
-        <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
-          <input [(ngModel)]="name" name="name" placeholder="{{ 'new_stack' | translate }}" required class="form-input" />
-          <button type="submit" class="btn btn-primary" [disabled]="!name || name.trim() === ''">
-            {{ 'create' | translate }}
-          </button>
-        </form>
-
-        <h2 class="page-title">{{ 'stacks' | translate }}</h2>
-
-        <div class="filter-controls">
-          <div class="search-wrapper">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              type="text"
-              [(ngModel)]="search"
-              placeholder="{{ 'search_stacks' | translate }}..."
-              class="form-input search-input"
-            />
-          </div>
-        
-          <select *ngIf="isLoggedIn()" [(ngModel)]="filter" class="form-input select-input">
-            <option value="all">{{ 'all' | translate }}</option>
-            <option value="public">🌍 {{ 'public_only' | translate }}</option>
-            <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
-          </select>
-        </div>
-        
-
-        <ul class="stack-list">
-          <li *ngFor="let s of filteredStacks" class="stack-item">
-            <span class="stack-name">
-              {{ s.name }}
-              <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 {{ 'by' | translate }} {{ s.owner_name }}</span>
-              <span *ngIf="s.is_public && isOwner(s)">🌍</span>
-              <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
-            </span>
-            <div class="stack-actions">
-              <span class="card-amount">{{ s.card_amount }}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d5d5d5"><path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/></svg>              
-              <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">{{ 'edit' | translate }}</a>
-              <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">{{ 'study' | translate }}</a>
-              <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">{{ 'delete' | translate }}</button>
-            </div>
-          </li>
-        </ul>
+<div *ngIf="!loading()">
+  <div class="container">
+    <h2 *ngIf="isLoggedIn()" class="page-title">{{ 'new' | translate }}</h2>
+    <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
+      <input [(ngModel)]="name" name="name" placeholder="{{ 'new_stack' | translate }}" required class="form-input" />
+      <button type="submit" class="btn btn-primary" [disabled]="!name || name.trim() === ''">
+        {{ 'create' | translate }}
+      </button>
+    </form>
+    <h2 class="page-title">{{ 'stacks' | translate }}</h2>
+    <div class="filter-controls">
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="search"
+          placeholder="{{ 'search_stacks' | translate }}..."
+          class="form-input search-input"
+        />
       </div>
+    
+      <select *ngIf="isLoggedIn()" [(ngModel)]="filter" class="form-input select-input">
+        <option value="all">{{ 'all' | translate }}</option>
+        <option value="public">🌍 {{ 'public_only' | translate }}</option>
+        <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
+      </select>
     </div>
+    
+    <ul class="stack-list">
+      <li *ngFor="let s of filteredStacks" class="stack-item">
+        <span class="stack-name">
+          {{ s.name }}
+          <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 {{ 'by' | translate }} {{ s.owner_name }}</span>
+          <span *ngIf="s.is_public && isOwner(s)">🌍</span>
+          <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
+        </span>
+        <div class="stack-actions">
+          <span class="card-amount">{{ s.card_amount }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d5d5d5">
+            <path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
+          </svg>              
+          <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">
+            <span class="btn-text">{{ 'edit' | translate }}</span>
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+              <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+            </svg>
+          </a>
+          <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">
+            <span class="btn-text">{{ 'study' | translate }}</span>
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+              <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z"/>
+            </svg>
+          </a>
+          <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">
+            <span class="btn-text">{{ 'delete' | translate }}</span>
+            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+            </svg>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
@@ -40,6 +40,12 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
     this.loadCard();
     this.loadCards();
     this.api.getStack(this.stackId).subscribe((stack) => this.stack.set(stack));
+  }
+
+  @HostListener('window:keydown.space', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    event.preventDefault();
+    this.flip();
   }
 
   isOwner(): boolean {
@@ -172,7 +178,7 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
 
    const shareUrl = window.location.href;
    const shareTitle = `${stack.name}`;
-   const shareText = `Check out "${stack.name}" by ${stack.owner_name || 'Unknown'} - A flashcard stack to learn from!`;
+   const shareText = `Check out \"${stack.name}\" by ${stack.owner_name || 'Unknown'} - A flashcard stack to learn from!`;
 
    // Update meta tags for social media preview
    this.updateMetaTags(shareTitle, shareText, shareUrl);

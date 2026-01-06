@@ -7,14 +7,14 @@
 }
 
 .login-card {
-  background: var(--light-color);
+  background: var(--card-background);
   padding: 2.5rem;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px;
   text-align: center;
-  color: var(--dark-color);
+  color: var(--text-color);
 }
 
 .title {
@@ -24,16 +24,16 @@
 }
 
 .form-input {
-  width: 100%;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  border: 0px solid var(--light-color);
-  border-bottom: 1px solid var(--light-color);
+  border: 0px solid var(--border);
+  border-bottom: 1px solid var(--border);
   font-size: 1rem;
   font-family: inherit;
-  background: var(--light-color);
-  color: var(--dark-color);
+  background: var(--input-bg);
+  color: var(--text-color);
   transition: border-color 0.2s;
+  border-radius: 0.3rem;
 }
 
 .form-input:focus {
@@ -48,7 +48,6 @@
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  width: 100%;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;

@@ -175,12 +175,14 @@
 
 @media (max-width: 768px) {
   .add-form {
-    flex-direction: column;
-    align-items: stretch;
+    /* Bleibt als Zeile (flex-row) */
+    flex-direction: row;
+    align-items: center;
   }
 
   .add-form > .btn {
-    align-self: flex-start;
+    /* Button bleibt normal */
+    align-self: center;
   }
 
   .stack-item {
@@ -195,14 +197,14 @@
 
   .stack-actions {
     margin-top: 0;
-    justify-content: space-between; /* Kartenanzahl links, Buttons rechts */
+    justify-content: space-between;
     margin-left: 0;
     width: 100%;
   }
 
   .card-count {
-    order: -1; /* Verschiebt Kartenanzahl an den Anfang */
-    margin-right: auto; /* Schiebt nach links */
+    order: -1;
+    margin-right: auto;
   }
 
   /* Buttons: nur Icons anzeigen */

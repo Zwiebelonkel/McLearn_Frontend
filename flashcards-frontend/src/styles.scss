@@ -65,6 +65,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
   font-weight: 600;
   line-height: 1.2;
+  user-select: none;
 }
 
 h1 { 
@@ -126,6 +127,7 @@ h6 { font-size: 1rem; }
 }
 
 .btn {
+  user-select: none;
   display: inline-block;
   font-weight: 600;
   color: var(--text-color);

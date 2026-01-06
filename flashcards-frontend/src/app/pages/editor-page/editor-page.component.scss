@@ -11,6 +11,7 @@
 }
 
 .back-link {
+  user-select: none;
   text-decoration: none;
   color: var(--primary-color);
   margin-bottom: 1rem;
@@ -114,6 +115,8 @@
 }
 
 .card-header {
+  user-select: none;
+  cursor: pointer;
   padding: 1rem;
   background-color: #ec4949;
   color: var(--text-color);

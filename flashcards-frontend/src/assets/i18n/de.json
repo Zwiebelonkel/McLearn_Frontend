@@ -69,5 +69,8 @@
     "no_friends_found": "Keine Freunde gefunden",
     "logged_out_title": "Du wurdest abgemeldet",
     "logged_out_message": "Vielen Dank für die Nutzung unserer Anwendung. Du kannst dich jederzeit wieder anmelden.",
-    "log_in_again": "Erneut anmelden"
+    "log_in_again": "Erneut anmelden",
+    "delete_selected": "Auswahl löschen",
+    "save_selected": "Auswahl speichern"
+
   }

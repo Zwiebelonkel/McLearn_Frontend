@@ -132,9 +132,16 @@
   padding: 1rem;
   border-top: 1px solid var(--border);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* Checkbox links, Buttons rechts */
+  align-items: center;
   gap: 1rem;
 }
+
+.card-footer .btn-group {
+  display: flex;
+  gap: 0.5rem; /* Abstand zwischen den Buttons */
+}
+
 
 .image-preview-container {
   position: relative;
@@ -484,5 +491,74 @@
   align-items: center;
   width: 100%;
 }
+
+.btn-fixed{
+
+}
+
+/* ===== Custom Checkbox in Card Footer ===== */
+.card-footer input[type="checkbox"] {
+  appearance: none;        /* Standard-Checkbox entfernen */
+  -webkit-appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--input-bg);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Hover-Effekt */
+.card-footer input[type="checkbox"]:hover {
+  border-color: var(--primary-color);
+}
+
+/* Checked-Zustand */
+.card-footer input[type="checkbox"]:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Haken-Symbol */
+.card-footer input[type="checkbox"]:checked::after {
+  content: '✔';
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.panels {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: fixed;
+  top: 7rem;
+  left: -10rem; /* Startposition */
+  z-index: 999999;
+  animation: fade-in 0.3s forwards; /* Animation */
+}
+
+@keyframes fade-in {
+  0% {
+    left: -10rem;
+  }
+  100% {
+    left: -10px;
+  }
+}
+
+.card.selected {
+  border-radius: 0.75rem;
+  border: 3px solid #ec4949;
+  transform: translate(0px, -10px) scale(0.95);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.411);
+}
+
+
 
 

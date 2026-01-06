@@ -48,6 +48,8 @@ import { AuthService } from '../../services/auth.service';
     showCollaboratorsModal = signal(false);
     inviteeSearch = '';
     searchedUsers: User[] = [];
+    selectedCardIds = new Set<String>();
+
   
     @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
   
@@ -358,8 +360,6 @@ import { AuthService } from '../../services/auth.service';
     
       this.toast.show('CSV exported successfully', 'success');
     }
-    
-    
 
   get filteredCards(): Card[] {
     const cardsArray = this.cards();
@@ -418,4 +418,85 @@ import { AuthService } from '../../services/auth.service';
       });
     }
   }
+
+  isSelected(card: Card): boolean {
+    return this.selectedCardIds.has(card.id);
+  }
+  
+  toggleSelection(card: Card) {
+    if (this.selectedCardIds.has(card.id)) {
+      this.selectedCardIds.delete(card.id);
+    } else {
+      this.selectedCardIds.add(card.id);
+    }
+  }
+  
+  hasSelection(): boolean {
+    return this.selectedCardIds.size > 0;
+  }
+  
+  deleteSelected() {
+    if (this.selectedCardIds.size === 0) return;
+  
+    if (!confirm(`${this.selectedCardIds.size} Karten wirklich löschen?`)) {
+      return;
+    }
+  
+    this.loading.set(true);
+  
+    const ids = Array.from(this.selectedCardIds);
+    let completed = 0;
+  
+    for (const id of ids) {
+      this.api.deleteCard(id.toString()).subscribe({
+        next: () => {
+          completed++;
+          if (completed === ids.length) {
+            this.selectedCardIds.clear();
+            this.reload();
+            this.toast.show(`${completed} Karten gelöscht`, 'success');
+          }
+        },
+        error: err => {
+          console.error(err);
+          this.loading.set(false);
+          this.toast.show('Fehler beim Löschen mehrerer Karten', 'error');
+        }
+      });
+    }
+    
+  }
+  saveSelected() {
+    if (this.selectedCardIds.size === 0) return;
+  
+    if (!confirm(`${this.selectedCardIds.size} Karten wirklich speichern?`)) {
+      return;
+    }
+  
+    this.loading.set(true);
+  
+    const cardsToSave = this.cards().filter(c => this.selectedCardIds.has(c.id));
+    let completed = 0;
+  
+    for (const c of cardsToSave) {
+      this.api.updateCard(c.id, { front: c.front, back: c.back, front_image: c.front_image }).subscribe({
+        next: () => {
+          completed++;
+          if (completed === cardsToSave.length) {
+            this.selectedCardIds.clear();
+            this.reload();
+            this.toast.show(`${completed} Karten gespeichert`, 'success');
+          }
+        },
+        error: err => {
+          console.error(err);
+          this.loading.set(false);
+          this.toast.show('Fehler beim Speichern mehrerer Karten', 'error');
+        }
+      });
+    }
+  }
+  
+  
+
 }

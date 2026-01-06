@@ -92,19 +92,22 @@
       class="form-input search-input"
     />
   </div>
-
+  <div *ngIf="selectedCardIds.size > 0" class="panels">
+  <button type="button" (click)="deleteSelected()" class="btn btn-fixed btn-danger" [disabled]="!hasSelection()">{{ 'delete_selected' | translate }}</button>
+  <button type="button" (click)="saveSelected()" class="btn btn-fixed btn-secondary" [disabled]="!hasSelection()">{{ 'save_selected' | translate }}</button>
+</div>
   <!-- Karten-Liste -->
   <div class="card-list">
-    <div *ngFor="let c of filteredCards" class="card">
+    <div *ngFor="let c of filteredCards" class="card" [class.selected]="isSelected(c)" (click)="toggleSelection(c)">
       <div class="card-header">
         <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
       </div>
       <div class="card-body">
         <label>{{ 'front' | translate }}:
-          <input [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" [disabled]="!canEdit" />
+          <input (click)="$event.stopPropagation()" [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" [disabled]="!canEdit" />
         </label>
         <div class="image-upload-container">
-          <button *ngIf="canEdit" type="button" (click)="openCardImageUploader(c)" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
+          <button *ngIf="canEdit" type="button" (click)="openCardImageUploader(c); $event.stopPropagation()" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
           <div *ngIf="c.front_image" class="image-preview-container">
               <img [src]="c.front_image" class="image-preview" />
               <button *ngIf="canEdit" type="button" (click)="removeCardImage(c)" class="btn btn-danger remove-image-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
@@ -112,13 +115,19 @@
       </div>
         <div class="divider"></div> <!-- <<< Neuer Trenner -->
         <label>{{ 'back' | translate }}:
-          <textarea [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3" [disabled]="!canEdit"></textarea>
+          <textarea (click)="$event.stopPropagation()" [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3" [disabled]="!canEdit"></textarea>
         </label>
       </div>
       <div *ngIf="canEdit" class="card-footer">
-        <button (click)="save(c)" class="btn btn-secondary">{{ 'save' | translate }}</button>
-        <button (click)="del(c)" class="btn btn-danger">{{ 'delete' | translate }}</button>
+        <!-- Checkbox links -->
+      
+        <!-- Buttons rechts -->
+        <div class="btn-group">
+          <button (click)="save(c); $event.stopPropagation()" class="btn btn-secondary">{{ 'save' | translate }}</button>
+          <button (click)="del(c); $event.stopPropagation()" class="btn btn-danger">{{ 'delete' | translate }}</button>
+        </div>
       </div>
+      
     </div>
   </div>
 </div>

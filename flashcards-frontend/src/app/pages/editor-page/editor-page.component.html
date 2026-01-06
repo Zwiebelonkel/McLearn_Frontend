@@ -21,21 +21,31 @@
 
   <!-- Karten-Hinzufügen -->
   <form (submit)="add($event)" class="add-form">
-    <input
-      type="text"
-      [(ngModel)]="front"
-      name="front"
-      placeholder="{{ 'question' | translate }}"
-      required
-      class="form-input"
-    />
-        <div class="image-upload-container">
-      <button type="button" (click)="openImageUploader()" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
-      <div *ngIf="frontImage" class="image-preview-container">
-        <img [src]="frontImage" class="image-preview" />
-        <button type="button" (click)="removeImage()" class="btn btn-danger remove-image-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
-      </div>
+    <div class="input-row">
+      <input
+        type="text"
+        [(ngModel)]="front"
+        name="front"
+        placeholder="{{ 'question' | translate }}"
+        required
+        class="form-input"
+      />
+      <button type="button" (click)="openImageUploader()" class="btn btn-secondary btn-icon-only">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+          <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/>
+        </svg>
+      </button>
     </div>
+    
+    <div *ngIf="frontImage" class="image-preview-container">
+      <img [src]="frontImage" class="image-preview" />
+      <button type="button" (click)="removeImage()" class="btn btn-danger remove-image-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+          <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+        </svg>
+      </button>
+    </div>
+    
     <div class="divider"></div>
 
     <!-- Markdown Toolbar (nur für Rückseite) -->
@@ -59,23 +69,23 @@
     <div class="divider"></div>
 
     <!-- Buttons nebeneinander -->
-<div class="form-actions">
-  <button type="submit" class="btn btn-primary">{{ 'add' | translate }}</button>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{{ 'add' | translate }}</button>
 
-  <!-- CSV-Import -->
-  <label class="btn btn-success csv-upload">
-    Upload CSV <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
-    <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
-  </label>
+      <!-- CSV-Import -->
+      <label class="btn btn-success csv-upload">
+        Upload CSV <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+        <input type="file" (change)="importCSV($event)" hidden accept=".csv" />
+      </label>
 
-  <!-- CSV-Export -->
-  <button type="button" (click)="exportCSV()" class="btn btn-success csv-export">
-    Export CSV 
-    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-      <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
-    </svg>
-  </button>
-</div>
+      <!-- CSV-Export -->
+      <button type="button" (click)="exportCSV()" class="btn btn-success csv-export">
+        Export CSV 
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+        </svg>
+      </button>
+    </div>
   </form>
 
   <div class="search-wrapper">
@@ -102,32 +112,31 @@
         <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
       </div>
       <div class="card-body">
-        <label>{{ 'front' | translate }}:
-          <input (click)="$event.stopPropagation()" [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" [disabled]="!canEdit" />
-        </label>
-        <div class="image-upload-container">
-          <button *ngIf="canEdit" type="button" (click)="openCardImageUploader(c); $event.stopPropagation()" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/></svg></button>
-          <div *ngIf="c.front_image" class="image-preview-container">
-              <img [src]="c.front_image" class="image-preview" />
-              <button *ngIf="canEdit" type="button" (click)="removeCardImage(c)" class="btn btn-danger remove-image-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
-          </div>
-      </div>
+        <div class="input-row">
+          <label style="flex: 1;">{{ 'front' | translate }}:
+            <input (click)="$event.stopPropagation()" [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" [disabled]="!canEdit" />
+          </label>
+          <button *ngIf="canEdit" type="button" (click)="openCardImageUploader(c); $event.stopPropagation()" class="btn btn-secondary btn-icon-only">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+              <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div *ngIf="c.front_image" class="image-preview-container">
+          <img [src]="c.front_image" class="image-preview" />
+          <button *ngIf="canEdit" type="button" (click)="removeCardImage(c); $event.stopPropagation()" class="btn btn-danger remove-image-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+            </svg>
+          </button>
+        </div>
+        
         <div class="divider"></div>
         <label>{{ 'back' | translate }}:
           <textarea (click)="$event.stopPropagation()" [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3" [disabled]="!canEdit"></textarea>
         </label>
       </div>
-      <!--<div *ngIf="canEdit" class="card-footer">
-
-      
-        <div class="btn-group">
-          <button (click)="save(c); $event.stopPropagation()" class="btn btn-secondary">{{ 'save' | translate }}</button>
-          <button (click)="del(c); $event.stopPropagation()" class="btn btn-danger">{{ 'delete' | translate }}</button>
-        </div>
-        
-      </div>
-      -->
-      
     </div>
   </div>
 </div>

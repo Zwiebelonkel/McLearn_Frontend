@@ -12,7 +12,7 @@
 
 .input-row {
   display: flex;
-  align-items: stretch; /* Wichtig: stretch statt flex-end für gleiche Höhe */
+  align-items: flex-end;
   gap: 0.5rem;
   width: 100%;
 }
@@ -29,19 +29,22 @@
 }
 
 .btn-icon-only {
-  padding: 0;
-  min-height: 40px; /* Mindesthöhe gleich wie Input */
-  width: 40px;
+  padding: 0.5rem;
+  height: 40px;
+  width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  align-self: flex-end; /* Ausrichtung am unteren Ende des Labels */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .btn-icon-only svg {
-  width: 20px;
-  height: 20px;
+  width: 28px !important;
+  height: 28px !important;
+  flex-shrink: 0;
 }
 
 .back-link {
@@ -95,7 +98,7 @@
   border: 1px solid var(--border);
   border-radius: 4px;
   box-sizing: border-box;
-  min-height: 40px; /* Konsistente Mindesthöhe */
+  height: 40px;
 }
 
 .form-input {
@@ -107,12 +110,15 @@
   border-radius: 4px;
   outline: none;
   background-color: var(--input-bg);
+  height: 40px;
 }
 
 .form-textarea {
   color:var(--input-color);
   resize: vertical;
   background-color: var(--input-bg);
+  height: auto;
+  min-height: 80px;
 }
 
 .btn {

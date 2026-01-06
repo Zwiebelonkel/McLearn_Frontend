@@ -175,14 +175,15 @@
 
 @media (max-width: 768px) {
   .add-form {
-    /* Bleibt als Zeile (flex-row) */
     flex-direction: row;
     align-items: center;
   }
 
   .add-form > .btn {
-    /* Button bleibt normal */
     align-self: center;
+    /* Create Button behält normale Breite (kein width override) */
+    min-width: auto;
+    width: auto;
   }
 
   .stack-item {
@@ -207,18 +208,18 @@
     margin-right: auto;
   }
 
-  /* Buttons: nur Icons anzeigen */
-  .btn {
+  /* Buttons in stack-actions: nur Icons anzeigen */
+  .stack-actions .btn {
     padding: 0.5rem;
     min-width: 40px;
     width: 40px;
   }
 
-  .btn-text {
+  .stack-actions .btn-text {
     display: none;
   }
 
-  .btn-icon {
+  .stack-actions .btn-icon {
     display: block;
   }
 }

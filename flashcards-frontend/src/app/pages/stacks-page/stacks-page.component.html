@@ -8,7 +8,9 @@
         {{ 'create' | translate }}
       </button>
     </form>
+    
     <h2 class="page-title">{{ 'stacks' | translate }}</h2>
+    
     <div class="filter-controls">
       <div class="search-wrapper">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
@@ -26,6 +28,7 @@
         <option value="shared">🤝 {{ 'shared_with_me' | translate }}</option>
       </select>
     </div>
+    
     <ul class="stack-list">
       <li *ngFor="let s of filteredStacks" class="stack-item">
         <span class="stack-name">
@@ -34,31 +37,86 @@
           <span *ngIf="s.is_public && isOwner(s)">🌍</span>
           <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
         </span>
+        
         <div class="stack-actions">
+          <!-- Card Count -->
           <div class="card-count">
             <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
               <path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
             </svg>
             <span class="card-amount">{{ s.card_amount }}</span>
           </div>
-          <a *ngIf="canEdit(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">
-            <span class="btn-text">{{ 'edit' | translate }}</span>
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-              <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
-            </svg>
-          </a>
+          
+          <!-- Study Button (always visible) -->
           <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">
             <span class="btn-text">{{ 'study' | translate }}</span>
             <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
               <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z"/>
             </svg>
           </a>
-          <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">
-            <span class="btn-text">{{ 'delete' | translate }}</span>
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-            </svg>
-          </button>
+          
+          <!-- 3-Dot Menu Button -->
+          <div class="menu-wrapper">
+            <button 
+              class="btn btn-icon-only more-menu-button" 
+              (click)="toggleDropdown(s.id, $event)"
+              [attr.aria-expanded]="isDropdownOpen(s.id)"
+              aria-label="More options">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+              </svg>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" *ngIf="isDropdownOpen(s.id)" @slideDown>
+              <!-- Edit -->
+              <a 
+                *ngIf="canEdit(s)" 
+                [routerLink]="['/stack', s.id, 'edit']" 
+                class="menu-item"
+                (click)="closeDropdownMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                </svg>
+                <span>{{ 'edit_stack' | translate }}</span>
+              </a>
+              
+              <!-- Export -->
+              <button 
+                class="menu-item" 
+                (click)="exportStack(s, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                </svg>
+                <span>{{ 'export_stack' | translate }}</span>
+              </button>
+              
+              <!-- Duplicate -->
+              <button 
+                *ngIf="isLoggedIn()" 
+                class="menu-item" 
+                (click)="duplicateStack(s, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M240-80q-33 0-56.5-23.5T160-160v-560q0-33 23.5-56.5T240-800h560q33 0 56.5 23.5T880-720v560q0 33-23.5 56.5T800-80H240Zm0-80h560v-560H240v560ZM120-240v-560q0-33 23.5-56.5T200-880h560q33 0 56.5 23.5T840-800v560q0 33-23.5 56.5T760-160H200q-33 0-56.5-23.5T120-240Zm120-480v560-560Z"/>
+                </svg>
+                <span>{{ 'duplicate' | translate }}</span>
+              </button>
+              
+              <!-- Divider -->
+              <div class="menu-divider" *ngIf="isOwner(s)"></div>
+              
+              <!-- Delete -->
+              <button 
+                *ngIf="isOwner(s)" 
+                class="menu-item menu-item-danger" 
+                (click)="remove(s)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                </svg>
+                <span>{{ 'delete' | translate }}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </li>
     </ul>

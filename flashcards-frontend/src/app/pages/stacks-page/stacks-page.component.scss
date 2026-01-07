@@ -54,10 +54,21 @@
   text-align: center;
   white-space: nowrap;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .btn-icon {
   display: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .btn-secondary {
@@ -73,6 +84,18 @@
 .btn-danger {
   background-color: var(--danger-color);
   color: white;
+}
+
+.btn-icon-only {
+  padding: 0.5rem;
+  min-width: 40px;
+  width: 40px;
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+.btn-icon-only:hover {
+  background-color: var(--hover-bg);
 }
 
 .stack-list {
@@ -173,6 +196,79 @@
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
 }
 
+/* Dropdown Menu Styles */
+.menu-wrapper {
+  position: relative;
+}
+
+.more-menu-button {
+  border-radius: 50%;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-item {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.menu-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.menu-item svg {
+  flex-shrink: 0;
+}
+
+.menu-item-danger {
+  color: var(--danger-color);
+}
+
+.menu-item-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--card-border-color);
+  margin: 0.5rem 0;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .add-form {
     flex-direction: row;
@@ -181,7 +277,6 @@
 
   .add-form > .btn {
     align-self: center;
-    /* Create Button behält normale Breite (kein width override) */
     min-width: auto;
     width: auto;
   }
@@ -208,19 +303,24 @@
     margin-right: auto;
   }
 
-  /* Buttons in stack-actions: nur Icons anzeigen */
-  .stack-actions .btn {
+  /* Study button: show only icon on mobile */
+  .stack-actions .btn-success {
     padding: 0.5rem;
     min-width: 40px;
     width: 40px;
   }
 
-  .stack-actions .btn-text {
+  .stack-actions .btn-success .btn-text {
     display: none;
   }
 
-  .stack-actions .btn-icon {
+  .stack-actions .btn-success .btn-icon {
     display: block;
+  }
+
+  /* Dropdown menu stays the same width on mobile */
+  .dropdown-menu {
+    min-width: 180px;
   }
 }
 
@@ -231,5 +331,16 @@
 
   .stack-actions {
     gap: 0.5rem;
+  }
+
+  .dropdown-menu {
+    right: -8px; /* Align better on small screens */
+  }
+}
+
+/* Dark mode support (if you have it) */
+@media (prefers-color-scheme: dark) {
+  .dropdown-menu {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
 }

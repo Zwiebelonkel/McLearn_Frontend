@@ -1,5 +1,4 @@
-
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -26,12 +25,23 @@ export class StacksPage {
   isPublic = false;
   userId = this.auth.getUserId();
   loading = signal(false);
-
   search: string = '';
   filter: 'all' | 'public' | 'own' | 'shared' = 'all';
+  
+  // Dropdown state management
+  openDropdownId: string | null = null;
 
   constructor() {
     this.load();
+  }
+
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.more-menu-button') && !target.closest('.dropdown-menu')) {
+      this.openDropdownId = null;
+    }
   }
 
   isLoggedIn(): boolean {
@@ -46,9 +56,6 @@ export class StacksPage {
     if (this.isOwner(stack)) {
       return true;
     }
-    // On the stacks list, we don't have detailed collaborator info.
-    // We assume that if a stack is private and not owned by the user,
-    // but is visible in their list, they are a collaborator with edit rights.
     return !stack.is_public && !this.isOwner(stack);
   }
 
@@ -58,11 +65,8 @@ export class StacksPage {
       if (!matchesSearch) {
         return false;
       }
-
       const isMine = s.user_id === this.userId;
-      // A stack is shared if it's not public and not mine, as the API only sends stacks the user can see.
       const isSharedWithMe = !s.is_public && s.user_id !== this.userId;
-
       switch (this.filter) {
         case 'public':
           return s.is_public;
@@ -79,8 +83,6 @@ export class StacksPage {
   load() {
     this.loading.set(true);
     this.api.stacks().subscribe(s => {
-      // If logged in, the API returns all visible stacks (public, own, shared).
-      // If not logged in, we must filter for public stacks only.
       this.stacks.set(this.isLoggedIn() ? s : s.filter(stack => stack.is_public));
       this.loading.set(false);
     });
@@ -105,6 +107,7 @@ export class StacksPage {
   }
 
   remove(s: Stack) {
+    this.closeDropdownMenu();
     if (confirm('Delete stack?')) {
       this.loading.set(true);
       this.api.deleteStack(s.id).subscribe({
@@ -119,5 +122,137 @@ export class StacksPage {
         complete: () => this.loading.set(false)
       });
     }
+  }
+
+  // Dropdown menu methods
+  toggleDropdown(stackId: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.openDropdownId = this.openDropdownId === stackId ? null : stackId;
+  }
+
+  isDropdownOpen(stackId: string): boolean {
+    return this.openDropdownId === stackId;
+  }
+
+  closeDropdownMenu() {
+    this.openDropdownId = null;
+  }
+
+  // Export functionality
+  exportStack(stack: Stack, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeDropdownMenu();
+    
+    this.loading.set(true);
+    
+    // Fetch all cards for this stack
+    this.api.cards(stack.id).subscribe({
+      next: (cards) => {
+        if (cards.length === 0) {
+          this.toast.show('No cards to export', 'warning');
+          this.loading.set(false);
+          return;
+        }
+
+        // Create CSV content
+        let csv = 'Front,Back\n';
+        
+        for (const card of cards) {
+          const escapeCsv = (text: string) => {
+            if (text.includes(',') || text.includes('\n') || text.includes('"')) {
+              return `"${text.replace(/"/g, '""')}"`;
+            }
+            return text;
+          };
+          
+          csv += `${escapeCsv(card.front)},${escapeCsv(card.back)}\n`;
+        }
+
+        // Download CSV
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${stack.name}_export.csv`);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        URL.revokeObjectURL(url);
+
+        this.toast.show(`Exported ${cards.length} cards from "${stack.name}"`, 'success');
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Export error:', err);
+        this.toast.show('Failed to export stack', 'error');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  // Duplicate functionality (optional)
+  duplicateStack(stack: Stack, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeDropdownMenu();
+    
+    const newName = `${stack.name} (Copy)`;
+    
+    this.loading.set(true);
+    
+    // Create new stack
+    this.api.createStack(newName, false).subscribe({
+      next: (newStack) => {
+        // Fetch cards from original stack
+        this.api.cards(stack.id).subscribe({
+          next: (cards) => {
+            if (cards.length === 0) {
+              this.toast.show(`Duplicated "${stack.name}" (no cards)`, 'success');
+              this.load();
+              return;
+            }
+
+            // Copy all cards to new stack
+            let completed = 0;
+            for (const card of cards) {
+              this.api.createCard({
+                stack_id: newStack.id,
+                front: card.front,
+                back: card.back,
+                front_image: card.front_image
+              }).subscribe({
+                next: () => {
+                  completed++;
+                  if (completed === cards.length) {
+                    this.toast.show(`Duplicated "${stack.name}" with ${cards.length} cards`, 'success');
+                    this.load();
+                  }
+                },
+                error: (err) => {
+                  console.error('Error duplicating card:', err);
+                  this.loading.set(false);
+                }
+              });
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching cards:', err);
+            this.toast.show('Failed to duplicate cards', 'error');
+            this.loading.set(false);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error creating duplicate stack:', err);
+        this.toast.show('Failed to duplicate stack', 'error');
+        this.loading.set(false);
+      }
+    });
   }
 }

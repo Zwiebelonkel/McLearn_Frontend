@@ -72,5 +72,8 @@
     "log_in_again": "Erneut anmelden",
     "delete_selected": "Auswahl löschen",
     "save_selected": "Auswahl speichern"
-
+    "share": "Teilen",
+    "edit_stack": "Bearbeiten",
+    "export_stack": "Exportieren",
+    "duplicate": "Duplizieren"
   }

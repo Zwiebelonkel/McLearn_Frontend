@@ -71,6 +71,11 @@
   "logged_out_message": "Thank you for using our application. You can log in again at any time.",
   "log_in_again": "Log in again",
   "delete_selected": "Delete selection",
-  "save_selected": "Save selection"
+  "save_selected": "Save selection",
+  "share":"Share",
+  "edit_stack":"Edit",
+  "export_stack":"Export",
+  "duplicate":"Duplicate"
+
 
 }

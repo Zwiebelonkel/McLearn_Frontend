@@ -87,6 +87,7 @@
 }
 
 .btn-icon-only {
+  box-shadow: none;
   padding: 0.5rem;
   min-width: 40px;
   width: 40px;
@@ -114,11 +115,13 @@
   border: 1px solid var(--card-border-color);
   border-radius: 4px;
   margin-bottom: 1rem;
+  /* CRITICAL: Remove any position/z-index that creates stacking context */
+  position: relative;
+  z-index: auto;
 }
 
 .stack-item:hover {
   transition: 0.22s;
-  transform: translateY(-5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -199,13 +202,13 @@
 /* Dropdown Menu Styles */
 .menu-wrapper {
   position: relative;
-  z-index: 10; /* 3-dot button above dropdown */
+  /* NO z-index here - let it be auto */
 }
 
 .more-menu-button {
   border-radius: 50%;
   position: relative;
-  z-index: 12; /* Button always on top */
+  /* NO z-index - button should NOT be above dropdown */
 }
 
 .dropdown-menu {
@@ -214,14 +217,17 @@
   top: calc(100% + 8px);
   
   /* Same background as sidebar */
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: var(--glass);
   backdrop-filter: blur(10px);
   
   border: 1px solid var(--card-border-color);
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   min-width: 200px;
-  z-index: 5; /* Below sidebar (which might be z-index: 100+) but above content */
+  
+  /* Higher than other stack items but lower than sidebar (100) */
+  z-index: 10;
+  
   overflow: hidden;
   animation: slideDown 0.2s ease-out;
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -280,6 +286,15 @@ body.dark-theme .dropdown-menu {
   height: 1px;
   background: var(--card-border-color);
   margin: 0.5rem 0;
+}
+
+/* Dark mode support */
+body.dark-theme .dropdown-menu {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive Design */
@@ -350,13 +365,4 @@ body.dark-theme .dropdown-menu {
   .dropdown-menu {
     right: -8px; /* Align better on small screens */
   }
-}
-
-/* Dark mode support */
-body.dark-theme .dropdown-menu {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-theme .sidebar-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
 }

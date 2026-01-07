@@ -70,4 +70,10 @@
     "logged_out_title": "Vous avez été déconnecté",
     "logged_out_message": "Merci d'utiliser notre application. Vous pouvez vous reconnecter à tout moment.",
     "log_in_again": "Se reconnecter"
+    "delete_selected": "Supprimer la sélection",
+    "save_selected": "Enregistrer la sélection",
+    "share": "Partager",
+    "edit_stack": "Modifier",
+    "export_stack": "Exporter",
+    "duplicate": "Dupliquer"
   }

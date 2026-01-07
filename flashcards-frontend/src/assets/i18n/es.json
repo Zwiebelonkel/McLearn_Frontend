@@ -70,4 +70,10 @@
   "logged_out_title": "Has cerrado sesión",
   "logged_out_message": "Gracias por usar nuestra aplicación. Puedes volver a iniciar sesión en cualquier momento.",
   "log_in_again": "Iniciar sesión de nuevo"
+      "delete_selected": "Eliminar selección",
+    "save_selected": "Guardar selección",
+    "share": "Compartir",
+    "edit_stack": "Editar",
+    "export_stack": "Exportar",
+    "duplicate": "Duplicar"
 }

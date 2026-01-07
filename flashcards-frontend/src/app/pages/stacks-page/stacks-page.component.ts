@@ -196,7 +196,7 @@ export class StacksPage {
     });
   }
 
-  // Duplicate functionality (optional)
+  // Duplicate functionality
   duplicateStack(stack: Stack, event: Event) {
     event.preventDefault();
     event.stopPropagation();
@@ -254,5 +254,87 @@ export class StacksPage {
         this.loading.set(false);
       }
     });
+  }
+
+  // Share functionality (based on study-page implementation)
+  async shareStack(stack: Stack, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeDropdownMenu();
+
+    // Generate study URL for sharing
+    const shareUrl = `${window.location.origin}/stack/${stack.id}/study`;
+    const shareTitle = stack.name;
+    const shareText = `Check out "${stack.name}"${stack.owner_name ? ` by ${stack.owner_name}` : ''} - A flashcard stack to learn from!`;
+
+    // Update meta tags for better social media preview
+    this.updateMetaTags(shareTitle, shareText, shareUrl);
+
+    // Check if Web Share API is available (mostly mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl
+        });
+        // Success - no toast needed as the share dialog confirms
+      } catch (err: any) {
+        // User cancelled or error occurred
+        if (err.name !== 'AbortError') {
+          console.error('Share failed:', err);
+          // Fallback to clipboard on error
+          this.copyToClipboard(shareText, shareUrl);
+        }
+      }
+    } else {
+      // Fallback: Copy to clipboard for desktop
+      this.copyToClipboard(shareText, shareUrl);
+    }
+  }
+
+  private async copyToClipboard(text: string, url: string) {
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      this.toast.show('Link copied to clipboard!', 'success');
+    } catch (err) {
+      // If clipboard fails, show a prompt
+      console.error('Clipboard failed:', err);
+      const result = prompt('Copy this link:', `${text}\n${url}`);
+      if (result !== null) {
+        this.toast.show('Link ready to copy', 'info');
+      }
+    }
+  }
+
+  private updateMetaTags(title: string, description: string, url: string) {
+    // Get logo URL
+    const logoUrl = `${window.location.origin}/assets/apple-touch-icon.png`;
+    
+    // Update or create Open Graph meta tags for social media previews
+    this.setMetaTag('og:title', title);
+    this.setMetaTag('og:description', description);
+    this.setMetaTag('og:url', url);
+    this.setMetaTag('og:image', logoUrl);
+    this.setMetaTag('og:type', 'website');
+    
+    // Twitter Card meta tags
+    this.setMetaTag('twitter:card', 'summary');
+    this.setMetaTag('twitter:title', title);
+    this.setMetaTag('twitter:description', description);
+    this.setMetaTag('twitter:image', logoUrl);
+  }
+
+  private setMetaTag(property: string, content: string) {
+    const prefix = property.startsWith('og:') ? 'property' : 'name';
+    let element = document.querySelector(`meta[${prefix}="${property}"]`);
+    
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute(prefix, property);
+      document.head.appendChild(element);
+    }
+    
+    element.setAttribute('content', content);
   }
 }

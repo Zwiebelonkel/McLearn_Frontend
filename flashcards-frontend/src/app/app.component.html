@@ -14,5 +14,9 @@
       <p>&copy; 2026 McLearn</p>
     </footer>
   </div>
-  <app-sidebar #sidebar [class.open]="isSidebarOpen"></app-sidebar>
+  <app-sidebar
+  #sidebar
+  [class.open]="isSidebarOpen"
+  (closed)="isSidebarOpen = false">
+</app-sidebar>
 </div>

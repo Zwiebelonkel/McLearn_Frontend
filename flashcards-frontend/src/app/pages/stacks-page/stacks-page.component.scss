@@ -271,7 +271,7 @@ body.dark-theme .dropdown-menu {
 }
 
 .menu-item:hover {
-  background-color: var(--hover-bg);
+  background-color: var(--glass-light);
 }
 
 .menu-item svg {
@@ -382,4 +382,9 @@ body.dark-theme .sidebar-link:hover {
   .dropdown-menu {
     right: -8px;
   }
+}
+
+textarea:focus, input:focus {
+  outline: none; 
+  border: 1px solid #ec4949;
 }

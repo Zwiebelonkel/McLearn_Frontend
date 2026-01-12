@@ -33,3 +33,11 @@
     }
   }
 }
+
+.friend-link{
+  text-decoration: none;
+  color: var(--text-color);
+  background-color: var(--card-background);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}

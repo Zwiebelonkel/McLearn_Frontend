@@ -25,8 +25,8 @@
   --header-background: rgb(236, 73, 73);
   --header-text-color: white;
   --border: #d5d5d5;
-  --glass: rgb(255, 255, 255);
-  --glass-light: rgb(184, 184, 184);
+  --glass: rgba(255, 255, 255, 0.781);
+  --glass-light: rgba(182, 182, 182, 0.897);
 
 
 }
@@ -35,6 +35,11 @@ body.dark-theme {
   --background-color: #121212;
   --text-color: #e0e0e0;
   --card-background: #1e1e1e;
+  --success-color: #18555c;
+  --danger-color: #913535;
+  --warning-color: #614312;
+  --info-color: #536575;
+
   --card-border-color: #424242;
   --input-bg: #2c2c2c;
   --input-color: #e0e0e0;
@@ -42,7 +47,7 @@ body.dark-theme {
   --header-background: #1f1f1f;
   --header-text-color: #f8f9fa;
   --border: #444444;
-  --glass: rgba(29, 29, 29, 0.6);
+  --glass: rgba(37, 37, 37, 0.11);
   --glass-light: rgba(255, 255, 255, 0.096);
 }
 

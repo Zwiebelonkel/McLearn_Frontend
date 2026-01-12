@@ -44,15 +44,15 @@ export class QuizModePage {
   handleArrowRight(event: KeyboardEvent) {
     event.preventDefault();
     if (this.showBack()) {
-      this.nextCard();
+      this.markCorrect();
     }
   }
 
   @HostListener('window:keydown.arrowleft', ['$event'])
   handleArrowLeft(event: KeyboardEvent) {
     event.preventDefault();
-    if (this.currentIndex() > 0 && !this.showBack()) {
-      this.previousCard();
+    if (this.showBack()) {
+      this.markIncorrect();
     }
   }
 
@@ -84,6 +84,14 @@ export class QuizModePage {
     this.showBack.set(!this.showBack());
   }
 
+  markCorrect() {
+    this.nextCard();
+  }
+
+  markIncorrect() {
+    this.nextCard();
+  }
+
   nextCard() {
     if (this.isTransitioning() || this.quizCompleted()) return;
     
@@ -102,18 +110,6 @@ export class QuizModePage {
 
     setTimeout(() => {
       this.currentIndex.set(nextIndex);
-      this.isTransitioning.set(false);
-    }, 300);
-  }
-
-  previousCard() {
-    if (this.isTransitioning() || this.currentIndex() === 0) return;
-
-    this.isTransitioning.set(true);
-    this.showBack.set(false);
-
-    setTimeout(() => {
-      this.currentIndex.set(this.currentIndex() - 1);
       this.isTransitioning.set(false);
     }, 300);
   }
@@ -149,6 +145,8 @@ export class QuizModePage {
   }
 
   handleTouchEnd(event: TouchEvent) {
+    if (!this.showBack()) return;
+
     const touchEndX = event.changedTouches[0].clientX;
     const touchEndY = event.changedTouches[0].clientY;
     
@@ -157,13 +155,72 @@ export class QuizModePage {
 
     // Swipe detection (horizontal swipe > 50px)
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      if (deltaX > 0 && this.currentIndex() > 0 && !this.showBack()) {
-        // Swipe right - previous card
-        this.previousCard();
-      } else if (deltaX < 0 && this.showBack()) {
-        // Swipe left - next card
-        this.nextCard();
+      if (deltaX > 0) {
+        // Swipe right - correct
+        this.markCorrect();
+      } else {
+        // Swipe left - incorrect
+        this.markIncorrect();
       }
     }
+  }
+
+  // Share functionality
+  async shareStack() {
+    const stack = this.stack();
+    if (!stack) return;
+
+    const shareUrl = `${window.location.origin}/stack/${this.stackId}/quiz`;
+    const shareTitle = `${stack.name} - Quiz Mode`;
+    const shareText = `Try the quiz for "${stack.name}"${stack.owner_name ? ` by ${stack.owner_name}` : ''}!`;
+
+    this.updateMetaTags(shareTitle, shareText, shareUrl);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl
+        });
+      } catch (err) {
+        console.log('Share cancelled or failed:', err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        alert('Link copied to clipboard!');
+      } catch (err) {
+        prompt('Copy this link:', `${shareText}\n${shareUrl}`);
+      }
+    }
+  }
+
+  private updateMetaTags(title: string, description: string, url: string) {
+    const logoUrl = `${window.location.origin}/assets/apple-touch-icon.png`;
+    
+    this.setMetaTag('og:title', title);
+    this.setMetaTag('og:description', description);
+    this.setMetaTag('og:url', url);
+    this.setMetaTag('og:image', logoUrl);
+    this.setMetaTag('og:type', 'website');
+    
+    this.setMetaTag('twitter:card', 'summary');
+    this.setMetaTag('twitter:title', title);
+    this.setMetaTag('twitter:description', description);
+    this.setMetaTag('twitter:image', logoUrl);
+  }
+
+  private setMetaTag(property: string, content: string) {
+    const prefix = property.startsWith('og:') ? 'property' : 'name';
+    let element = document.querySelector(`meta[${prefix}="${property}"]`);
+    
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute(prefix, property);
+      document.head.appendChild(element);
+    }
+    
+    element.setAttribute('content', content);
   }
 }

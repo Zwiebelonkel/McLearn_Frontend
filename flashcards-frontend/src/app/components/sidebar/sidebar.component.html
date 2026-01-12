@@ -1,28 +1,36 @@
-<a routerLink="/" class="sidebar-link"
-  ><i class="fa-solid fa-house"></i>{{ "home" | translate }}</a
->
+<a routerLink="/" class="sidebar-link" (click)="closeSidebar()">
+  <i class="fa-solid fa-house"></i>{{ "home" | translate }}
+</a>
+
 <a routerLink="/profile" class="sidebar-link" *ngIf="isLoggedIn$ | async"
-  ><i class="fa-solid fa-user"></i>{{ "profile" | translate }}</a
->
+   (click)="closeSidebar()">
+  <i class="fa-solid fa-user"></i>{{ "profile" | translate }}
+</a>
+
 <a routerLink="/scribblepad" class="sidebar-link" *ngIf="isLoggedIn$ | async"
-  ><i class="fa-solid fa-book"></i>{{ "scribblepad" | translate }}</a
->
+   (click)="closeSidebar()">
+  <i class="fa-solid fa-book"></i>{{ "scribblepad" | translate }}
+</a>
+
 <a routerLink="/friends" class="sidebar-link" *ngIf="isLoggedIn$ | async"
-  ><i class="fa-solid fa-users"></i>{{ "friends" | translate }}</a
->
+   (click)="closeSidebar()">
+  <i class="fa-solid fa-users"></i>{{ "friends" | translate }}
+</a>
 
 <div class="sidebar-bottom">
-  <a routerLink="/help" class="sidebar-link"
-    ><i class="fa-solid fa-circle-info"></i>{{ "help" | translate }}</a
-  >
+  <a routerLink="/help" class="sidebar-link" (click)="closeSidebar()">
+    <i class="fa-solid fa-circle-info"></i>{{ "help" | translate }}
+  </a>
+
   <button (click)="login()" *ngIf="!(isLoggedIn$ | async)" class="sidebar-link">
     <i class="fa-solid fa-right-to-bracket"></i>{{ "login" | translate }}
   </button>
+
   <button (click)="logout()" *ngIf="isLoggedIn$ | async" class="sidebar-link">
     <i class="fa-solid fa-right-from-bracket"></i>{{ "logout" | translate }}
   </button>
+
   <button (click)="toggleTheme()" class="sidebar-link">
-    <i class="fa-solid fa-circle-half-stroke"></i
-    >{{ "toggle_theme" | translate }}
+    <i class="fa-solid fa-circle-half-stroke"></i>{{ "toggle_theme" | translate }}
   </button>
 </div>

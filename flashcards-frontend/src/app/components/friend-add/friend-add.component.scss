@@ -31,3 +31,8 @@
   background-color: var(--primary-color);
   color: white;
 }
+
+textarea:focus, input:focus {
+  outline: none; 
+  border: 1px solid #ec4949;
+}

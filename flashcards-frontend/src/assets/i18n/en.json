@@ -84,5 +84,12 @@
   "clear": "Clear",
   "characters": "characters",
   "words": "words",
-  "quiz": "Quiz"
+  "quiz": "Quiz",
+  "quiz_mode": "Quiz Mode",
+  "quiz_completed": "Quiz Completed!",
+  "quiz_completed_message": "You've reviewed all cards!",
+  "restart_quiz": "Restart Quiz",
+  "back_to_study": "Back to Study",
+  "correct": "Correct",
+  "incorrect": "Incorrect"
 }

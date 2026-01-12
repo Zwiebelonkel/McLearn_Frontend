@@ -8,6 +8,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { authGuard } from './guards/auth.guard';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
+import { ScribblePadPage } from './pages/scribblepad-page/scribble-page.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 
 export const routes: Routes = [
@@ -18,6 +19,11 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfilePageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'scribblepad',
+    component: ScribblePadPage,
     canActivate: [authGuard],
   },
   {

@@ -155,4 +155,29 @@ export class ApiService {
       }
     );
   }
+
+// -------- SCRIBBLEPAD --------
+getScribblePad() {
+  return this.http.get<{
+    id: string;
+    user_id: number;
+    content: string;
+    updated_at: string;
+  }>(`${environment.apiBase}/scribblepad`, {
+    headers: this.getHeaders(),
+  });
+}
+
+saveScribblePad(content: string) {
+  return this.http.post<{
+    id: string;
+    user_id: number;
+    content: string;
+    updated_at: string;
+  }>(
+    `${environment.apiBase}/scribblepad`,
+    { content },
+    { headers: this.getHeaders() }
+  );
+}
 }

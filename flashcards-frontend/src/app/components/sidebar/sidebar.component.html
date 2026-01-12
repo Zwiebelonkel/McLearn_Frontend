@@ -4,6 +4,9 @@
 <a routerLink="/profile" class="sidebar-link" *ngIf="isLoggedIn$ | async"
   ><i class="fa-solid fa-user"></i>{{ "profile" | translate }}</a
 >
+<a routerLink="/scribblepad" class="sidebar-link" *ngIf="isLoggedIn$ | async"
+  ><i class="fa-solid fa-book"></i>{{ "scribblepad" | translate }}</a
+>
 <a routerLink="/friends" class="sidebar-link" *ngIf="isLoggedIn$ | async"
   ><i class="fa-solid fa-users"></i>{{ "friends" | translate }}</a
 >

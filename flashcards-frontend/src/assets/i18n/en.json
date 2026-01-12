@@ -75,7 +75,15 @@
   "share":"Share",
   "edit_stack":"Edit",
   "export_stack":"Export",
-  "duplicate":"Duplicate"
+  "duplicate":"Duplicate",
+  "scribblepad": "ScribblePad",
+  "scribblepad_description": "Your personal note space - write anything you want",
+  "scribblepad_placeholder": "Start writing your notes here...\n\nThis is your personal space to jot down ideas, reminders, drafts, or anything else you want to keep track of.",
+  "scribblepad_login_required": "Please log in to access your personal ScribblePad. Your notes are private and saved automatically.",
+  "saving": "Saving...",
+  "clear": "Clear",
+  "characters": "characters",
+  "words": "words"
 
 
 }

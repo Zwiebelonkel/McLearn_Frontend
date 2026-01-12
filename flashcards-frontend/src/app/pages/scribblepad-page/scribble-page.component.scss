@@ -289,3 +289,35 @@
       font-size: 0.95rem;
     }
   }
+
+
+  .editor-card {
+    position: relative;
+  }
+  
+  .copy-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 6px;
+    color: var(--text-secondary, #666);
+    transition: background 0.2s ease, color 0.2s ease;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .copy-btn:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+  }
+  
+  .copy-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }

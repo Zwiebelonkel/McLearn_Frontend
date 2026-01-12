@@ -163,4 +163,14 @@ export class ScribblePadPage implements OnInit {
     if (!text) return 0;
     return text.split(/\s+/).length;
   }
+
+  copyAll() {
+    if (!this.content()) return;
+  
+    navigator.clipboard.writeText(this.content()).then(() => {
+      this.toast.show('Copied to clipboard', 'success');
+    }).catch(() => {
+      this.toast.show('Failed to copy', 'error');
+    });
+  }
 }

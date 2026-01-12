@@ -138,18 +138,49 @@
   </div>
   <div *ngIf="selectedCardIds.size > 0 && isOwner" class="panels">
     <button type="button" (click)="deleteSelected()" class="btn btn-fixed btn-danger" [disabled]="!hasSelection()">{{ 'delete_selected' | translate }}</button>
-    <button type="button" (click)="saveSelected()" class="btn btn-fixed btn-secondary" [disabled]="!hasSelection()">{{ 'save_selected' | translate }}</button>
   </div>
   <!-- Karten-Liste -->
   <div class="card-list">
     <div *ngFor="let c of filteredCards" class="card" [class.selected]="isSelected(c) && isOwner" (click)="isOwner && toggleSelection(c)">
       <div class="card-header">
+        <span class="save-indicator">
+
+          <!-- Saving -->
+          <span *ngIf="savingCards.has(c.id)" class="saving">
+            …
+          </span>
+      
+          <!-- Error -->
+          <span *ngIf="saveErrorCards.has(c.id)" class="error">
+            ⚠
+          </span>
+      
+          <!-- Saved -->
+          <span
+            *ngIf="
+              !savingCards.has(c.id) &&
+              !saveErrorCards.has(c.id) &&
+              lastSavedBack.get(c.id) === c.back &&
+              lastSavedFront.get(c.id) === c.front
+            "
+            class="saved">
+            ✔
+          </span>
+      
+        </span>
         <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
       </div>
       <div class="card-body">
         <label>{{ 'front' | translate }}:</label>
         <div class="input-row">
-          <input (click)="$event.stopPropagation()" [(ngModel)]="c.front" name="f{{c.id}}" class="form-input" [disabled]="!canEdit" />
+          <input
+  (click)="$event.stopPropagation()"
+  [(ngModel)]="c.front"
+  (ngModelChange)="onCardChange(c, 'front')"
+  name="f{{c.id}}"
+  class="form-input"
+  [disabled]="!canEdit"
+/>
           <button *ngIf="canEdit" type="button" (click)="openCardImageUploader(c); $event.stopPropagation()" class="btn btn-secondary btn-icon-only">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
               <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/>
@@ -168,7 +199,15 @@
         
         <div class="divider"></div>
         <label>{{ 'back' | translate }}:
-          <textarea (click)="$event.stopPropagation()" [(ngModel)]="c.back" name="b{{c.id}}" class="form-textarea" rows="3" [disabled]="!canEdit"></textarea>
+          <textarea
+  (click)="$event.stopPropagation()"
+  [(ngModel)]="c.back"
+  (ngModelChange)="onCardChange(c, 'back')"
+  name="b{{c.id}}"
+  class="form-textarea"
+  rows="3"
+  [disabled]="!canEdit">
+</textarea>
         </label>
       </div>
     </div>

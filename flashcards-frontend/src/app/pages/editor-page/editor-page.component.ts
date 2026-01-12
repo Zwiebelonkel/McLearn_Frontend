@@ -49,6 +49,14 @@ export class EditorPage {
   searchedUsers: User[] = [];
   selectedCardIds = new Set<String>();
 
+  private autoSaveTimers = new Map<string, any>();
+  lastSavedFront = new Map<string, string>();
+  lastSavedBack = new Map<string, string>();
+  private readonly AUTO_SAVE_DELAY = 1500;
+  // Save-Status pro Karte
+  savingCards = new Set<string>();
+  saveErrorCards = new Set<string>();
+
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
 
   constructor() {
@@ -67,6 +75,13 @@ export class EditorPage {
     this.loading.set(true);
     this.api.cards(this.stackId).subscribe(cs => {
       this.cards.set(cs);
+  
+      // 🔐 Initiale Werte merken
+      for (const c of cs) {
+        this.lastSavedFront.set(c.id, c.front);
+        this.lastSavedBack.set(c.id, c.back);
+      }
+  
       this.loading.set(false);
     });
   }
@@ -537,5 +552,46 @@ export class EditorPage {
         }
       });
     }
+  }
+
+  onCardChange(card: Card, field: 'front' | 'back') {
+    if (!this.canEdit) return;
+  
+    const last =
+      field === 'front'
+        ? this.lastSavedFront.get(card.id)
+        : this.lastSavedBack.get(card.id);
+  
+    const current = field === 'front' ? card.front : card.back;
+    if (last === current) return;
+  
+    clearTimeout(this.autoSaveTimers.get(card.id));
+  
+    // 🔄 Status setzen
+    this.savingCards.add(card.id);
+    this.saveErrorCards.delete(card.id);
+  
+    const timer = setTimeout(() => {
+      this.api.updateCard(card.id, {
+        front: card.front,
+        back: card.back,
+        front_image: card.front_image
+      }).subscribe({
+        next: () => {
+          this.lastSavedFront.set(card.id, card.front);
+          this.lastSavedBack.set(card.id, card.back);
+  
+          this.savingCards.delete(card.id);
+          this.saveErrorCards.delete(card.id);
+        },
+        error: err => {
+          console.error(err);
+          this.savingCards.delete(card.id);
+          this.saveErrorCards.add(card.id);
+        }
+      });
+    }, this.AUTO_SAVE_DELAY);
+  
+    this.autoSaveTimers.set(card.id, timer)
   }
 }

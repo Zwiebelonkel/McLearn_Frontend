@@ -579,8 +579,30 @@
 }
 
 .card.selected {
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   border: 3px solid #ec4949;
   transform: translate(0px, -10px) scale(0.95);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.411);
+}
+
+.save-indicator {
+  float: right;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.85;
+}
+
+.save-indicator .saved {
+  color: var(--border);
+}
+
+.save-indicator .saving {
+  color: var(--border);
+}
+
+.save-indicator .error {
+  color: var(--border);
+  font-weight: 600;
 }

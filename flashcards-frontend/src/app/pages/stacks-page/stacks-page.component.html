@@ -69,6 +69,18 @@
             
             <!-- Dropdown Menu -->
             <div class="dropdown-menu" *ngIf="isDropdownOpen(s.id)">
+              <!-- Quiz -->
+              <a 
+                *ngIf="s.card_amount && s.card_amount > 0"
+                [routerLink]="['/stack', s.id, 'quiz']" 
+                class="menu-item"
+                (click)="closeDropdownMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M340-280h280v-80H340v80Zm0-160h280v-80H340v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+                </svg>
+                <span>{{ 'quiz' | translate }}</span>
+              </a>
+              
               <!-- Edit -->
               <a 
                 *ngIf="canEdit(s)" 

@@ -86,6 +86,16 @@
   color: white;
 }
 
+.btn-info {
+  background-color: var(--info-color);
+  color: white;
+}
+
+.btn-quiz {
+  background-color: var(--info-color);
+  color: white;
+}
+
 .btn-icon-only {
   box-shadow: none;
   padding: 0.5rem;
@@ -115,7 +125,6 @@
   border: 1px solid var(--card-border-color);
   border-radius: 4px;
   margin-bottom: 1rem;
-  /* CRITICAL: Remove any position/z-index that creates stacking context */
   position: relative;
   z-index: auto;
 }
@@ -202,13 +211,11 @@
 /* Dropdown Menu Styles */
 .menu-wrapper {
   position: relative;
-  /* NO z-index here - let it be auto */
 }
 
 .more-menu-button {
   border-radius: 50%;
   position: relative;
-  /* NO z-index - button should NOT be above dropdown */
 }
 
 .dropdown-menu {
@@ -216,7 +223,6 @@
   right: 0;
   top: calc(100% + 8px);
   
-  /* Same background as sidebar */
   background-color: var(--glass);
   backdrop-filter: blur(10px);
   
@@ -225,7 +231,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   min-width: 200px;
   
-  /* Higher than other stack items but lower than sidebar (100) */
   z-index: 10;
   
   overflow: hidden;
@@ -233,7 +238,6 @@
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Dark theme dropdown background */
 body.dark-theme .dropdown-menu {
   background-color: rgba(29, 29, 29, 0.6);
   border-color: var(--card-border-color);
@@ -288,7 +292,6 @@ body.dark-theme .dropdown-menu {
   margin: 0.5rem 0;
 }
 
-/* Dark mode support */
 body.dark-theme .dropdown-menu {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
@@ -332,6 +335,21 @@ body.dark-theme .sidebar-link:hover {
     margin-right: auto;
   }
 
+  /* Hide quiz button text on mobile, show only on larger screens */
+  .btn-quiz .btn-text {
+    display: none;
+  }
+
+  .btn-quiz .btn-icon {
+    display: block;
+  }
+
+  .btn-quiz {
+    padding: 0.5rem;
+    min-width: 40px;
+    width: 40px;
+  }
+
   /* Study button: show only icon on mobile */
   .stack-actions .btn-success {
     padding: 0.5rem;
@@ -347,7 +365,6 @@ body.dark-theme .sidebar-link:hover {
     display: block;
   }
 
-  /* Dropdown menu stays the same width on mobile */
   .dropdown-menu {
     min-width: 180px;
   }
@@ -363,6 +380,6 @@ body.dark-theme .sidebar-link:hover {
   }
 
   .dropdown-menu {
-    right: -8px; /* Align better on small screens */
+    right: -8px;
   }
 }

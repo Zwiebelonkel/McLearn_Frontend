@@ -10,6 +10,7 @@ import { authGuard } from './guards/auth.guard';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 import { ScribblePadPage } from './pages/scribblepad-page/scribble-page.component';
 import { LogoutComponent } from './pages/logout/logout.component';
+import { QuizModePage } from './pages/quiz-mode/quiz-mode-page.component';
 
 export const routes: Routes = [
   { path: '', component: StacksPage },
@@ -38,6 +39,7 @@ export const routes: Routes = [
   },
   { path: 'stack/:id/edit', component: EditorPage },
   { path: 'stack/:id/study', component: StudyPage },
+  { path: 'stack/:id/quiz', component: QuizModePage },
   { path: 'help', component: HelpPageComponent },
   { path: '**', redirectTo: '' },
 ];

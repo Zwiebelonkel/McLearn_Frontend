@@ -44,3 +44,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+textarea:focus, input:focus {
+  outline: none; 
+  border: 1px solid #ec4949;
+}

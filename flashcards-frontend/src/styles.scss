@@ -26,6 +26,8 @@
   --header-text-color: white;
   --border: #d5d5d5;
   --glass: rgb(255, 255, 255);
+  --glass-light: rgb(184, 184, 184);
+
 
 }
 
@@ -41,6 +43,7 @@ body.dark-theme {
   --header-text-color: #f8f9fa;
   --border: #444444;
   --glass: rgba(29, 29, 29, 0.6);
+  --glass-light: rgba(255, 255, 255, 0.096);
 }
 
 html, body {

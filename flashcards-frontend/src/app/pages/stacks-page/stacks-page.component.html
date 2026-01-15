@@ -18,10 +18,10 @@
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="text" [(ngModel)]="search" placeholder="{{ 'search_stacks' | translate }}..."
+        <input type="text" [(ngModel)]="search" (ngModelChange)="onSearchOrFilterChange()" placeholder="{{ 'search_stacks' | translate }}..."
           class="form-input search-input" />
       </div>
-      <select *ngIf="isLoggedIn()" [(ngModel)]="filter" class="form-input select-input">
+      <select *ngIf="isLoggedIn()" [(ngModel)]="filter" (ngModelChange)="onSearchOrFilterChange()" class="form-input select-input">
         <option value="all">{{ 'all' | translate }}</option>
         <option value="public">🌍 {{ 'public_only' | translate }}</option>
         <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
@@ -33,7 +33,12 @@
       <li *ngFor="let s of filteredStacks" class="stack-item">
         <span class="stack-name">
           {{ s.name }}
-          <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 {{ 'by' | translate }} {{ s.owner_name }}</span>
+          <span *ngIf="s.is_public && !isOwner(s) && s.owner_name" class="stack-author">
+            🌍 {{ 'by' | translate }} 
+            <a [routerLink]="['/profile', s.user_id]" class="author-link" (click)="$event.stopPropagation()">
+              {{ s.owner_name }}
+            </a>
+          </span>
           <span *ngIf="s.is_public && isOwner(s)">🌍</span>
           <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
         </span>
@@ -143,5 +148,15 @@
         </div>
       </li>
     </ul>
+    
+    <!-- Load More Button -->
+    <div *ngIf="shouldShowLoadMore" class="load-more-container">
+      <button class="btn btn-secondary load-more-btn" (click)="loadMore()">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+          <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/>
+        </svg>
+        {{ 'load_more' | translate }}
+      </button>
+    </div>
   </div>
 </div>

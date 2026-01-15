@@ -93,5 +93,9 @@
   "correct": "Correct",
   "incorrect": "Incorrect",
   "stack_settings": "Stack Settings",
-  "visibility": "Visibility"
+  "visibility": "Visibility",
+  "load_more": "More",
+  "request_pending": "Request Pending",
+  "already_friends": "Already Friends",
+  "public_stacks": "Public Stacks"
 }

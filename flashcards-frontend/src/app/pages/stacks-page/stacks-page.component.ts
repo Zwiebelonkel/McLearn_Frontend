@@ -28,6 +28,11 @@ export class StacksPage {
   search: string = '';
   filter: 'all' | 'public' | 'own' | 'shared' = 'all';
   
+  // Pagination
+  private readonly PAGE_SIZE = 10;
+  private allStacks: Stack[] = [];
+  currentPage = signal(0);
+  
   // Dropdown state management
   openDropdownId: string | null = null;
 
@@ -60,7 +65,7 @@ export class StacksPage {
   }
 
   get filteredStacks(): Stack[] {
-    return this.stacks().filter(s => {
+    const filtered = this.allStacks.filter(s => {
       const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
       if (!matchesSearch) {
         return false;
@@ -78,14 +83,54 @@ export class StacksPage {
           return true;
       }
     });
+
+    const maxPage = this.currentPage();
+    const displayCount = (maxPage + 1) * this.PAGE_SIZE;
+    
+    return filtered.slice(0, displayCount);
+  }
+
+  get shouldShowLoadMore(): boolean {
+    const filtered = this.allStacks.filter(s => {
+      const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
+      if (!matchesSearch) {
+        return false;
+      }
+      const isMine = s.user_id === this.userId;
+      const isSharedWithMe = !s.is_public && s.user_id !== this.userId;
+      switch (this.filter) {
+        case 'public':
+          return s.is_public;
+        case 'own':
+          return isMine;
+        case 'shared':
+          return isSharedWithMe;
+        default:
+          return true;
+      }
+    });
+
+    const maxPage = this.currentPage();
+    const displayCount = (maxPage + 1) * this.PAGE_SIZE;
+    return filtered.length > displayCount;
   }
 
   load() {
     this.loading.set(true);
     this.api.stacks().subscribe(s => {
-      this.stacks.set(this.isLoggedIn() ? s : s.filter(stack => stack.is_public));
+      this.allStacks = this.isLoggedIn() ? s : s.filter(stack => stack.is_public);
+      this.currentPage.set(0);
       this.loading.set(false);
     });
+  }
+
+  loadMore() {
+    this.currentPage.set(this.currentPage() + 1);
+  }
+
+  // Reset pagination when search or filter changes
+  onSearchOrFilterChange() {
+    this.currentPage.set(0);
   }
 
   create(e: Event) {

@@ -48,6 +48,11 @@ export class EditorPage {
   inviteeSearch = '';
   searchedUsers: User[] = [];
   selectedCardIds = new Set<String>();
+  
+  // Import Progress
+  importProgress = signal(0);
+  importTotal = signal(0);
+  isImporting = signal(false);
 
   private autoSaveTimers = new Map<string, any>();
   lastSavedFront = new Map<string, string>();
@@ -310,8 +315,6 @@ export class EditorPage {
     const file = input.files?.[0];
     if (!file) return;
 
-    this.loading.set(true);
-
     const reader = new FileReader();
     reader.onload = () => {
       const text = reader.result as string;
@@ -351,12 +354,18 @@ export class EditorPage {
       }
 
       if (cardsToCreate.length === 0) {
-        this.loading.set(false);
         this.toast.show('No valid cards found for import.', 'warning');
         return;
       }
 
+      // Progress initialisieren
+      this.isImporting.set(true);
+      this.importTotal.set(cardsToCreate.length);
+      this.importProgress.set(0);
+
       let completed = 0;
+      let hasError = false;
+
       for (const card of cardsToCreate) {
         this.api.createCard({
           stack_id: this.stackId,
@@ -365,22 +374,36 @@ export class EditorPage {
         }).subscribe({
           next: () => {
             completed++;
+            this.importProgress.set(completed);
+            
             if (completed === cardsToCreate.length) {
+              this.isImporting.set(false);
               this.reload();
-              this.loading.set(false);
-              this.toast.show(`${completed} cards successfully imported.`, 'success');
+              if (!hasError) {
+                this.toast.show(`${completed} cards successfully imported.`, 'success');
+              }
             }
           },
           error: (err) => {
             console.error('Import error:', err);
-            this.loading.set(false);
-            this.toast.show('Error during import. See console for details.', 'error');
+            hasError = true;
+            completed++;
+            this.importProgress.set(completed);
+            
+            if (completed === cardsToCreate.length) {
+              this.isImporting.set(false);
+              this.toast.show('Import completed with errors. See console for details.', 'error');
+              this.reload();
+            }
           }
         });
       }
     };
 
     reader.readAsText(file);
+    
+    // Reset file input
+    input.value = '';
   }
 
   exportCSV() {
@@ -424,6 +447,12 @@ export class EditorPage {
       const searchLower = this.search.toLowerCase();
       return c.front.toLowerCase().includes(searchLower);
     });
+  }
+
+  get importProgressPercent(): number {
+    const total = this.importTotal();
+    if (total === 0) return 0;
+    return Math.round((this.importProgress() / total) * 100);
   }
 
   openCollaboratorsModal() {

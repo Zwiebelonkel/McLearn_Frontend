@@ -34,7 +34,8 @@ export class StudyPage {
 
 hasCards  = this.cards().length > 0;
 canFlip = !this.isTransitioning() && this.current() !== null;
-canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
+canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null && this.showBack();
+
 
   constructor() {
     this.loadCard();
@@ -43,9 +44,27 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
   }
 
   @HostListener('window:keydown.space', ['$event'])
+  @HostListener('window:keydown.ArrowLeft', ['$event'])
+  @HostListener('window:keydown.ArrowDown', ['$event'])
+  @HostListener('window:keydown.ArrowRight', ['$event'])
+
   handleKeyDown(event: KeyboardEvent) {
     event.preventDefault();
-    this.flip();
+  
+    switch (event.key) {
+      case ' ': // Leertaste
+        this.flip();
+        break;
+      case 'ArrowLeft':
+        this.rate('hard');
+        break;
+      case 'ArrowDown':
+        this.rate('good');
+        break;
+      case 'ArrowRight':
+        this.rate('easy');
+        break;
+    }
   }
 
   isOwner(): boolean {
@@ -80,7 +99,7 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null;
   }
 
   rate(rating: 'again' | 'hard' | 'good' | 'easy') {
-    if (this.isTransitioning() || !this.isOwner()) return;
+    if (this.isTransitioning() || !this.isOwner() || !this.showBack()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
     this.isTransitioning.set(true);

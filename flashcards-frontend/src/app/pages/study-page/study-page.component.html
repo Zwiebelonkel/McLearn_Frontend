@@ -36,7 +36,6 @@
 
     <div *ngIf="showBack() && !isTransitioning()">
       <div *ngIf="isOwner()" class="ratings">
-        <button (click)="rate('again')" class="btn btn-danger">{{ 'again' | translate }}</button>
         <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }}</button>
         <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }}</button>
         <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }}</button>

@@ -91,5 +91,7 @@
   "restart_quiz": "Restart Quiz",
   "back_to_study": "Back to Study",
   "correct": "Correct",
-  "incorrect": "Incorrect"
+  "incorrect": "Incorrect",
+  "stack_settings": "Stack Settings",
+  "visibility": "Visibility"
 }

@@ -1,9 +1,11 @@
+<app-rain #rain></app-rain>
+
 <a routerLink="/stacks" class="back-link">← {{ 'back' | translate }}</a>
 
 <div class="container" (touchstart)="handleTouchStart($event)" (touchend)="handleTouchEnd($event)">
 
   <!-- Progress Container - matching study page style -->
-  <div class="progress-container">
+  <div class="progress-container" *ngIf="!quizCompleted()">
     <div class="progress-bar">
       <div class="progress-fill" [style.width.%]="getProgressPercent()"></div>
     </div>
@@ -14,11 +16,55 @@
   <ng-container *ngIf="quizCompleted(); else quizActive">
     <div class="completion-screen">
       <h2>🎉 {{ 'quiz_completed' | translate }}</h2>
-      <p>{{ 'quiz_completed_message' | translate }}</p>
       
+      <!-- Results Summary -->
+      <div class="results-summary">
+        <div class="result-stats">
+          <div class="stat correct-stat">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ correctCount() }}</div>
+              <div class="stat-label">{{ 'correct' | translate }}</div>
+            </div>
+          </div>
+          
+          <div class="stat incorrect-stat">
+            <div class="stat-icon">❌</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ incorrectCount() }}</div>
+              <div class="stat-label">{{ 'incorrect' | translate }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horizontal Results Bar -->
+        <div class="results-bar-container">
+          <div class="results-bar">
+            <div 
+              *ngFor="let segment of getResultSegments()"
+              class="result-segment"
+              [class.correct-segment]="segment.correct"
+              [class.incorrect-segment]="!segment.correct"
+              [style.width.%]="segment.percentage"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Score Percentage -->
+        <div class="score-percentage">
+          <span class="percentage-number">{{ correctPercentage() }}%</span>
+          <span class="percentage-label">{{ 'score' | translate }}</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
       <div class="ratings">
-        <button (click)="restartQuiz()" class="btn btn-primary">{{ 'restart_quiz' | translate }}</button>
-        <button (click)="exitQuiz()" class="btn btn-secondary">{{ 'back_to_study' | translate }}</button>
+        <button (click)="restartQuiz()" class="btn btn-primary">
+          🔄 {{ 'restart_quiz' | translate }}
+        </button>
+        <button (click)="exitQuiz()" class="btn btn-secondary">
+          ← {{ 'back_to_study' | translate }}
+        </button>
       </div>
     </div>
   </ng-container>

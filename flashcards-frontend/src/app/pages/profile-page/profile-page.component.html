@@ -3,8 +3,8 @@
     <img [src]="profilePictureUrl" alt="Profile Picture" class="profile-picture">
     <h1 class="user-name">{{ userName }}</h1>
     
-    <!-- Friend Request Button (only show when viewing another user's profile) -->
-    <div *ngIf="isOtherUserProfile" class="friend-actions">
+    <!-- Friend Request Button -->
+    <div *ngIf="isOtherUserProfile && isLoggedIn" class="friend-actions">
       <button 
         *ngIf="friendStatus === 'none'" 
         (click)="sendFriendRequest()" 
@@ -37,6 +37,23 @@
       </button>
     </div>
   </div>
+
+  <!-- Stats Toggle Button -->
+  <div class="stats-toggle-container">
+    <button (click)="toggleStatistics()" class="btn btn-stats" [class.active]="showStatistics()">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+        <path d="M280-280h80v-200h-80v200Zm160 0h80v-400h-80v400Zm160 0h80v-120h-80v120ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+      </svg>
+      {{ showStatistics() ? ('' | translate) : ('' | translate) }}
+    </button>
+  </div>
+
+  <!-- Statistics Component -->
+  <app-user-statistics 
+    *ngIf="showStatistics() && viewedUserId" 
+    [userId]="viewedUserId"
+    [isOwnProfile]="!isOtherUserProfile">
+  </app-user-statistics>
 
   <div class="stacks-container">
     <h2>{{ isOtherUserProfile ? ('public_stacks' | translate) : ('my_stacks' | translate) }}</h2>

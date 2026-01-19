@@ -1,0 +1,372 @@
+.stats-wrapper {
+  margin: 2rem 0;
+}
+
+/* ===== LOADING STATE ===== */
+.stats-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== STATS CONTAINER ===== */
+.stats-container {
+  background: var(--card-background);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.stats-header {
+  background: #ec4949;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.stats-title svg {
+  opacity: 0.8;
+}
+
+/* ===== METRICS GRID ===== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--input-bg);
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--card-background);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 0%, currentColor 100%);
+  opacity: 0.03;
+  transition: opacity 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.metric-card:hover::before {
+  opacity: 0.08;
+}
+
+.metric-card.primary {
+  border-color: rgba(77, 213, 255, 0.3);
+  color: #4dd5ff;
+}
+
+.metric-card.secondary {
+  border-color: rgba(192, 132, 252, 0.3);
+  color: #c084fc;
+}
+
+.metric-card.accent {
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.metric-card.success {
+  border-color: rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.metric-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* ===== RESPONSE STATS ===== */
+.response-stats {
+  padding: 2rem;
+  background: var(--card-background);
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.response-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.response-item {
+  position: relative;
+  background: var(--input-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.response-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.15;
+  transition: width 0.6s ease;
+  border-radius: 8px;
+}
+
+.response-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.response-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.response-label span:nth-child(2) {
+  flex: 1;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.response-label strong {
+  font-weight: 700;
+  color: currentColor;
+  font-size: 1.1rem;
+}
+
+.response-item.danger { color: #ef4444; }
+.response-item.warning { color: #f97316; }
+.response-item.good { color: #22c55e; }
+.response-item.easy { color: #10b981; }
+
+/* ===== CHARTS SECTION ===== */
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  background: var(--input-bg);
+}
+
+.chart-card {
+  background: var(--card-background);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.chart-card.full-width {
+  grid-column: span 2;
+}
+
+.chart-header {
+  padding: 1rem 1.25rem;
+  background: var(--input-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chart-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.chart-header svg {
+  opacity: 0.7;
+}
+
+.chart-hint {
+  display: flex;
+  align-items: center;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  cursor: help;
+}
+
+.chart-hint:hover {
+  opacity: 0.8;
+}
+
+.chart-body {
+  padding: 1.5rem;
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-body canvas {
+  cursor: pointer;
+}
+
+.chart-card.full-width .chart-body {
+  min-height: 350px;
+}
+
+/* ===== EMPTY STATE ===== */
+.stats-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  gap: 1rem;
+}
+
+.stats-empty svg {
+  opacity: 0.3;
+}
+
+.stats-empty p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card.full-width {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-header,
+  .response-stats,
+  .charts-section {
+    padding: 1.5rem;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1.5rem;
+  }
+  
+  .metric-card {
+    padding: 1rem;
+  }
+  
+  .metric-icon {
+    font-size: 2rem;
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+  }
+  
+  .stats-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-header {
+    padding: 1.25rem;
+  }
+  
+  .stats-title {
+    font-size: 1.15rem;
+  }
+}

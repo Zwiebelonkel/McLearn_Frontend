@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
@@ -8,13 +8,13 @@ import { RouterLink, ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastService } from '../../services/toast.service';
-
+import { UserStatisticsComponent } from '../../components/user-stats/user-stats.component';
 type FriendStatus = 'none' | 'pending' | 'friends';
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, UserStatisticsComponent],
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.scss'],
 })
@@ -26,6 +26,8 @@ export class ProfilePageComponent implements OnInit {
   viewedUserId: number | null = null;
   friendStatus: FriendStatus = 'none';
   isLoading: boolean = false;
+  isLoggedIn: boolean = false;
+  showStatistics = signal(false);
 
   constructor(
     private api: ApiService,
@@ -39,6 +41,8 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     const paramId = this.route.snapshot.paramMap.get('id');
     const currentUserId = this.auth.getUserId();
+    
+    this.isLoggedIn = !!currentUserId;
     
     if (paramId) {
       const idNum = Number(paramId);
@@ -54,13 +58,13 @@ export class ProfilePageComponent implements OnInit {
         }
         this.loadStacksForUser(idNum);
         
-        // Check friend status if viewing another user's profile
-        if (this.isOtherUserProfile) {
+        if (this.isLoggedIn && this.isOtherUserProfile) {
           this.checkFriendStatus();
         }
       });
     } else {
       this.isOtherUserProfile = false;
+      this.viewedUserId = currentUserId;
       this.userName = this.auth.getUsername();
       if (this.userName) {
         this.profilePictureUrl = this.sanitizer.bypassSecurityTrustUrl(
@@ -69,6 +73,10 @@ export class ProfilePageComponent implements OnInit {
       }
       this.loadStacks();
     }
+  }
+
+  toggleStatistics() {
+    this.showStatistics.update(v => !v);
   }
 
   loadStacks(): void {
@@ -80,7 +88,6 @@ export class ProfilePageComponent implements OnInit {
 
   loadStacksForUser(userId: number): void {
     this.api.stacks().subscribe((stacks) => {
-      // Show only public stacks when viewing another user's profile
       if (this.isOtherUserProfile) {
         this.stacks = stacks.filter((s) => s.user_id === userId && s.is_public);
       } else {
@@ -90,9 +97,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
   checkFriendStatus(): void {
-    if (!this.viewedUserId) return;
+    if (!this.isLoggedIn || !this.viewedUserId) {
+      return;
+    }
 
-    // Check if already friends
     this.friendsService.getFriends().subscribe({
       next: (friends) => {
         const isFriend = friends.some((friend) => friend.id === this.viewedUserId);
@@ -101,10 +109,8 @@ export class ProfilePageComponent implements OnInit {
           return;
         }
 
-        // Check if there's a pending request
         this.friendsService.getFriendRequests().subscribe({
           next: (requests) => {
-            // Check if we sent a request to this user
             const hasPendingRequest = requests.some(
               (req) => req.sender_id === this.viewedUserId
             );

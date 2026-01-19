@@ -1,4 +1,4 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, HostListener, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
@@ -6,16 +6,24 @@ import { Card, Stack } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { marked } from 'marked';
+import { ViewChild } from '@angular/core';
+import { RainComponent } from '../../components/rain/rain.component';
 import DOMPurify from 'dompurify';
+
+interface QuizResult {
+  cardId: string;
+  correct: boolean;
+}
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, RainComponent],
   selector: 'app-quiz-mode',
   templateUrl: './quiz-mode-page.component.html',
   styleUrls: ['./quiz-mode-page.component.scss'],
 })
 export class QuizModePage {
+  @ViewChild('rain') rainComponent!: RainComponent;
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private api = inject(ApiService);
@@ -29,6 +37,26 @@ export class QuizModePage {
   isTransitioning = signal(false);
   userId = this.auth.getUserId();
   quizCompleted = signal(false);
+  
+  // Track quiz results
+  results = signal<QuizResult[]>([]);
+
+  // Computed statistics
+  correctCount = computed(() => 
+    this.results().filter(r => r.correct).length
+  );
+  
+  incorrectCount = computed(() => 
+    this.results().filter(r => !r.correct).length
+  );
+
+  totalAnswered = computed(() => this.results().length);
+
+  correctPercentage = computed(() => {
+    const total = this.totalAnswered();
+    if (total === 0) return 0;
+    return Math.round((this.correctCount() / total) * 100);
+  });
 
   constructor() {
     this.loadStackAndCards();
@@ -68,7 +96,7 @@ export class QuizModePage {
     });
   }
 
-  get currentCard(): Card | undefined {
+  get currentCard() {
     const cards = this.cards();
     const index = this.currentIndex();
     return cards[index];
@@ -85,10 +113,18 @@ export class QuizModePage {
   }
 
   markCorrect() {
+    const card = this.currentCard;
+    if (!card) return;
+    
+    this.results.update(results => [...results, { cardId: card.id, correct: true }]);
     this.nextCard();
   }
 
   markIncorrect() {
+    const card = this.currentCard;
+    if (!card) return;
+    
+    this.results.update(results => [...results, { cardId: card.id, correct: false }]);
     this.nextCard();
   }
 
@@ -102,6 +138,7 @@ export class QuizModePage {
       // Quiz completed
       this.quizCompleted.set(true);
       this.showBack.set(false);
+      this.rainComponent.emojiRain("🎉")
       return;
     }
 
@@ -118,6 +155,7 @@ export class QuizModePage {
     this.currentIndex.set(0);
     this.showBack.set(false);
     this.quizCompleted.set(false);
+    this.results.set([]);
   }
 
   exitQuiz() {
@@ -133,6 +171,14 @@ export class QuizModePage {
   getProgressText(): string {
     const cards = this.cards();
     return `${this.currentIndex() + 1} / ${cards.length}`;
+  }
+
+  // Get the visual representation of results for the horizontal bar
+  getResultSegments() {
+    return this.results().map(result => ({
+      correct: result.correct,
+      percentage: (1 / this.cards().length) * 100
+    }));
   }
 
   // Touch gestures for mobile

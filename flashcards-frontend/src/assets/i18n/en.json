@@ -97,5 +97,80 @@
   "load_more": "More",
   "request_pending": "Request Pending",
   "already_friends": "Already Friends",
-  "public_stacks": "Public Stacks"
+  "public_stacks": "Public Stacks",
+  "congratulations": "Congratulations!",
+  "completed_100": "100% completed",
+  "add_cards": "Karten hinzufügen",
+    "stats": {
+      "title": "Stack Statistics",
+      "loading": "Loading statistics...",
+      "no_data": "No statistics available",
+      
+      "toggle_show": "Show statistics",
+      "toggle_hide": "Hide statistics",
+      
+      "metrics": {
+        "total_cards": "Total Cards",
+        "total_reviews": "Reviews",
+        "average_box": "Avg Box",
+        "success_rate": "Success Rate"
+      },
+      
+      "response_distribution": {
+        "title": "Response Distribution",
+        "again": "Again",
+        "hard": "Hard",
+        "good": "Good",
+        "easy": "Easy"
+      },
+      
+      "charts": {
+        "activity_title": "Activity (Last 14 Days)",
+        "box_distribution_title": "Box Distribution",
+        "most_reviewed_title": "Most Reviewed",
+        "hardest_cards_title": "Hardest Cards",
+        "easiest_cards_title": "Easiest Cards",
+        
+        "click_hint": "Click on a bar to jump to the card",
+        "tooltip_hint": "💡 Click to jump to card"
+      }
+    },
+      "user_stats": {
+        "title": "User Statistics",
+        "loading": "Loading statistics...",
+        "no_data": "No statistics available",
+        
+        "limited_title": "Limited Access",
+        "limited_message": "This user has no public stacks. Statistics are not available.",
+        
+        "metrics": {
+          "total_stacks": "Total Stacks",
+          "total_cards": "Total Cards",
+          "total_reviews": "Reviews",
+          "accuracy": "Accuracy"
+        },
+        
+        "study_streak": "Study Streak",
+        "current_streak": "Current Streak",
+        "longest_streak": "Longest Streak",
+        "reviews": "reviews",
+        
+        "charts": {
+          "activity": "Activity (Last 14 Days)",
+          "weekly_pattern": "Weekly Pattern",
+          "box_distribution": "Box Distribution",
+          "top_stacks": "Top Stacks (by Avg Box)",
+          "most_reviewed_stacks": "Most Reviewed Stacks"
+        },
+        
+        "days": {
+          "sun": "Sun",
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat"
+        }
+      }
 }

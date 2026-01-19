@@ -281,6 +281,82 @@
   transform: translateY(150%) rotate(10deg);
 }
 
+// Confetti Animation
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f0f;
+  animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.celebration-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  color: var(--text);
+  padding: 2rem 3rem;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  z-index: 10000;
+  animation: celebration-popup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes celebration-popup {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.celebration-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: bounce 0.6s ease infinite alternate;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .footer-actions {
@@ -301,5 +377,14 @@
     user-select: none;
     top: 6rem;
     left: 0.5rem;
+  }
+
+  .celebration-message {
+    font-size: 1.5rem;
+    padding: 1.5rem 2rem;
+  }
+
+  .celebration-emoji {
+    font-size: 2.5rem;
   }
 }

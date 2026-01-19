@@ -1,10 +1,12 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, HostListener, effect } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ViewChild } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Card, Stack } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { RainComponent } from '../../components/rain/rain.component';
 
 
 import { marked } from 'marked';
@@ -12,12 +14,13 @@ import DOMPurify from 'dompurify';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, RainComponent],
   selector: 'app-study-page',
   templateUrl: './study-page.component.html',
   styleUrls: ['./study-page.component.scss'],
 })
 export class StudyPage {
+  @ViewChild('rain') rainComponent!: RainComponent;
   private route = inject(ActivatedRoute);
   private api = inject(ApiService);
   private auth = inject(AuthService);
@@ -30,6 +33,8 @@ export class StudyPage {
   isTransitioning = signal(false);
   userId = this.auth.getUserId();
   flyDirection = signal<'left' | 'right' | null>(null);
+  showCelebration = signal(false);
+  previousProgress = 0;
 
 
 hasCards  = this.cards().length > 0;
@@ -41,6 +46,15 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
     this.loadCard();
     this.loadCards();
     this.api.getStack(this.stackId).subscribe((stack) => this.stack.set(stack));
+
+    // Watch for 100% completion
+    effect(() => {
+      const progress = this.getProgressPercent();
+      if (progress === 100 && this.previousProgress < 100 && this.isOwner()) {
+        this.triggerCelebration();
+      }
+      this.previousProgress = progress;
+    });
   }
 
   @HostListener('window:keydown.space', ['$event'])
@@ -265,5 +279,43 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
    }
    
    element.setAttribute('content', content);
+ }
+
+ // Celebration/Confetti logic
+ triggerCelebration() {
+   this.showCelebration.set(true);
+   this.createConfetti();
+   
+   // Hide celebration message after 5 seconds
+   setTimeout(() => {
+     this.showCelebration.set(false);
+   }, 5000);
+ }
+
+ createConfetti() {
+  this.rainComponent.emojiRain("🎉")
+   const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff1493'];
+   const confettiCount = 150;
+
+   for (let i = 0; i < confettiCount; i++) {
+     setTimeout(() => {
+       const confetti = document.createElement('div');
+       confetti.className = 'confetti';
+       confetti.style.left = Math.random() * 100 + '%';
+       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+       confetti.style.animationDelay = Math.random() * 0.5 + 's';
+       confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+       
+       const container = document.querySelector('.confetti-container');
+       if (container) {
+         container.appendChild(confetti);
+         
+         // Remove confetti after animation
+         setTimeout(() => {
+           confetti.remove();
+         }, 4000);
+       }
+     }, i * 20);
+   }
  }
 }

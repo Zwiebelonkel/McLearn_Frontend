@@ -103,7 +103,7 @@
   text-align: center;
   font-size: 1.2rem;
   box-sizing: border-box;
-  border: 5px solid;
+  border: 5px solid var(--border);
   cursor: pointer;
   user-select: none;
 }
@@ -154,6 +154,9 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
@@ -161,9 +164,29 @@
   color: white;
 }
 
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
 .btn-danger {
   background-color: var(--danger-color);
   color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
 }
 
 .btn-warning {
@@ -174,6 +197,11 @@
 .btn-success {
   background-color: var(--success-color);
   color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
 }
 
 .btn-info {
@@ -198,36 +226,6 @@
 
 .card-back ::ng-deep center {
   text-align: center;
-}
-
-.difficulty-label {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 5px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.box-1 {
-  background-color: #d9534f;
-}
-.box-2 {
-  background-color: #f0ad4e;
-}
-.box-3 {
-  background-color: #5bc0de;
-}
-.box-4 {
-  background-color: #5cb85c;
-}
-.box-5 {
-  background-color: #428bca;
 }
 
 .progress-container {
@@ -293,6 +291,133 @@
   transform: translateY(150%) rotate(10deg);
 }
 
+/* Completion Screen Styles */
+.completion-screen {
+  padding: 2rem 0;
+  animation: fadeIn 0.5s ease;
+}
+
+.completion-screen h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.results-summary {
+  background: var(--light-color);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 3rem;
+}
+
+.stat-info {
+  text-align: left;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.correct-stat .stat-number {
+  color: var(--success-color);
+}
+
+.incorrect-stat .stat-number {
+  color: var(--danger-color);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* Horizontal Results Bar */
+.results-bar-container {
+  margin: 2rem 0;
+}
+
+.results-bar {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.result-segment {
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.correct-segment {
+  background: #28a745;
+}
+
+.incorrect-segment {
+  background: #dc3545;
+}
+
+/* Score Percentage */
+.score-percentage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.percentage-number {
+  font-size: 3rem;
+  font-weight: bold;
+  background: var(--text-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.percentage-label {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .footer-actions {
@@ -314,4 +439,45 @@
     top: 6rem;
     left: 0.5rem;
   }
+
+  .completion-screen h2 {
+    font-size: 1.5rem;
+  }
+
+  .result-stats {
+    gap: 1.5rem;
+  }
+
+  .stat-icon {
+    font-size: 2rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .results-bar {
+    height: 30px;
+  }
+
+  .percentage-number {
+    font-size: 2.5rem;
+  }
+
+  .results-summary {
+    padding: 1.5rem;
+  }
+}
+
+:host-context(body.dark-theme) .results-summary {
+  background-color: #2d2d2d;
+  color: var(--light-color);
+}
+
+:host-context(body.dark-theme) .stat-label {
+  color: #aaa;
+}
+
+:host-context(body.dark-theme) .percentage-label {
+  color: #aaa;
 }

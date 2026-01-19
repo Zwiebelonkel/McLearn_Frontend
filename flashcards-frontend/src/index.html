@@ -1,15 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FJ26L0CVFS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-FJ26L0CVFS');
-</script>
+  <!-- Google tag (gtag.js) - Async loading -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FJ26L0CVFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FJ26L0CVFS');
+  </script>
 
   <meta charset="utf-8">
   <title>McLearn - Flashcards</title>
@@ -17,30 +16,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Preconnect to external domains for faster loading -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://upload-widget.cloudinary.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://upload-widget.cloudinary.com">
+  
+  <!-- Font Awesome - Async loading with font-display optimization -->
+  <link 
+    rel="preload" 
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer">
+  <noscript>
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer">
+  </noscript>
   
   <!-- Open Graph / Facebook Meta Tags -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="McLearn - Flashcards">
   <meta property="og:title" content="McLearn - Master any subject with flashcards">
   <meta property="og:description" content="Learn smarter with spaced repetition flashcards. Create, study, and share your own flashcard stacks.">
-  <meta property="og:image" content="https://yourdomain.com/assets/apple-touch-icon.png">
+  <meta property="og:image" content="https://mclearn-d113a.web.app/assets/apple-touch-icon.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
-  <meta property="og:url" content="https://yourdomain.com">
+  <meta property="og:url" content="https://mclearn-d113a.web.app">
   
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="McLearn - Master any subject with flashcards">
   <meta name="twitter:description" content="Learn smarter with spaced repetition flashcards. Create, study, and share your own flashcard stacks.">
-  <meta name="twitter:image" content="https://yourdomain.com/assets/apple-touch-icon.png">
+  <meta name="twitter:image" content="https://mclearn-d113a.web.app/assets/apple-touch-icon.png">
   
   <!-- General Meta Tags -->
   <meta name="description" content="Learn smarter with spaced repetition flashcards. Create, study, and share your own flashcard stacks.">
-  <meta name="theme-color" content="#3b82f6">
+  <meta name="keywords" content="flashcards, learning, spaced repetition, study, education, memorization">
+  <meta name="theme-color" content="#ec4949">
+  
+  <!-- Critical CSS for faster First Contentful Paint -->
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Font Awesome font-display optimization */
+    @font-face {
+      font-family: "Font Awesome 6 Free";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    
+    @font-face {
+      font-family: "Font Awesome 6 Free";
+      font-style: normal;
+      font-weight: 900;
+      font-display: swap;
+    }
+    
+    /* App Loading State */
+    .app-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+      z-index: 9999;
+    }
+    
+    .loading-text {
+      margin-top: 20px;
+      color: #666;
+      font-size: 16px;
+    }
+    
+    /* Dark theme support for loading screen */
+    @media (prefers-color-scheme: dark) {
+      .app-loading {
+        background: #1a1a1a;
+      }
+      .loading-text {
+        color: #ccc;
+      }
+    }
+  </style>
 </head>
 <body>
-  <app-root></app-root>
-  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <app-root>
+    <!-- Loading indicator with better UX -->
+    <div class="app-loading">
+      <div class="loader"></div>
+      <div class="loading-text">Loading McLearn...</div>
+    </div>
+  </app-root>
+  
+  <!-- Cloudinary Widget - Deferred loading -->
+  <script 
+    src="https://upload-widget.cloudinary.com/global/all.js" 
+    type="text/javascript"
+    defer>
+  </script>
 </body>
 </html>

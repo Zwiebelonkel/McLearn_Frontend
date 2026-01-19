@@ -16,12 +16,12 @@ import { ToastService } from '../../services/toast.service';
 import { environment } from '../../../environments/environments';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
-
+import { StackStatisticsComponent } from '../../components/stats/stats.component';
 declare var cloudinary: any;
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LoaderComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterLink, LoaderComponent, TranslateModule, StackStatisticsComponent],
   templateUrl: './editor-page.component.html',
   styleUrls: ['./editor-page.component.scss']
 })
@@ -48,6 +48,7 @@ export class EditorPage {
   inviteeSearch = '';
   searchedUsers: User[] = [];
   selectedCardIds = new Set<String>();
+  showStatistics = signal(false);
   
   // Import Progress
   importProgress = signal(0);
@@ -63,6 +64,7 @@ export class EditorPage {
   saveErrorCards = new Set<string>();
 
   @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild(StackStatisticsComponent) statsComponent?: StackStatisticsComponent;
 
   constructor() {
     this.loading.set(true);
@@ -89,6 +91,10 @@ export class EditorPage {
   
       this.loading.set(false);
     });
+  }
+
+  toggleStatistics() {
+    this.showStatistics.update(v => !v);
   }
 
   openImageUploader() {
@@ -622,5 +628,9 @@ export class EditorPage {
     }, this.AUTO_SAVE_DELAY);
   
     this.autoSaveTimers.set(card.id, timer)
+  }
+
+  getHighlightedCardId(): string | null {
+    return this.statsComponent?.highlightedCardId() ?? null;
   }
 }

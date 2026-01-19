@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
-import { Card, Stack, StackCollaborator, User } from '../models';
+import { Observable } from 'rxjs';
+import { Card, Stack, StackCollaborator, User, StackStatistics, UserStatistics } from '../models';
+
 
 export type CreateCardPayload = Partial<Card> & {
   stack_id: string;
@@ -179,5 +181,18 @@ saveScribblePad(content: string) {
     { content },
     { headers: this.getHeaders() }
   );
+}
+
+getStackStatistics(stackId: string) {
+  return this.http.get<StackStatistics>(
+    `${environment.apiBase}/stacks/${stackId}/statistics`,
+    {
+      headers: this.getHeaders(),
+    }
+  );
+}
+
+getUserStatistics(userId: number): Observable<UserStatistics> {
+  return this.http.get<UserStatistics>(`${environment.apiBase}/users/${userId}/statistics`);
 }
 }

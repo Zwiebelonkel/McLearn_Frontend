@@ -1,5 +1,16 @@
 <a routerLink="/" class="back-link">← {{ 'back' | translate }}</a>
 
+<!-- Confetti Container -->
+<app-rain #rain></app-rain>
+<div class="confetti-container"></div>
+
+<!-- Celebration Message -->
+<div *ngIf="showCelebration()" class="celebration-message">
+  <div class="celebration-emoji">🎉</div>
+  {{ 'congratulations' | translate }}!
+  <div>{{ 'completed_100' | translate }}</div>
+</div>
+
 <div class="container">
   <h2 class="page-title">{{ 'study' | translate }}</h2>
 
@@ -18,6 +29,8 @@
         [class.fly-left]="flyDirection() === 'left'"
         [class.fly-right]="flyDirection() === 'right'"
         (click)="flip()"
+        (touchstart)="handleTouchStart($event)"
+        (touchend)="handleTouchEnd($event)"
       >
         <div class="card-inner">
           <div class="card-front">

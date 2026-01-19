@@ -97,5 +97,77 @@
   "load_more": "Cargar más",
   "request_pending": "Solicitud Pendiente",
   "already_friends": "Ya son Amigos",
-  "public_stacks": "Colecciones Públicas"
+  "public_stacks": "Colecciones Públicas",
+    "stats": {
+      "title": "Estadísticas del Stack",
+      "loading": "Cargando estadísticas...",
+      "no_data": "No hay estadísticas disponibles",
+      
+      "toggle_show": "Mostrar estadísticas",
+      "toggle_hide": "Ocultar estadísticas",
+      
+      "metrics": {
+        "total_cards": "Tarjetas totales",
+        "total_reviews": "Repasos",
+        "average_box": "Caja prom.",
+        "success_rate": "Tasa de éxito"
+      },
+      
+      "response_distribution": {
+        "title": "Distribución de respuestas",
+        "again": "Otra vez",
+        "hard": "Difícil",
+        "good": "Bien",
+        "easy": "Fácil"
+      },
+      
+      "charts": {
+        "activity_title": "Actividad (últimos 14 días)",
+        "box_distribution_title": "Distribución de cajas",
+        "most_reviewed_title": "Más repasadas",
+        "hardest_cards_title": "Tarjetas más difíciles",
+        "easiest_cards_title": "Tarjetas más fáciles",
+        
+        "click_hint": "Haz clic en una barra para ir a la tarjeta",
+        "tooltip_hint": "💡 Haz clic para ir a la tarjeta"
+      }
+    },
+      "user_stats": {
+        "title": "Estadísticas de usuario",
+        "loading": "Cargando estadísticas...",
+        "no_data": "No hay estadísticas disponibles",
+        
+        "limited_title": "Acceso limitado",
+        "limited_message": "Este usuario no tiene pilas públicas. Las estadísticas no están disponibles.",
+        
+        "metrics": {
+          "total_stacks": "Pilas totales",
+          "total_cards": "Tarjetas totales",
+          "total_reviews": "Repasos",
+          "accuracy": "Precisión"
+        },
+        
+        "study_streak": "Racha de estudio",
+        "current_streak": "Racha actual",
+        "longest_streak": "Racha más larga",
+        "reviews": "repasos",
+        
+        "charts": {
+          "activity": "Actividad (últimos 14 días)",
+          "weekly_pattern": "Patrón semanal",
+          "box_distribution": "Distribución de cajas",
+          "top_stacks": "Mejores pilas (por caja prom.)",
+          "most_reviewed_stacks": "Pilas más repasadas"
+        },
+        
+        "days": {
+          "sun": "Dom",
+          "mon": "Lun",
+          "tue": "Mar",
+          "wed": "Mié",
+          "thu": "Jue",
+          "fri": "Vie",
+          "sat": "Sáb"
+        }
+      }
 }

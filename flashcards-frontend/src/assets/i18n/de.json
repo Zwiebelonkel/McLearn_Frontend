@@ -97,5 +97,79 @@
   "load_more": "Mehr laden",
   "request_pending": "Anfrage ausstehend",
   "already_friends": "Bereits befreundet",
-  "public_stacks": "Öffentliche Stapel"
+  "public_stacks": "Öffentliche Stapel",
+  
+    "stats": {
+      "title": "Stack Statistiken",
+      "loading": "Lade Statistiken...",
+      "no_data": "Keine Statistiken verfügbar",
+      
+      "toggle_show": "Statistiken anzeigen",
+      "toggle_hide": "Statistiken ausblenden",
+      
+      "metrics": {
+        "total_cards": "Gesamt Karten",
+        "total_reviews": "Wiederholungen",
+        "average_box": "Ø Box Level",
+        "success_rate": "Erfolgsquote"
+      },
+      
+      "response_distribution": {
+        "title": "Antwortverteilung",
+        "again": "Nochmal",
+        "hard": "Schwer",
+        "good": "Gut",
+        "easy": "Einfach"
+      },
+      
+      "charts": {
+        "activity_title": "Aktivität (letzte 14 Tage)",
+        "box_distribution_title": "Box Verteilung",
+        "most_reviewed_title": "Meist wiederholt",
+        "hardest_cards_title": "Schwierigste Karten",
+        "easiest_cards_title": "Leichteste Karten",
+        
+        "click_hint": "Klicke auf einen Balken um zur Karte zu springen",
+        "tooltip_hint": "💡 Klicke um zur Karte zu springen"
+      }
+    },
+      "user_stats": {
+        "title": "Benutzerstatistiken",
+        "loading": "Lade Statistiken...",
+        "no_data": "Keine Statistiken verfügbar",
+        
+        "limited_title": "Eingeschränkter Zugriff",
+        "limited_message": "Dieser Benutzer hat keine öffentlichen Stacks. Statistiken sind nicht verfügbar.",
+        
+        "metrics": {
+          "total_stacks": "Gesamt Stacks",
+          "total_cards": "Gesamt Karten",
+          "total_reviews": "Wiederholungen",
+          "accuracy": "Genauigkeit"
+        },
+        
+        "study_streak": "Lernsträhne",
+        "current_streak": "Aktuelle Serie",
+        "longest_streak": "Längste Serie",
+        "reviews": "Wiederholungen",
+        
+        "charts": {
+          "activity": "Aktivität (letzte 14 Tage)",
+          "weekly_pattern": "Wöchentliches Muster",
+          "box_distribution": "Box Verteilung",
+          "top_stacks": "Top Stacks (nach Ø Box)",
+          "most_reviewed_stacks": "Meist wiederholte Stacks"
+        },
+        
+        "days": {
+          "sun": "So",
+          "mon": "Mo",
+          "tue": "Di",
+          "wed": "Mi",
+          "thu": "Do",
+          "fri": "Fr",
+          "sat": "Sa"
+        }
+      }
+
 }

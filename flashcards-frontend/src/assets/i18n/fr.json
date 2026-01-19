@@ -97,5 +97,77 @@
   "load_more": "Charger plus",
   "request_pending": "Demande en Attente",
   "already_friends": "Déjà Amis",
-  "public_stacks": "Piles Publiques"
+  "public_stacks": "Piles Publiques",
+    "stats": {
+      "title": "Statistiques du Stack",
+      "loading": "Chargement des statistiques...",
+      "no_data": "Aucune statistique disponible",
+      
+      "toggle_show": "Afficher les statistiques",
+      "toggle_hide": "Masquer les statistiques",
+      
+      "metrics": {
+        "total_cards": "Cartes totales",
+        "total_reviews": "Révisions",
+        "average_box": "Boîte moy.",
+        "success_rate": "Taux de réussite"
+      },
+      
+      "response_distribution": {
+        "title": "Distribution des réponses",
+        "again": "Encore",
+        "hard": "Difficile",
+        "good": "Bon",
+        "easy": "Facile"
+      },
+      
+      "charts": {
+        "activity_title": "Activité (14 derniers jours)",
+        "box_distribution_title": "Distribution des boîtes",
+        "most_reviewed_title": "Plus révisées",
+        "hardest_cards_title": "Cartes les plus difficiles",
+        "easiest_cards_title": "Cartes les plus faciles",
+        
+        "click_hint": "Cliquez sur une barre pour accéder à la carte",
+        "tooltip_hint": "💡 Cliquez pour accéder à la carte"
+      }
+    },
+      "user_stats": {
+        "title": "Statistiques utilisateur",
+        "loading": "Chargement des statistiques...",
+        "no_data": "Aucune statistique disponible",
+        
+        "limited_title": "Accès limité",
+        "limited_message": "Cet utilisateur n'a pas de piles publiques. Les statistiques ne sont pas disponibles.",
+        
+        "metrics": {
+          "total_stacks": "Piles totales",
+          "total_cards": "Cartes totales",
+          "total_reviews": "Révisions",
+          "accuracy": "Précision"
+        },
+        
+        "study_streak": "Série d'étude",
+        "current_streak": "Série actuelle",
+        "longest_streak": "Série la plus longue",
+        "reviews": "révisions",
+        
+        "charts": {
+          "activity": "Activité (14 derniers jours)",
+          "weekly_pattern": "Modèle hebdomadaire",
+          "box_distribution": "Distribution des boîtes",
+          "top_stacks": "Meilleures piles (par boîte moy.)",
+          "most_reviewed_stacks": "Piles les plus révisées"
+        },
+        
+        "days": {
+          "sun": "Dim",
+          "mon": "Lun",
+          "tue": "Mar",
+          "wed": "Mer",
+          "thu": "Jeu",
+          "fri": "Ven",
+          "sat": "Sam"
+        }
+      }
 }

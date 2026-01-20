@@ -22,6 +22,11 @@
     <i class="fa-solid fa-circle-info"></i>{{ "help" | translate }}
   </a>
 
+  <a routerLink="/admin" class="sidebar-link" *ngIf="isAdmin$ | async"
+   (click)="closeSidebar()">
+    <i class="fa-solid fa-hammer"></i>{{ "Admin" | translate }}
+  </a>
+
   <button (click)="login()" *ngIf="!(isLoggedIn$ | async)" class="sidebar-link">
     <i class="fa-solid fa-right-to-bracket"></i>{{ "login" | translate }}
   </button>

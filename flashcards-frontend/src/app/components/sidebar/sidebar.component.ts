@@ -17,6 +17,7 @@ export class SidebarComponent {
   @Output() closed = new EventEmitter<void>();
 
   isLoggedIn$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
   themeService = inject(ThemeService);
 
   constructor(
@@ -25,6 +26,7 @@ export class SidebarComponent {
     public elementRef: ElementRef
   ) {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
+    this.isAdmin$ = this.authService.isAdmin$;
   }
 
   closeSidebar() {

@@ -7,10 +7,12 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 import { ScribblePadPage } from './pages/scribblepad-page/scribble-page.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { QuizModePage } from './pages/quiz-mode/quiz-mode-page.component';
+import { AdminPage } from './pages/admin-page/admin-page.component';
 
 export const routes: Routes = [
   { path: '', component: StacksPage },
@@ -36,6 +38,11 @@ export const routes: Routes = [
     path: 'friends',
     component: FriendsPageComponent,
     canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    component: AdminPage,
+    canActivate: [adminGuard],
   },
   { path: 'stack/:id/edit', component: EditorPage },
   { path: 'stack/:id/study', component: StudyPage },

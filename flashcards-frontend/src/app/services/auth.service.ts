@@ -11,7 +11,10 @@ export class AuthService {
 
   // ✅ FIX: Initialisiere mit false, dann im constructor prüfen
   private loggedIn$ = new BehaviorSubject<boolean>(false);
+  private admin$ = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.loggedIn$.asObservable();
+  public isAdmin$ = this.admin$.asObservable();
+
 
   constructor(private http: HttpClient, private router: Router) {
     // ✅ FIX: Auth-Status NACH der Initialisierung prüfen
@@ -24,10 +27,18 @@ export class AuthService {
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
         const isAuthenticated = this.checkAuthStatus();
         this.loggedIn$.next(isAuthenticated);
+        
+        // ✅ NEU: Admin-Status auch initialisieren
+        if (isAuthenticated) {
+          this.updateAdminStatus();
+        } else {
+          this.admin$.next(false);
+        }
       }
     } catch (error) {
       console.error('Error initializing auth state:', error);
       this.loggedIn$.next(false);
+      this.admin$.next(false);
     }
   }
 
@@ -51,6 +62,13 @@ export class AuthService {
       console.error('Error checking auth status:', error);
       return false;
     }
+  }
+
+  // ✅ NEU: Helper-Methode um Admin-Status zu aktualisieren
+  private updateAdminStatus(): void {
+    const username = this.getUsername();
+    const isAdminUser = username === 'Luca' || username === 'McLearn';
+    this.admin$.next(isAdminUser);
   }
 
   login(username: string, password: string) {
@@ -164,6 +182,9 @@ export class AuthService {
       const expiry = decoded.exp * 1000;
       localStorage.setItem('tokenExpiry', expiry.toString());
       this.loggedIn$.next(true);
+      
+      // ✅ NEU: Admin-Status aktualisieren nach Login
+      this.updateAdminStatus();
     } catch (error) {
       console.error('Error storing token:', error);
     }
@@ -184,6 +205,7 @@ export class AuthService {
     try {
       this.clearAuthData();
       this.loggedIn$.next(false);
+      this.admin$.next(false); // ✅ NEU: Admin-Status auch zurücksetzen
       this.router.navigateByUrl('/');
     } catch (error) {
       console.error('Error during logout:', error);
@@ -197,6 +219,12 @@ export class AuthService {
       console.error('Error decoding token:', error);
       throw error;
     }
+  }
+
+  // Synchrone Methode für Guards
+  isAdmin(): boolean {
+    const username = this.getUsername();
+    return username === 'Luca' || username === 'McLearn';
   }
 
   // Hilfsmethode zum manuellen Refresh des Auth-Status

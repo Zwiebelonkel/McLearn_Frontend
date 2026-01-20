@@ -195,4 +195,87 @@ getStackStatistics(stackId: string) {
 getUserStatistics(userId: number): Observable<UserStatistics> {
   return this.http.get<UserStatistics>(`${environment.apiBase}/users/${userId}/statistics`);
 }
+  // -------- ADMIN --------
+  
+  // Get all users (admin only)
+  adminGetUsers() {
+    return this.http.get<Array<{
+      id: number;
+      username: string;
+      role?: string;
+      created_at?: string;
+      stack_count: number;
+      card_count: number;
+    }>>(`${environment.apiBase}/admin/users`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Get all stacks (admin only)
+  adminGetStacks() {
+    return this.http.get<Array<{
+      id: string;
+      name: string;
+      user_id: number;
+      owner_name: string;
+      is_public: boolean;
+      card_amount: number;
+      created_at: string;
+      updated_at: string;
+    }>>(`${environment.apiBase}/admin/stacks`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Delete user (admin only)
+  adminDeleteUser(userId: number) {
+    return this.http.delete(`${environment.apiBase}/admin/users/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Delete stack (admin only)
+  adminDeleteStack(stackId: string) {
+    return this.http.delete(`${environment.apiBase}/admin/stacks/${stackId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Update stack visibility (admin only)
+  adminUpdateStack(stackId: string, isPublic: boolean) {
+    return this.http.patch(`${environment.apiBase}/admin/stacks/${stackId}`, 
+      { is_public: isPublic },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Transfer stack ownership (admin only)
+  adminTransferStack(stackId: string, username: string) {
+    return this.http.patch(`${environment.apiBase}/admin/stacks/${stackId}/transfer`,
+      { username },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Get admin statistics (admin only)
+  adminGetStatistics() {
+    return this.http.get<{
+      total: {
+        users: number;
+        stacks: number;
+        publicStacks: number;
+        cards: number;
+        reviews: number;
+      };
+      recent: {
+        users: number;
+        stacks: number;
+        reviews: number;
+      };
+    }>(`${environment.apiBase}/admin/statistics`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+
 }

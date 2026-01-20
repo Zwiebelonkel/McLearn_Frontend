@@ -61,7 +61,11 @@ export class StacksPage {
     if (this.isOwner(stack)) {
       return true;
     }
-    return !stack.is_public && !this.isOwner(stack);
+    // Check if user is a collaborator
+    if (stack.collaborators && Array.isArray(stack.collaborators)) {
+      return stack.collaborators.some(collab => collab.user_id === this.userId);
+    }
+    return false;
   }
 
   get filteredStacks(): Stack[] {
@@ -71,7 +75,10 @@ export class StacksPage {
         return false;
       }
       const isMine = s.user_id === this.userId;
-      const isSharedWithMe = !s.is_public && s.user_id !== this.userId;
+      // ✅ FIXED: Check if user is actually a collaborator
+      const isSharedWithMe = !isMine && s.collaborators && Array.isArray(s.collaborators) 
+        && s.collaborators.some(collab => collab.user_id === this.userId);
+      
       switch (this.filter) {
         case 'public':
           return s.is_public;
@@ -97,7 +104,10 @@ export class StacksPage {
         return false;
       }
       const isMine = s.user_id === this.userId;
-      const isSharedWithMe = !s.is_public && s.user_id !== this.userId;
+      // ✅ FIXED: Same fix here
+      const isSharedWithMe = !isMine && s.collaborators && Array.isArray(s.collaborators) 
+        && s.collaborators.some(collab => collab.user_id === this.userId);
+      
       switch (this.filter) {
         case 'public':
           return s.is_public;

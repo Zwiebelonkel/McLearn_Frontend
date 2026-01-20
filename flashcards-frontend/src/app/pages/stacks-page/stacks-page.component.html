@@ -41,6 +41,15 @@
           </span>
           <span *ngIf="s.is_public && isOwner(s)">🌍</span>
           <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
+          
+          <!-- Average Rating Display -->
+          <span *ngIf="s.average_rating && s.average_rating > 0" class="stack-rating-badge">
+            <svg class="rating-star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            {{ s.average_rating | number:'1.1-1' }}
+            <span class="rating-count">({{ s.rating_count }})</span>
+          </span>
         </span>
         
         <div class="stack-actions">
@@ -61,7 +70,7 @@
           </a>
           
           <!-- 3-Dot Menu Button -->
-          <div class="menu-wrapper">
+          <div class="menu-wrapper" [attr.data-stack-id]="s.id">
             <button 
               class="btn btn-icon-only more-menu-button" 
               (click)="toggleDropdown(s.id, $event)"
@@ -74,6 +83,32 @@
             
             <!-- Dropdown Menu -->
             <div class="dropdown-menu" *ngIf="isDropdownOpen(s.id)">
+              
+              <!-- Star Rating Section -->
+              <div class="rating-section" *ngIf="isLoggedIn()">
+                <div class="rating-label">{{ 'rate_stack' | translate }}</div>
+                <div class="star-rating">
+                  <button 
+                    *ngFor="let star of [1, 2, 3, 4, 5]" 
+                    class="star-button"
+                    (click)="rateStack(s, star, $event)"
+                    (mouseenter)="setHoverRating(s.id, star)"
+                    (mouseleave)="clearHoverRating(s.id)"
+                    [attr.aria-label]="'Rate ' + star + ' stars'">
+                    <svg 
+                      class="star-icon" 
+                      [class.star-filled]="star <= getDisplayRating(s)"
+                      xmlns="http://www.w3.org/2000/svg" 
+                      viewBox="0 0 24 24" 
+                      fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="menu-divider"></div>
+              
               <!-- Quiz -->
               <a 
                 *ngIf="s.card_amount && s.card_amount > 0"

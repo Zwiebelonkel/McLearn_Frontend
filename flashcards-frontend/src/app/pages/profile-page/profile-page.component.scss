@@ -172,6 +172,10 @@ h1:hover {
   margin: 2rem 0;
   display: flex;
   justify-content: center;
+  position: fixed;
+  left: -1.5rem;
+  top: 9rem;
+  z-index: 99999;
 }
 
 .btn-stats {

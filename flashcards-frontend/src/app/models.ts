@@ -8,7 +8,11 @@ export type Stack = {
   owner_name?: string;
   card_amount?: number;
   collaborators?: StackCollaborator[];
+  average_rating?: number;
+  rating_count?: number;
+  user_rating?: number; // Current user's rating
 };
+
 export type Card = {
   id: string;
   stack_id: string;
@@ -20,6 +24,7 @@ export type Card = {
   updated_at: string;
   front_image?: string;
 };
+
 export type StackCollaborator = {
   id: string;
   stack_id: string;
@@ -27,6 +32,7 @@ export type StackCollaborator = {
   user_name: string;
   can_edit: boolean;
 };
+
 export type User = {
   id: number;
   name: string;

@@ -277,5 +277,13 @@ getUserStatistics(userId: number): Observable<UserStatistics> {
     });
   }
 
+  rateStack(stackId: string, rating: number): Observable<Stack> {
+    return this.http.post<Stack>(
+      `${environment.apiBase}/stacks/${stackId}/rate`,
+      { rating },
+      { headers: this.getHeaders() }
+    );
+  }
+
 
 }

@@ -35,10 +35,19 @@ export class StacksPage {
   
   // Dropdown state management
   openDropdownId: string | null = null;
+  
+  // Rating state
+  hoverRating: { [stackId: string]: number } = {};
 
   constructor() {
     this.load();
   }
+
+  @HostListener('window:scroll')
+onWindowScroll() {
+  this.openDropdownId = null;
+}
+
 
   // Close dropdown when clicking outside
   @HostListener('document:click', ['$event'])
@@ -183,8 +192,35 @@ export class StacksPage {
   toggleDropdown(stackId: string, event: Event) {
     event.preventDefault();
     event.stopPropagation();
+  
+    // Schließe alle anderen Dropdowns
     this.openDropdownId = this.openDropdownId === stackId ? null : stackId;
+  
+    // Prüfe nach einer kurzen Verzögerung die Position
+    if (this.openDropdownId === stackId) {
+      setTimeout(() => this.adjustDropdownPosition(stackId), 50);
+    }
   }
+  
+  private adjustDropdownPosition(stackId: string) {
+    const buttonElement = document.querySelector(`[data-stack-id="${stackId}"] .more-menu-button`);
+    const dropdownElement = document.querySelector(`[data-stack-id="${stackId}"] .dropdown-menu`);
+  
+    if (buttonElement && dropdownElement) {
+      const buttonRect = buttonElement.getBoundingClientRect();
+      const dropdownRect = dropdownElement.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+  
+      // Prüfe, ob das Dropdown nach unten abgeschnitten würde
+      const spaceBelow = viewportHeight - buttonRect.bottom;
+      if (spaceBelow < dropdownRect.height) {
+        dropdownElement.classList.add('dropdown-menu--upwards');
+      } else {
+        dropdownElement.classList.remove('dropdown-menu--upwards');
+      }
+    }
+  }
+  
 
   isDropdownOpen(stackId: string): boolean {
     return this.openDropdownId === stackId;
@@ -192,6 +228,45 @@ export class StacksPage {
 
   closeDropdownMenu() {
     this.openDropdownId = null;
+  }
+
+  // Star Rating Methods
+  setHoverRating(stackId: string, rating: number) {
+    this.hoverRating[stackId] = rating;
+  }
+
+  clearHoverRating(stackId: string) {
+    delete this.hoverRating[stackId];
+  }
+
+  getDisplayRating(stack: Stack): number {
+    return this.hoverRating[stack.id] || stack.user_rating || 0;
+  }
+
+  rateStack(stack: Stack, rating: number, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (!this.isLoggedIn()) {
+      this.toast.show('Please login to rate stacks', 'warning');
+      return;
+    }
+
+    // Call API to rate the stack
+    this.api.rateStack(stack.id, rating).subscribe({
+      next: (updatedStack) => {
+        // Update the stack in the local array
+        const index = this.allStacks.findIndex(s => s.id === stack.id);
+        if (index !== -1) {
+          this.allStacks[index] = { ...this.allStacks[index], ...updatedStack };
+        }
+        this.toast.show(`Rated "${stack.name}" with ${rating} star${rating !== 1 ? 's' : ''}`, 'success');
+      },
+      error: (err) => {
+        console.error('Rating error:', err);
+        this.toast.show('Failed to rate stack', 'error');
+      }
+    });
   }
 
   // Export functionality

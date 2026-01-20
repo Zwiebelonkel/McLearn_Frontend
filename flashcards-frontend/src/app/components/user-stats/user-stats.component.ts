@@ -202,13 +202,22 @@ export class UserStatisticsComponent implements OnInit {
     return text.length > max ? text.slice(0, max) + '…' : text;
   }
 
+  // ✅ NEW: Format stack name with privacy indicator
+  private formatStackName(stack: any): string {
+    const truncated = this.truncate(stack.name);
+    if (stack.is_anonymous) {
+      return `🔒 ${truncated}`;
+    }
+    return truncated;
+  }
+
   setupCharts() {
     const s = this.stats();
     if (!s || s.limited) return;
 
     // Top Stacks by Performance
     this.topStacksChartData = {
-      labels: s.topStacks.map(stack => this.truncate(stack.name)),
+      labels: s.topStacks.map(stack => this.formatStackName(stack)),
       datasets: [{
         data: s.topStacks.map(stack => stack.average_box),
         backgroundColor: '#4ade80',
@@ -219,7 +228,7 @@ export class UserStatisticsComponent implements OnInit {
 
     // Most Reviewed Stacks
     this.mostReviewedStacksChartData = {
-      labels: s.mostReviewedStacks.map(stack => this.truncate(stack.name)),
+      labels: s.mostReviewedStacks.map(stack => this.formatStackName(stack)),
       datasets: [{
         data: s.mostReviewedStacks.map(stack => stack.total_reviews),
         backgroundColor: '#4dd5ff',

@@ -255,7 +255,7 @@ export class StackStatisticsComponent implements OnInit {
     };
 
     // Recent Activity
-    const recentDays = s.recentActivity.slice(-14);
+    const recentDays = s.recentActivity.slice(-14).reverse();
     this.activityChartData = {
       labels: recentDays.map(a => new Date(a.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })),
       datasets: [

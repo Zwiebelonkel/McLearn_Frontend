@@ -1,6 +1,5 @@
 import { Component, inject, signal, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { UserStatistics } from '../../models';
 import { BaseChartDirective } from 'ng2-charts';
@@ -27,7 +26,7 @@ import {
 @Component({
   selector: 'app-user-statistics',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, TranslateModule, RouterLink],
+  imports: [CommonModule, BaseChartDirective, TranslateModule],
   templateUrl: './user-stats.component.html',
   styleUrls: ['./user-stats.component.scss']
 })
@@ -251,7 +250,7 @@ export class UserStatisticsComponent implements OnInit {
     };
 
     // Recent Activity
-    const recentDays = s.recentActivity.slice(-14);
+    const recentDays = s.recentActivity.slice(-14).reverse();
     this.activityChartData = {
       labels: recentDays.map(a => new Date(a.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })),
       datasets: [

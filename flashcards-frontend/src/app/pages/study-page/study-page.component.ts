@@ -85,6 +85,21 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
     return this.stack()?.user_id === this.userId;
   }
 
+  canEdit(): boolean {
+    const stack = this.stack();
+    if (!stack) return false;
+    
+    // Owner can always edit
+    if (this.isOwner()) return true;
+    
+    // Check if user is a collaborator
+    if (stack.collaborators && Array.isArray(stack.collaborators) && this.userId) {
+      return stack.collaborators.some(collab => collab.user_id === this.userId);
+    }
+    
+    return false;
+  }
+
   renderMarkdown(text: string): string {
     const dirty = marked.parse(text || '') as string;
     return DOMPurify.sanitize(dirty, { ADD_TAGS: ['center'] });
@@ -112,39 +127,42 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
     this.showBack.set(!this.showBack());
   }
 
-  rate(rating: 'again' | 'hard' | 'good' | 'easy') {
+  rate(rating: 'hard' | 'good' | 'easy') {
     if (this.isTransitioning() || !this.isOwner() || !this.showBack()) return;
     const cardId = this.current()?.id;
     if (!cardId) return;
+    
     this.isTransitioning.set(true);
 
-    // 🧭 Richtung merken für Animation
-    this.flyDirection.set(
-      rating === 'hard' || rating === 'again' ? 'left' : 'right'
-    );
+    // 🧭 Step 1: Karte rausfliegen lassen
+    this.flyDirection.set(rating === 'hard' ? 'left' : 'right');
 
-    // ⏱ Karte "wegfliegen lassen", dann bewerten
+    // ⏱ Step 2: Warte bis Animation fertig, dann API Call
     setTimeout(() => {
       this.api.review(this.stackId, cardId, rating).subscribe((updatedCard) => {
-        // 🟢 Direkt Fortschrittsbalken aktualisieren:
+        // 🟢 Fortschrittsbalken aktualisieren
         this.loadCards();
 
-        // Karte aktualisieren (wichtig bei "again")
-        this.current.set(updatedCard);
-        this.flyDirection.set(null);
-
-        if (rating === 'again') {
-          // Karte bleibt dieselbe
+        // Step 3: Karte ist jetzt "draußen" - lade neue Karte
+        this.api.nextCard(this.stackId).subscribe((nextCard) => {
+          // ✅ WICHTIG: Karte SOFORT zurückdrehen (bevor sie sichtbar wird!)
           this.showBack.set(false);
-          this.isTransitioning.set(false);
-        } else {
-          // Karte wechselt nach kleiner Pause
-          this.showBack.set(false);
-          setTimeout(() => this.loadCard(), 100);
-        }
+          
+          // Step 4: Neue Karte setzen (Vorderseite)
+          this.current.set(nextCard);
+          
+          // Step 5: Reset Animation State und Karte fliegt rein
+          this.flyDirection.set(null);
+          
+          // Step 6: Warte auf Reinflug-Animation (500ms), dann interaktiv machen
+          setTimeout(() => {
+            this.isTransitioning.set(false);
+          }, 500); // Zeit für fly-in Animation
+        });
       });
-    }, 200); // Zeit für Fluganimation
+    }, 400); // Zeit für Rausflug-Animation
   }
+
 
   getBoxLabel(box: number | undefined | null): string {
     switch (box) {
@@ -198,10 +216,7 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
      if (deltaX > 0) {
        // Swipe right - good
        this.rate('good');
-     } else {
-       // Swipe left - again
-       this.rate('again');
-     }
+     } 
    }
  }
 

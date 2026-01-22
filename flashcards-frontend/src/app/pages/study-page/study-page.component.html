@@ -12,7 +12,13 @@
 </div>
 
 <div class="container">
-  <h2 class="page-title">{{ 'study' | translate }}</h2>
+  <!-- Clickable title for owners/collaborators -->
+  <a *ngIf="canEdit()" [routerLink]="['/stack', stackId, 'edit']" class="page-title-link">
+    <h2 class="page-title">{{ stack()?.name || ('study' | translate) }}</h2>
+  </a>
+  
+  <!-- Non-clickable title for others -->
+  <h2 *ngIf="!canEdit()" class="page-title">{{ stack()?.name || ('study' | translate) }}</h2>
 
   <div *ngIf="isOwner()" class="progress-container">
     <div class="progress-bar">

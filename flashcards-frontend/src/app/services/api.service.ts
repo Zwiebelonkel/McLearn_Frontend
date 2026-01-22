@@ -277,6 +277,13 @@ getUserStatistics(userId: number): Observable<UserStatistics> {
     });
   }
 
+  adminResetReviewSequences(stackId: string) {
+    return this.http.post(`${environment.apiBase}/admin/stacks/${stackId}/reset-sequences`, 
+      {},
+      { headers: this.getHeaders() }
+    );
+  }
+
   rateStack(stackId: string, rating: number): Observable<Stack> {
     return this.http.post<Stack>(
       `${environment.apiBase}/stacks/${stackId}/rate`,

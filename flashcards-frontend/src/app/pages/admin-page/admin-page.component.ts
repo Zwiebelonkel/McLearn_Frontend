@@ -186,6 +186,26 @@ export class AdminPage implements OnInit {
     });
   }
 
+  // ✅ NEU: Reset Review Sequences
+  resetReviewSequences(stack: AdminStack) {
+    if (!confirm(`Reset all review sequences for stack "${stack.name}"? This will reset the study session cooldowns.`)) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.api.adminResetReviewSequences(stack.id).subscribe({
+      next: () => {
+        this.toast.show(`Review sequences reset for "${stack.name}"`, 'success');
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error resetting review sequences:', err);
+        this.toast.show('Failed to reset review sequences', 'error');
+        this.loading.set(false);
+      }
+    });
+  }
+
   // Stats
   get totalUsers(): number {
     return this.users().length;

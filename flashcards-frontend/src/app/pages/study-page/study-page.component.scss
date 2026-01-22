@@ -52,8 +52,22 @@
   height: 18px;
 }
 
+.page-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.page-title-link:hover .page-title {
+  color: var(--primary-color);
+  transform: scale(1.02);
+}
+
 .page-title {
   margin-bottom: 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .card-wrapper {
@@ -388,3 +402,4 @@
     font-size: 2.5rem;
   }
 }
+

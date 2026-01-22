@@ -85,8 +85,7 @@
             <div class="dropdown-menu" *ngIf="isDropdownOpen(s.id)">
               
               <!-- Star Rating Section -->
-              <div class="rating-section" *ngIf="isLoggedIn()">
-                <div class="rating-label">{{ 'rate_stack' | translate }}</div>
+              <div class="rating-section" *ngIf="!canEdit(s)">
                 <div class="star-rating">
                   <button 
                     *ngFor="let star of [1, 2, 3, 4, 5]" 
@@ -106,9 +105,7 @@
                   </button>
                 </div>
               </div>
-              
-              <div class="menu-divider"></div>
-              
+
               <!-- Quiz -->
               <a 
                 *ngIf="s.card_amount && s.card_amount > 0"

@@ -186,6 +186,7 @@
             <td>{{ stack.created_at | date: 'short' }}</td>
             <td>
               <div class="action-buttons">
+                <!-- Toggle Visibility -->
                 <button 
                   class="btn-icon" 
                   (click)="toggleStackVisibility(stack)"
@@ -197,11 +198,25 @@
                     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Z"/>
                   </svg>
                 </button>
+
+                <!-- ✅ NEU: Reset Review Sequences Button -->
+                <button 
+                  class="btn-icon" 
+                  (click)="resetReviewSequences(stack)"
+                  title="Reset Review Sequences">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                    <path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/>
+                  </svg>
+                </button>
+
+                <!-- Transfer Ownership -->
                 <button class="btn-icon" (click)="transferStack(stack)" title="Transfer Ownership">
                   <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
                     <path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"/>
                   </svg>
                 </button>
+
+                <!-- Delete Stack -->
                 <button class="btn-icon btn-danger" (click)="deleteStack(stack)" title="Delete Stack">
                   <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
                     <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Z"/>

@@ -55,9 +55,9 @@
 
     <div *ngIf="showBack() && !isTransitioning()">
       <div *ngIf="isOwner()" class="ratings">
-        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }}</button>
-        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }}</button>
-        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }}</button>
+        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }} <i class="fa-regular fa-face-dizzy"></i></button>
+        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }} <i class="fa-regular fa-face-smile-beam"></i></button>
+        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }} <i class="fa-regular fa-face-grin-beam"></i></button>
       </div>
       <div *ngIf="!isOwner()">
         <button (click)="loadCard()" class="btn btn-primary">{{ 'next' | translate }}</button>

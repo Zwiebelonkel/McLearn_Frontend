@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { AdminToggleService } from '../../services/admin-toggle.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { FormsModule } from '@angular/forms';
 
@@ -35,10 +36,12 @@ export class AdminPage implements OnInit {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
   private router = inject(Router);
+  private adminToggle = inject(AdminToggleService);
 
   loading = signal(false);
   users = signal<User[]>([]);
   stacks = signal<AdminStack[]>([]);
+  maintenanceModeActive = signal(false);
   
   activeTab: 'users' | 'stacks' = 'users';
   searchTerm = '';
@@ -52,6 +55,7 @@ export class AdminPage implements OnInit {
   ngOnInit() {
     this.checkAdminAccess();
     this.loadData();
+    this.maintenanceModeActive.set(this.adminToggle.isMaintenanceModeActive());
   }
 
   checkAdminAccess() {
@@ -103,6 +107,24 @@ export class AdminPage implements OnInit {
       s.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       s.owner_name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+  }
+
+  // Maintenance Mode Toggle
+  toggleMaintenanceMode() {
+    this.loading.set(true);
+    this.adminToggle.toggleMaintenanceMode().subscribe({
+      next: () => {
+        this.maintenanceModeActive.set(this.adminToggle.isMaintenanceModeActive());
+        const status = this.maintenanceModeActive() ? 'activated' : 'deactivated';
+        this.toast.show(`Maintenance mode ${status}`, 'success');
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error toggling maintenance mode:', err);
+        this.toast.show('Failed to toggle maintenance mode', 'error');
+        this.loading.set(false);
+      }
+    });
   }
 
   // User actions
@@ -186,7 +208,7 @@ export class AdminPage implements OnInit {
     });
   }
 
-  // ✅ NEU: Reset Review Sequences
+  // Reset Review Sequences
   resetReviewSequences(stack: AdminStack) {
     if (!confirm(`Reset all review sequences for stack "${stack.name}"? This will reset the study session cooldowns.`)) {
       return;

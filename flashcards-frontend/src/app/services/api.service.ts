@@ -292,5 +292,27 @@ getUserStatistics(userId: number): Observable<UserStatistics> {
     );
   }
 
+    
+  // Get maintenance mode status (public)
+  getMaintenanceMode() {
+    return this.http.get<{
+      maintenance_mode: boolean;
+      updated_at: string | null;
+      updated_by: string | null;
+    }>(`${environment.apiBase}/admin/maintenance-mode`);
+  }
+
+  // Set maintenance mode (admin only)
+  setMaintenanceMode(maintenanceMode: boolean) {
+    return this.http.post<{
+      maintenance_mode: boolean;
+      updated_at: string;
+      updated_by: string;
+    }>(`${environment.apiBase}/admin/maintenance-mode`, 
+      { maintenance_mode: maintenanceMode },
+      { headers: this.getHeaders() }
+    );
+  }
+
 
 }

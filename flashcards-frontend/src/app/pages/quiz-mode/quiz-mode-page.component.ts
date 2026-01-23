@@ -91,7 +91,8 @@ export class QuizModePage {
 
     this.api.cards(this.stackId).subscribe((cards) => {
       if (cards.length > 0) {
-        this.cards.set(cards);
+        const shuffledCards = this.shuffleCards(cards);
+        this.cards.set(shuffledCards);
       }
     });
   }
@@ -111,6 +112,16 @@ export class QuizModePage {
     if (this.isTransitioning() || this.quizCompleted()) return;
     this.showBack.set(!this.showBack());
   }
+
+  shuffleCards(cards: Card[]): Card[] {
+    const shuffled = [...cards];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+  
 
   markCorrect() {
     const card = this.currentCard;

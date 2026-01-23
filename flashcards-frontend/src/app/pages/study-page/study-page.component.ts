@@ -157,10 +157,10 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
           // Step 6: Warte auf Reinflug-Animation (500ms), dann interaktiv machen
           setTimeout(() => {
             this.isTransitioning.set(false);
-          }, 500); // Zeit für fly-in Animation
+          }, 300); // Zeit für fly-in Animation
         });
       });
-    }, 400); // Zeit für Rausflug-Animation
+    }, 300); // Zeit für Rausflug-Animation
   }
 
 

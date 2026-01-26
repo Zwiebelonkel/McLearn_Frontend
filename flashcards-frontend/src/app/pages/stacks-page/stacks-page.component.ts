@@ -9,6 +9,8 @@ import { LoaderComponent } from '../../pages/loader/loader.component';
 import { ToastService } from '../../services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+type SortOption = 'name-asc' | 'name-desc' | 'rating-desc' | 'rating-asc' | 'cards-desc' | 'cards-asc' | 'date-desc' | 'date-asc';
+
 @Component({
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, LoaderComponent, TranslateModule],
@@ -27,6 +29,7 @@ export class StacksPage {
   loading = signal(false);
   search: string = '';
   filter: 'all' | 'public' | 'own' | 'shared' = 'all';
+  sortBy: SortOption = 'date-desc'; // Default: newest first
   
   // Pagination
   private readonly PAGE_SIZE = 10;
@@ -44,10 +47,9 @@ export class StacksPage {
   }
 
   @HostListener('window:scroll')
-onWindowScroll() {
-  this.openDropdownId = null;
-}
-
+  onWindowScroll() {
+    this.openDropdownId = null;
+  }
 
   // Close dropdown when clicking outside
   @HostListener('document:click', ['$event'])
@@ -77,6 +79,59 @@ onWindowScroll() {
     return false;
   }
 
+  private sortStacks(stacks: Stack[]): Stack[] {
+    const sorted = [...stacks];
+    
+    switch (this.sortBy) {
+      case 'name-asc':
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      
+      case 'name-desc':
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      
+      case 'rating-desc':
+        return sorted.sort((a, b) => {
+          const ratingA = a.average_rating || 0;
+          const ratingB = b.average_rating || 0;
+          if (ratingB !== ratingA) return ratingB - ratingA;
+          // Secondary sort by rating count
+          return (b.rating_count || 0) - (a.rating_count || 0);
+        });
+      
+      case 'rating-asc':
+        return sorted.sort((a, b) => {
+          const ratingA = a.average_rating || 0;
+          const ratingB = b.average_rating || 0;
+          if (ratingA !== ratingB) return ratingA - ratingB;
+          // Secondary sort by rating count
+          return (a.rating_count || 0) - (b.rating_count || 0);
+        });
+      
+      case 'cards-desc':
+        return sorted.sort((a, b) => (b.card_amount || 0) - (a.card_amount || 0));
+      
+      case 'cards-asc':
+        return sorted.sort((a, b) => (a.card_amount || 0) - (b.card_amount || 0));
+      
+      case 'date-desc':
+        return sorted.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0).getTime();
+          const dateB = new Date(b.created_at || 0).getTime();
+          return dateB - dateA;
+        });
+      
+      case 'date-asc':
+        return sorted.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0).getTime();
+          const dateB = new Date(b.created_at || 0).getTime();
+          return dateA - dateB;
+        });
+      
+      default:
+        return sorted;
+    }
+  }
+
   get filteredStacks(): Stack[] {
     const filtered = this.allStacks.filter(s => {
       const matchesSearch = s.name.toLowerCase().includes(this.search.toLowerCase());
@@ -100,10 +155,13 @@ onWindowScroll() {
       }
     });
 
+    // Apply sorting
+    const sorted = this.sortStacks(filtered);
+
     const maxPage = this.currentPage();
     const displayCount = (maxPage + 1) * this.PAGE_SIZE;
     
-    return filtered.slice(0, displayCount);
+    return sorted.slice(0, displayCount);
   }
 
   get shouldShowLoadMore(): boolean {
@@ -147,7 +205,7 @@ onWindowScroll() {
     this.currentPage.set(this.currentPage() + 1);
   }
 
-  // Reset pagination when search or filter changes
+  // Reset pagination when search, filter or sort changes
   onSearchOrFilterChange() {
     this.currentPage.set(0);
   }
@@ -221,7 +279,6 @@ onWindowScroll() {
     }
   }
   
-
   isDropdownOpen(stackId: string): boolean {
     return this.openDropdownId === stackId;
   }

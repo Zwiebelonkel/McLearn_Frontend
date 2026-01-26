@@ -27,6 +27,24 @@
         <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
         <option value="shared">🤝 {{ 'shared_with_me' | translate }}</option>
       </select>
+
+      <!-- Sort Dropdown (Google-style)
+      <div class="sort-wrapper">
+        <svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+          <path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z"/>
+        </svg>
+        <select [(ngModel)]="sortBy" (ngModelChange)="onSearchOrFilterChange()" class="form-input select-input sort-select">
+          <option value="date-desc">Newest</option>
+          <option value="date-asc">Oldest</option>
+          <option value="name-asc">A → Z</option>
+          <option value="name-desc">Z → A</option>
+          <option value="rating-desc">Highest rated</option>
+          <option value="rating-asc">Lowest rated</option>
+          <option value="cards-desc">Most cards</option>
+          <option value="cards-asc">Fewest cards</option>
+        </select>
+      </div>
+      -->
     </div>
     
     <ul class="stack-list">

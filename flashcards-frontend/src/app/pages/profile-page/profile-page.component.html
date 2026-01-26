@@ -57,13 +57,35 @@
 
   <div *ngIf="stacks.length > 0" class="stacks-container">
     <h2>{{ isOtherUserProfile ? ('public_stacks' | translate) : ('my_stacks' | translate) }}</h2>
-    <ul class="stack-list">
-      <li *ngFor="let stack of stacks" class="stack-item">
-        <a [routerLink]="['/stack', stack.id, 'study']" class="stack-link">
-          <span class="stack-name">{{ stack.name }}</span>
-          <span class="card-amount">{{ stack.card_amount }} {{ 'cards' | translate }}</span>
-        </a>
-      </li>
-    </ul>
+    <div class="card-deck-grid">
+      <a 
+        *ngFor="let stack of stacks" 
+        [routerLink]="['/stack', stack.id, 'study']" 
+        class="card-deck"
+      >
+        <div class="deck-stack">
+          <div class="deck-card deck-card-3"></div>
+          <div class="deck-card deck-card-2"></div>
+          <div class="deck-card deck-card-1">
+            <div class="deck-content">
+              <div class="deck-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="currentColor">
+                  <path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
+                </svg>
+              </div>
+              <h3 class="deck-name">{{ stack.name }}</h3>
+              <div class="deck-info">
+                <div class="deck-count">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                    <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+                  </svg>
+                  <span>{{ stack.card_amount }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
 </div>

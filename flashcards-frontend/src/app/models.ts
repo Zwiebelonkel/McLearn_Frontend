@@ -11,6 +11,8 @@ export type Stack = {
   average_rating?: number;
   rating_count?: number;
   user_rating?: number; // Current user's rating
+  cover_image?: string;
+  description: string;
 };
 
 export type Card = {
@@ -133,4 +135,85 @@ export interface UserStatistics {
     review_count: number;
   }[];
   limited: boolean;
+}
+
+// Füge diese Models zu deiner models.ts Datei hinzu
+
+export interface Question {
+  id: string;
+  stack_id: string;
+  question: string;
+  answer_1: string;
+  answer_2: string;
+  answer_3: string;
+  answer_4: string;
+  correct_answer: number; // 1-4
+  explanation?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuestionResult {
+  id: string;
+  question_id: string;
+  stack_id: string;
+  user_id: number;
+  selected_answer: number; // 1-4
+  is_correct: boolean;
+  time_taken?: number; // in seconds
+  created_at: string;
+}
+
+export interface QuestionAnswerResponse {
+  id: string;
+  is_correct: boolean;
+  correct_answer: number;
+  explanation?: string;
+  selected_answer: number;
+}
+
+export interface QuestionStatistics {
+  overall: {
+    total_questions: number;
+    total_attempts: number;
+    correct_answers: number;
+    avg_time_taken: number;
+  };
+  user?: {
+    attempted_questions: number;
+    total_attempts: number;
+    correct_answers: number;
+    avg_time_taken: number;
+  };
+  difficult_questions: Array<{
+    id: string;
+    question: string;
+    attempt_count: number;
+    correct_count: number;
+    correct_percentage: number;
+  }>;
+}
+
+export interface QuestionImportRequest {
+  questions: Array<{
+    question: string;
+    answer_1: string;
+    answer_2: string;
+    answer_3: string;
+    answer_4: string;
+    correct_answer: number;
+    explanation?: string;
+    difficulty?: 'easy' | 'medium' | 'hard';
+  }>;
+}
+
+export interface QuestionImportResponse {
+  success: boolean;
+  imported: number;
+  errors: number;
+  details: {
+    imported: Array<{ index: number; id: string }>;
+    errors: Array<{ index: number; error: string }>;
+  };
 }

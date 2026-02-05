@@ -13,6 +13,7 @@ import { FriendsPageComponent } from './pages/friends-page/friends-page.componen
 import { ScribblePadPage } from './pages/scribblepad-page/scribble-page.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { QuizModePage } from './pages/quiz-mode/quiz-mode-page.component';
+import { MultipleChoicePage } from './pages/mutiple-choice-page/mutiple-choice-page.component';
 import { AdminPage } from './pages/admin-page/admin-page.component';
 
 export const routes: Routes = [

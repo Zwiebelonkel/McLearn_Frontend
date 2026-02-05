@@ -114,11 +114,11 @@
           }
           
           .deck-card-2 {
-            transform: translateX(-50%) translateY(-1px) rotate(-0.5deg);
+            transform: translateX(-50%) translateY(-1px) rotate(-5deg);
           }
           
           .deck-card-3 {
-            transform: translateX(-50%) rotate(-1deg);
+            transform: translateX(-50%) rotate(-10deg);
           }
         }
       }
@@ -138,6 +138,7 @@
       border: 2px solid var(--card-border-color);
       border-radius: 16px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
     }
 
     .deck-card-3 {
@@ -165,37 +166,66 @@
       background: var(--card-background);
       border-color: var(--card-border-color);
       transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     .card-deck:hover .deck-card-1 {
       border-color: var(--primary-color);
     }
 
-    .deck-content {
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      height: 100%;
-      justify-content: center;
-      gap: 1rem;
+    // Cover Image Header
+    .deck-header {
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+      border-radius: 14px 14px 0 0;
+      flex-shrink: 0;
     }
 
-    .deck-icon {
+    .deck-cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .deck-cover-gradient {
+      width: 100%;
+      height: 100%;
+      background: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deck-icon-centered {
       width: 64px;
       height: 64px;
-      background-color: var(--primary-color);
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      margin-bottom: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       
       svg {
         color: white;
       }
+    }
+
+    .deck-content {
+      padding: 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      justify-content: space-between;
+      gap: 1rem;
     }
 
     .deck-name {
@@ -212,7 +242,6 @@
     }
 
     .deck-info {
-      margin-top: auto;
       width: 100%;
     }
 
@@ -280,13 +309,17 @@ h1:hover {
         height: 240px;
       }
 
-      .deck-icon {
+      .deck-header {
+        height: 100px;
+      }
+
+      .deck-icon-centered {
         width: 52px;
         height: 52px;
 
         svg {
-          width: 26px;
-          height: 26px;
+          width: 32px;
+          height: 32px;
         }
       }
 
@@ -295,7 +328,7 @@ h1:hover {
       }
 
       .deck-content {
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 1rem;
       }
     }
   }

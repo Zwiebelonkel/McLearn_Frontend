@@ -170,5 +170,19 @@
           "sat": "Sáb"
         }
       },
-  "rate_stack":"Evaluar"
+  "rate_stack":"Evaluar",
+  "description": "Descripción",
+  "rate_this_stack": "Calificar este Stack",
+  "your_rating": "Tu calificación",
+  "average": "Promedio",
+  "average_rating": "Calificación promedio",
+  "click_stars_to_rate": "Haz clic en las estrellas para calificar este stack",
+  "your_stack_rating": "Calificación de tu Stack",
+  "rating": "Calificación",
+  "ratings": "Calificaciones",
+  "private": "Privado",
+  "owner": "Propietario",
+  "created": "Creado",
+  "export": "Exportar",
+  "view_profile": "Ver perfil"
 }

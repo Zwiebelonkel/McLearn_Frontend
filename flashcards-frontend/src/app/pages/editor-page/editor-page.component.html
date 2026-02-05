@@ -26,6 +26,47 @@
           class="form-input stack-name-input" 
           placeholder="Enter stack name..."
         />
+        <label class="form-label">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+            <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/>
+          </svg>
+          {{ 'description' | translate }}
+        </label>
+        <input 
+          *ngIf="stack()" 
+          [(ngModel)]="stack()!.description" 
+          name="stackDescription" 
+          class="form-input stack-name-input" 
+          placeholder="Enter stack description..."
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360v80H200v560h560v-360h80v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/>
+          </svg>
+          Cover Image
+        </label>
+        
+        <div class="cover-image-section">
+          <div *ngIf="stack()?.cover_image" class="cover-preview-container">
+            <img [src]="stack()!.cover_image" class="cover-preview" alt="Stack cover" />
+            <button type="button" (click)="removeCoverImage()" class="btn btn-danger btn-sm remove-cover-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+              </svg>
+              Remove
+            </button>
+          </div>
+          
+          <button type="button" (click)="openCoverImageUploader()" class="btn btn-secondary btn-with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360v80H200v560h560v-360h80v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm480-280v-167l-64 63-56-56 160-160 160 160-56 56-64-63v167h-80Z"/>
+            </svg>
+            {{ stack()?.cover_image ? 'Change Cover' : 'Upload Cover' }}
+          </button>
+        </div>
       </div>
 
       <div class="form-group">
@@ -87,6 +128,7 @@
     [stackId]="stackId">
   </app-stack-statistics>
 
+  <!-- Rest of the component stays the same... -->
   <!-- Karten-Hinzufügen -->
   <form (submit)="add($event)" class="add-form">
     <div class="input-row">
@@ -336,7 +378,7 @@
     <!-- Header -->
     <div class="modal-header">
       <h3 class="modal-title">{{ 'manage_collaborators' | translate }}</h3>
-      <button class="modal-close" (click)="closeCollaboratorsModal()">×</button>
+      <button class="close-button" (click)="closeCollaboratorsModal()">×</button>
     </div>
 
     <!-- Body -->

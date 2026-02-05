@@ -134,6 +134,7 @@
       }
     },
       "user_stats": {
+        "private_stack": "Privater Stack",
         "title": "Benutzerstatistiken",
         "loading": "Lade Statistiken...",
         "no_data": "Keine Statistiken verfügbar",
@@ -171,6 +172,19 @@
           "sat": "Sa"
         }
       },
-  "rate_stack":"Bewerten"
-
+  "rate_stack":"Bewerten",
+  "description": "Beschreibung",
+  "rate_this_stack": "Diesen Stack bewerten",
+  "your_rating": "Deine Bewertung",
+  "average": "Durchschnitt",
+  "average_rating": "Durchschnittliche Bewertung",
+  "click_stars_to_rate": "Klicke auf die Sterne um diesen Stack zu bewerten",
+  "your_stack_rating": "Bewertung deines Stacks",
+  "rating": "Bewertung",
+  "ratings": "Bewertungen",
+  "private": "Privat",
+  "owner": "Besitzer",
+  "created": "Erstellt",
+  "export": "Exportieren",
+  "view_profile": "Profil ansehen"
 }

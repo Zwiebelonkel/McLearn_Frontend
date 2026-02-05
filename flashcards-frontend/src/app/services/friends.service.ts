@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { User } from '../models';
 import { FriendRequest } from '../models';
+import { Observable } from 'rxjs';
+
 
 @Injectable({ providedIn: 'root' })
 export class FriendsService {
@@ -58,6 +60,10 @@ export class FriendsService {
         headers: this.getHeaders(),
       }
     );
+  }
+
+  getSentFriendRequests(): Observable<FriendRequest[]> {
+    return this.http.get<FriendRequest[]>(`${environment.apiBase}/requests/sent`);
   }
 
   // 🗑️ Freund entfernen

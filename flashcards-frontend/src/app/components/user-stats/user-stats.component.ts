@@ -186,9 +186,8 @@ export class UserStatisticsComponent implements OnInit {
     this.api.getUserStatistics(this.userId).subscribe({
       next: stats => {
         this.stats.set(stats);
-        if (!stats.limited) {
-          this.setupCharts();
-        }
+        // Always setup charts now, even with anonymous stacks
+        this.setupCharts();
         this.loading.set(false);
       },
       error: err => {
@@ -202,124 +201,133 @@ export class UserStatisticsComponent implements OnInit {
     return text.length > max ? text.slice(0, max) + '…' : text;
   }
 
-  // ✅ NEW: Format stack name with privacy indicator
+  // Format stack name with privacy indicator
   private formatStackName(stack: any): string {
-    const truncated = this.truncate(stack.name);
     if (stack.is_anonymous) {
-      return `🔒 ${truncated}`;
+      return `🔒 ${this.translate.instant('user_stats.private_stack')}`;
     }
-    return truncated;
+    return this.truncate(stack.name);
   }
 
   setupCharts() {
     const s = this.stats();
-    if (!s || s.limited) return;
+    if (!s) return;
 
     // Top Stacks by Performance
-    this.topStacksChartData = {
-      labels: s.topStacks.map(stack => this.formatStackName(stack)),
-      datasets: [{
-        data: s.topStacks.map(stack => stack.average_box),
-        backgroundColor: '#4ade80',
-        hoverBackgroundColor: '#6ee7b7',
-        borderRadius: 6
-      }]
-    };
+    if (s.topStacks && s.topStacks.length > 0) {
+      this.topStacksChartData = {
+        labels: s.topStacks.map(stack => this.formatStackName(stack)),
+        datasets: [{
+          data: s.topStacks.map(stack => stack.average_box),
+          backgroundColor: '#4ade80',
+          hoverBackgroundColor: '#6ee7b7',
+          borderRadius: 6
+        }]
+      };
+    }
 
     // Most Reviewed Stacks
-    this.mostReviewedStacksChartData = {
-      labels: s.mostReviewedStacks.map(stack => this.formatStackName(stack)),
-      datasets: [{
-        data: s.mostReviewedStacks.map(stack => stack.total_reviews),
-        backgroundColor: '#4dd5ff',
-        hoverBackgroundColor: '#6ee0ff',
-        borderRadius: 6
-      }]
-    };
+    if (s.mostReviewedStacks && s.mostReviewedStacks.length > 0) {
+      this.mostReviewedStacksChartData = {
+        labels: s.mostReviewedStacks.map(stack => this.formatStackName(stack)),
+        datasets: [{
+          data: s.mostReviewedStacks.map(stack => stack.total_reviews),
+          backgroundColor: '#4dd5ff',
+          hoverBackgroundColor: '#6ee0ff',
+          borderRadius: 6
+        }]
+      };
+    }
 
     // Box Distribution
-    const sortedBoxes = s.boxDistribution.sort((a, b) => a.box - b.box);
-    this.boxDistributionChartData = {
-      labels: sortedBoxes.map(b => `Box ${b.box}`),
-      datasets: [{
-        data: sortedBoxes.map(b => b.count),
-        backgroundColor: [
-          '#ef4444',
-          '#f97316',
-          '#f59e0b',
-          '#eab308',
-          '#84cc16',
-          '#22c55e',
-          '#10b981'
-        ],
-        hoverOffset: 8,
-        borderWidth: 2,
-        borderColor: '#111'
-      }]
-    };
+    if (s.boxDistribution && s.boxDistribution.length > 0) {
+      const sortedBoxes = s.boxDistribution.sort((a, b) => a.box - b.box);
+      this.boxDistributionChartData = {
+        labels: sortedBoxes.map(b => `Box ${b.box}`),
+        datasets: [{
+          data: sortedBoxes.map(b => b.count),
+          backgroundColor: [
+            '#ef4444',
+            '#f97316',
+            '#f59e0b',
+            '#eab308',
+            '#84cc16',
+            '#22c55e',
+            '#10b981'
+          ],
+          hoverOffset: 8,
+          borderWidth: 2,
+          borderColor: '#111'
+        }]
+      };
+    }
 
     // Recent Activity
-    const recentDays = s.recentActivity.slice(-14).reverse();
-    this.activityChartData = {
-      labels: recentDays.map(a => new Date(a.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })),
-      datasets: [
-        {
-          label: this.translate.instant('stats.response_distribution.hard'),
-          data: recentDays.map(a => a.hard_count),
-          borderColor: '#f97316',
-          backgroundColor: 'rgba(249, 115, 22, 0.1)',
-          tension: 0.3,
-          fill: true
-        },
-        {
-          label: this.translate.instant('stats.response_distribution.good'),
-          data: recentDays.map(a => a.good_count),
-          borderColor: '#22c55e',
-          backgroundColor: 'rgba(34, 197, 94, 0.1)',
-          tension: 0.3,
-          fill: true
-        },
-        {
-          label: this.translate.instant('stats.response_distribution.easy'),
-          data: recentDays.map(a => a.easy_count),
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          tension: 0.3,
-          fill: true
-        }
-      ]
-    };
+    if (s.recentActivity && s.recentActivity.length > 0) {
+      const recentDays = s.recentActivity.slice(-14).reverse();
+      this.activityChartData = {
+        labels: recentDays.map(a => new Date(a.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })),
+        datasets: [
+          {
+            label: this.translate.instant('stats.response_distribution.hard'),
+            data: recentDays.map(a => a.hard_count),
+            borderColor: '#f97316',
+            backgroundColor: 'rgba(249, 115, 22, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: this.translate.instant('stats.response_distribution.good'),
+            data: recentDays.map(a => a.good_count),
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: this.translate.instant('stats.response_distribution.easy'),
+            data: recentDays.map(a => a.easy_count),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      };
+    }
 
     // Weekly Activity Pattern (Radar)
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const weeklyData = new Array(7).fill(0);
-    s.weeklyStats.forEach(stat => {
-      weeklyData[stat.day_of_week] = stat.review_count;
-    });
+    if (s.weeklyStats && s.weeklyStats.length > 0) {
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const weeklyData = new Array(7).fill(0);
+      s.weeklyStats.forEach(stat => {
+        weeklyData[stat.day_of_week] = stat.review_count;
+      });
 
-    this.weeklyChartData = {
-      labels: dayNames.map(day => this.translate.instant(`user_stats.days.${day.toLowerCase()}`)),
-      datasets: [{
-        data: weeklyData,
-        borderColor: '#c084fc',
-        backgroundColor: 'rgba(192, 132, 252, 0.2)',
-        pointBackgroundColor: '#c084fc',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#c084fc'
-      }]
-    };
+      this.weeklyChartData = {
+        labels: dayNames.map(day => this.translate.instant(`user_stats.days.${day.toLowerCase()}`)),
+        datasets: [{
+          data: weeklyData,
+          borderColor: '#c084fc',
+          backgroundColor: 'rgba(192, 132, 252, 0.2)',
+          pointBackgroundColor: '#c084fc',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#c084fc'
+        }]
+      };
+    }
   }
 
   get accuracyRate(): number {
     const s = this.stats();
-    if (!s || s.limited) return 0;
+    if (!s) return 0;
     return s.overall.average_accuracy;
   }
 
   get difficultyRate(): number {
     const s = this.stats();
-    if (!s || s.limited) return 0;
+    if (!s) return 0;
     
     const total = s.overall.total_reviews;
     if (total === 0) return 0;
@@ -332,5 +340,10 @@ export class UserStatisticsComponent implements OnInit {
     return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map(
       day => this.translate.instant(`user_stats.days.${day}`)
     );
+  }
+
+  get hasAnyData(): boolean {
+    const s = this.stats();
+    return !!(s && (s.overall.total_stacks > 0 || s.overall.total_cards > 0 || s.overall.total_reviews > 0));
   }
 }

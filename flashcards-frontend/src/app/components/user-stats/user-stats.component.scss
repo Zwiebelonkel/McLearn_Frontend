@@ -1,6 +1,10 @@
 // Importiere die base styles von stats.component.scss
 // Diese Datei erweitert die existierenden Styles
 
+*{
+  user-select: none;
+}
+
 .user-stats-wrapper {
     margin: 2rem 0;
   }

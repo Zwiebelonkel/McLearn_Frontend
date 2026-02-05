@@ -172,9 +172,10 @@ export class EditorPage {
   saveStack() {
     const s = this.stack();
     if (!s) return;
-
+  
     this.loading.set(true);
-    this.api.updateStack(s.id, s.name, this.isPublic).subscribe({
+    // NOTE: Update your API service to accept cover_image parameter
+    this.api.updateStack(s.id, s.name, s.description, this.isPublic, s.cover_image).subscribe({
       next: () => {
         this.toast.show('Stack saved', 'success');
         this.loading.set(false);
@@ -185,6 +186,39 @@ export class EditorPage {
         this.loading.set(false);
       }
     });
+  }
+
+  openCoverImageUploader() {
+    if (typeof cloudinary === 'undefined') {
+      this.toast.show('Error: Cloudinary script not loaded. Please try again later.', 'error');
+      return;
+    }
+    const widget = cloudinary.createUploadWidget({
+      cropping: true,
+      showSkipCropButton: false,
+      croppingAspectRatio: 16 / 9, // Force 16:9 aspect ratio for covers
+      cloudName: environment.cloudinary.cloudName,
+      uploadPreset: environment.cloudinary.uploadPreset
+    }, (error: any, result: any) => {
+      if (!error && result && result.event === 'success') {
+        this.zone.run(() => {
+          const currentStack = this.stack();
+          if (currentStack) {
+            currentStack.cover_image = result.info.secure_url;
+            this.stack.set(currentStack);
+          }
+        });
+      }
+    });
+    widget.open();
+  }
+  
+  removeCoverImage() {
+    const currentStack = this.stack();
+    if (currentStack) {
+      currentStack.cover_image = undefined;
+      this.stack.set(currentStack);
+    }
   }
 
   del(c: Card) {

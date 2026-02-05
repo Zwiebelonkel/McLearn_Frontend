@@ -321,3 +321,8 @@
     opacity: 0.4;
     cursor: not-allowed;
   }
+
+  .limit-reached {
+    color: var(--danger-color, #f44336) !important;
+    font-weight: 600;
+  }

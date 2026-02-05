@@ -101,6 +101,7 @@ export class ProfilePageComponent implements OnInit {
       return;
     }
 
+    // First check if already friends
     this.friendsService.getFriends().subscribe({
       next: (friends) => {
         const isFriend = friends.some((friend) => friend.id === this.viewedUserId);
@@ -109,12 +110,31 @@ export class ProfilePageComponent implements OnInit {
           return;
         }
 
+        // Check for incoming friend requests (from them to me)
         this.friendsService.getFriendRequests().subscribe({
           next: (requests) => {
-            const hasPendingRequest = requests.some(
+            const hasIncomingRequest = requests.some(
               (req) => req.sender_id === this.viewedUserId
             );
-            this.friendStatus = hasPendingRequest ? 'pending' : 'none';
+            
+            if (hasIncomingRequest) {
+              this.friendStatus = 'pending';
+              return;
+            }
+
+            // Check for outgoing friend requests (from me to them)
+            this.friendsService.getSentFriendRequests().subscribe({
+              next: (sentRequests) => {
+                const hasOutgoingRequest = sentRequests.some(
+                  (req) => req.receiver_id === this.viewedUserId
+                );
+                this.friendStatus = hasOutgoingRequest ? 'pending' : 'none';
+              },
+              error: (err) => {
+                console.error('Error checking sent friend requests:', err);
+                this.friendStatus = 'none';
+              },
+            });
           },
           error: (err) => {
             console.error('Error checking friend requests:', err);

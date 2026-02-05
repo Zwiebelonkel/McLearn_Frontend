@@ -170,5 +170,20 @@
           "sat": "Sam"
         }
       },
-  "rate_stack":"Évaluer"
+  "rate_stack":"Évaluer",
+  "description": "Description",
+  "rate_this_stack": "Évaluer ce Stack",
+  "your_rating": "Votre évaluation",
+  "average": "Moyenne",
+  "average_rating": "Évaluation moyenne",
+  "click_stars_to_rate": "Cliquez sur les étoiles pour évaluer ce stack",
+  "your_stack_rating": "Évaluation de votre Stack",
+  "rating": "Évaluation",
+  "ratings": "Évaluations",
+  "private": "Privé",
+  "owner": "Propriétaire",
+  "created": "Créé",
+  "export": "Exporter",
+  "view_profile": "Voir le profil"
+
 }

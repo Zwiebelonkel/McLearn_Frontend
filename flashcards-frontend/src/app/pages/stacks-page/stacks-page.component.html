@@ -27,28 +27,10 @@
         <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
         <option value="shared">🤝 {{ 'shared_with_me' | translate }}</option>
       </select>
-
-      <!-- Sort Dropdown (Google-style)
-      <div class="sort-wrapper">
-        <svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
-          <path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z"/>
-        </svg>
-        <select [(ngModel)]="sortBy" (ngModelChange)="onSearchOrFilterChange()" class="form-input select-input sort-select">
-          <option value="date-desc">Newest</option>
-          <option value="date-asc">Oldest</option>
-          <option value="name-asc">A → Z</option>
-          <option value="name-desc">Z → A</option>
-          <option value="rating-desc">Highest rated</option>
-          <option value="rating-asc">Lowest rated</option>
-          <option value="cards-desc">Most cards</option>
-          <option value="cards-asc">Fewest cards</option>
-        </select>
-      </div>
-      -->
     </div>
     
     <ul class="stack-list">
-      <li *ngFor="let s of filteredStacks" class="stack-item">
+      <li *ngFor="let s of filteredStacks" class="stack-item" (click)="openStackDetail(s)">
         <span class="stack-name">
           {{ s.name }}
           <span *ngIf="s.is_public && !isOwner(s) && s.owner_name" class="stack-author">
@@ -79,8 +61,8 @@
             <span class="card-amount">{{ s.card_amount }}</span>
           </div>
           
-          <!-- Study Button (always visible) -->
-          <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">
+          <!-- Study Button -->
+          <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success" (click)="$event.stopPropagation()">
             <span class="btn-text">{{ 'study' | translate }}</span>
             <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
               <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z"/>
@@ -111,7 +93,7 @@
                     (click)="rateStack(s, star, $event)"
                     (mouseenter)="setHoverRating(s.id, star)"
                     (mouseleave)="clearHoverRating(s.id)"
-                    [attr.aria-label]="'Rate ' + star + ' stars'">
+                    [attr.aria-label]="'Rate ' + star + ' stars'" >
                     <svg 
                       class="star-icon" 
                       [class.star-filled]="star <= getDisplayRating(s)"
@@ -124,7 +106,7 @@
                 </div>
               </div>
 
-              <!-- Quiz -->
+              <!-- Regular Quiz -->
               <a 
                 *ngIf="s.card_amount && s.card_amount > 0"
                 [routerLink]="['/stack', s.id, 'quiz']" 
@@ -208,5 +190,12 @@
         {{ 'load_more' | translate }}
       </button>
     </div>
+
+    <app-stack-detail-modal
+      *ngIf="isModalOpen"
+      [stack]="selectedStack"
+      (close)="closeModal()"
+      (stackDeleted)="onStackDeleted($event)">
+  </app-stack-detail-modal>
   </div>
 </div>

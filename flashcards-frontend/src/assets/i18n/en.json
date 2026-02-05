@@ -136,6 +136,7 @@
       }
     },
       "user_stats": {
+        "private_stack": "Private Stack",
         "title": "User Statistics",
         "loading": "Loading statistics...",
         "no_data": "No statistics available",
@@ -173,5 +174,19 @@
           "sat": "Sat"
         }
       },
-  "rate_stack":"Rate"
+  "rate_stack":"Rate",
+  "description": "Description",
+  "rate_this_stack": "Rate this Stack",
+  "your_rating": "Your Rating",
+  "average": "Average",
+  "average_rating": "Average Rating",
+  "click_stars_to_rate": "Click the stars to rate this stack",
+  "your_stack_rating": "Your Stack's Rating",
+  "rating": "Rating",
+  "ratings": "Ratings",
+  "private": "Private",
+  "owner": "Owner",
+  "created": "Created",
+  "export": "Export",
+  "view_profile": "View Profile"
 }

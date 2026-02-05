@@ -339,7 +339,7 @@
 }
 
 .correct-stat .stat-number {
-  color: var(--success-color);
+  color: var(--text-color);
 }
 
 .incorrect-stat .stat-number {
@@ -480,4 +480,35 @@
 
 :host-context(body.dark-theme) .percentage-label {
   color: #aaa;
+}
+
+.incorrect-answers {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--input-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+  }
+
+  .incorrect-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    .card-front, .card-back {
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: contents;
+    }
+
+    .card-front{
+      border-bottom: 1px solid var(--input-bg);
+    }
+  }
 }

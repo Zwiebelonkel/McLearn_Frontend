@@ -13,6 +13,7 @@ import DOMPurify from 'dompurify';
 interface QuizResult {
   cardId: string;
   correct: boolean;
+  card?: Card; // Optional: Speichere die gesamte Karte für die Anzeige
 }
 
 @Component({
@@ -49,6 +50,11 @@ export class QuizModePage {
   incorrectCount = computed(() => 
     this.results().filter(r => !r.correct).length
   );
+
+  incorrectAnswers = computed(() =>
+    this.results().filter(r => !r.correct)
+  );
+  
 
   totalAnswered = computed(() => this.results().length);
 
@@ -126,18 +132,37 @@ export class QuizModePage {
   markCorrect() {
     const card = this.currentCard;
     if (!card) return;
-    
-    this.results.update(results => [...results, { cardId: card.id, correct: true }]);
+  
+    this.results.update(results => [...results, {
+      cardId: card.id,
+      correct: true,
+      card: {...card} // Speichere eine Kopie der Karte
+    }]);
     this.nextCard();
   }
-
+  
   markIncorrect() {
     const card = this.currentCard;
     if (!card) return;
-    
-    this.results.update(results => [...results, { cardId: card.id, correct: false }]);
+  
+    this.results.update(results => [...results, {
+      cardId: card.id,
+      correct: false,
+      card: {...card} // Speichere eine Kopie der Karte
+    }]);
     this.nextCard();
   }
+
+  restartWithIncorrect() {
+    const incorrectCards = this.incorrectAnswers().map(a => a.card!);
+    this.cards.set(this.shuffleCards(incorrectCards));
+    this.currentIndex.set(0);
+    this.showBack.set(false);
+    this.quizCompleted.set(false);
+    this.results.set([]);
+  }
+  
+  
 
   nextCard() {
     if (this.isTransitioning() || this.quizCompleted()) return;

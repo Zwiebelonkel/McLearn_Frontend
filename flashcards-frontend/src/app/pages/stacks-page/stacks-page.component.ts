@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Stack } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { LoaderComponent } from '../../pages/loader/loader.component';
+import { StackDetailModalComponent } from '../../components/stack-detail-modal.component/stack-detail-modal.component';
 import { ToastService } from '../../services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -13,7 +14,7 @@ type SortOption = 'name-asc' | 'name-desc' | 'rating-desc' | 'rating-asc' | 'car
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, LoaderComponent, TranslateModule],
+  imports: [CommonModule, RouterLink, FormsModule, LoaderComponent, StackDetailModalComponent, TranslateModule],
   templateUrl: './stacks-page.component.html',
   styleUrls: ['./stacks-page.component.scss']
 })
@@ -30,6 +31,8 @@ export class StacksPage {
   search: string = '';
   filter: 'all' | 'public' | 'own' | 'shared' = 'all';
   sortBy: SortOption = 'date-desc'; // Default: newest first
+  selectedStack: Stack | null = null;
+  isModalOpen: boolean = false;
   
   // Pagination
   private readonly PAGE_SIZE = 10;
@@ -58,6 +61,19 @@ export class StacksPage {
     if (!target.closest('.more-menu-button') && !target.closest('.dropdown-menu')) {
       this.openDropdownId = null;
     }
+  }
+
+  openStackDetail(stack: Stack) {
+    this.selectedStack = stack;
+    this.isModalOpen = true;
+  }
+  
+  onStackDeleted(stackId: string) {
+    this.allStacks = this.allStacks.filter(s => s.id !== stackId);
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 
   isLoggedIn(): boolean {

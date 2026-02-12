@@ -44,16 +44,19 @@ export class ApiService {
     );
   }
 
-  updateStack(id: string, name: string, isPublic?: boolean) {
+  updateStack(id: string, name: string, description?: string, isPublic?: boolean, cover_image?: string) {
     const payload: any = { name };
+    if (description) payload.description = description;
     if (typeof isPublic === 'boolean') payload.is_public = isPublic;
-
+    if (cover_image) payload.cover_image = cover_image;
+  
     return this.http.patch<Stack>(
       `${environment.apiBase}/stacks/${id}`,
       payload,
       { headers: this.getHeaders() }
     );
   }
+  
 
   deleteStack(id: string) {
     return this.http.delete(`${environment.apiBase}/stacks/${id}`, {
@@ -159,29 +162,6 @@ export class ApiService {
   }
 
 // -------- SCRIBBLEPAD --------
-getScribblePad() {
-  return this.http.get<{
-    id: string;
-    user_id: number;
-    content: string;
-    updated_at: string;
-  }>(`${environment.apiBase}/scribblepad`, {
-    headers: this.getHeaders(),
-  });
-}
-
-saveScribblePad(content: string) {
-  return this.http.post<{
-    id: string;
-    user_id: number;
-    content: string;
-    updated_at: string;
-  }>(
-    `${environment.apiBase}/scribblepad`,
-    { content },
-    { headers: this.getHeaders() }
-  );
-}
 
 getStackStatistics(stackId: string) {
   return this.http.get<StackStatistics>(
@@ -313,6 +293,34 @@ getUserStatistics(userId: number): Observable<UserStatistics> {
       { headers: this.getHeaders() }
     );
   }
+
+// -------- SCRIBBLEPAD (add to your existing ApiService) --------
+
+getScribblePad() {
+  return this.http.get<{
+    id: string;
+    user_id: number;
+    content: string;
+    image: string | null;
+    updated_at: string;
+  }>(`${environment.apiBase}/scribblepad`, {
+    headers: this.getHeaders(),
+  });
+}
+
+saveScribblePad(content: string, image: string | null = null) {
+  return this.http.post<{
+    id: string;
+    user_id: number;
+    content: string;
+    image: string | null;
+    updated_at: string;
+  }>(
+    `${environment.apiBase}/scribblepad`,
+    { content, image },
+    { headers: this.getHeaders() }
+  );
+}
 
 
 }

@@ -588,6 +588,11 @@ body.dark-theme .sidebar-link:hover {
     width: 24px;
     height: 24px;
   }
+
+  .add{
+    height: 2.3rem;
+    width:2.3rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -602,9 +607,19 @@ body.dark-theme .sidebar-link:hover {
   .dropdown-menu {
     right: -8px;
   }
+
+  .add{
+    height: 2.3rem;
+    width:2.3rem !important
+  }
 }
 
 textarea:focus, input:focus {
   outline: none; 
   border: 1px solid #ec4949;
+}
+
+.add{
+  height: 2.3rem;
+  width:2.3rem;
 }

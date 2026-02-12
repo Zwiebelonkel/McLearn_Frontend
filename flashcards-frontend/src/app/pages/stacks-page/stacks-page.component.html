@@ -4,8 +4,8 @@
     <h2 *ngIf="isLoggedIn()" class="page-title">{{ 'new' | translate }}</h2>
     <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
       <input [(ngModel)]="name" name="name" placeholder="{{ 'new_stack' | translate }}" required class="form-input" />
-      <button type="submit" class="btn btn-primary" [disabled]="!name || name.trim() === ''">
-        {{ 'create' | translate }}
+      <button type="submit" class="btn add btn-primary" [disabled]="!name || name.trim() === ''">
+        <i class="fa-solid fa-plus"></i> 
       </button>
     </form>
     

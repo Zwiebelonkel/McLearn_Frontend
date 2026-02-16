@@ -49,6 +49,47 @@ body.dark-theme {
   --border: #444444;
   --glass: rgba(37, 37, 37, 0.11);
   --glass-light: rgba(255, 255, 255, 0.096);
+
+  /* Quill Editor Dark Theme */
+  .ql-toolbar.ql-snow {
+    background-color: var(--input-bg);
+    border-color: var(--card-border-color);
+
+    .ql-picker-label,
+    .ql-picker-item {
+      color: var(--text-color);
+    }
+
+    .ql-stroke {
+        stroke: var(--text-color);
+    }
+
+    .ql-fill {
+        fill: var(--text-color);
+    }
+    
+    .ql-picker-options {
+        background-color: var(--card-background);
+        border-color: var(--card-border-color);
+        color: var(--text-color);
+    }
+    .ql-snow .ql-picker-label:hover {
+        color: var(--primary-color);
+    }
+    .ql-snow .ql-picker-item:hover {
+        color: var(--primary-color);
+    }
+    .ql-snow .ql-picker.ql-expanded .ql-picker-label {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+  }
+
+  .ql-container.ql-snow {
+    background-color: var(--input-bg);
+    border-color: var(--card-border-color);
+    color: var(--text-color);
+  }
 }
 
 html, body {
@@ -293,4 +334,9 @@ h6 { font-size: 1rem; }
 
 .language-selector:focus {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
+}
+
+/* Apply Poppins to Quill editor */
+.ql-editor {
+    font-family: var(--font-family-sans-serif);
 }

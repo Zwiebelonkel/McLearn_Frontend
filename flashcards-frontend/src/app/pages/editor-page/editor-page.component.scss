@@ -1316,3 +1316,238 @@ textarea:focus, input:focus {
     gap: 10px;
   }
 }
+
+/* Additional styles for editor-page.component.scss */
+
+/* Card back preview that looks like rendered content */
+.card-back-preview {
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  cursor: default;
+  color: var(--text-color);
+  
+  /* ============================================
+     QUILL CLASSES - Must be inside :deep()
+     ============================================ */
+  :deep(.ql-align-left) {
+    text-align: left !important;
+  }
+  
+  :deep(.ql-align-center) {
+    text-align: center !important;
+  }
+  
+  :deep(.ql-align-right) {
+    text-align: right !important;
+  }
+  
+  :deep(.ql-align-justify) {
+    text-align: justify !important;
+  }
+  
+  :deep(.ql-size-small) {
+    font-size: 0.75em !important;
+  }
+  
+  :deep(.ql-size-large) {
+    font-size: 1.5em !important;
+  }
+  
+  :deep(.ql-size-huge) {
+    font-size: 2.5em !important;
+  }
+  
+  :deep(.ql-font-serif) {
+    font-family: Georgia, Times New Roman, serif !important;
+  }
+  
+  :deep(.ql-font-monospace) {
+    font-family: var(--font-family-monospace) !important;
+  }
+  
+  :deep(.ql-color-red) { color: var(--danger-color) !important; }
+  :deep(.ql-color-orange) { color: var(--warning-color) !important; }
+  :deep(.ql-color-yellow) { color: #ffd700 !important; }
+  :deep(.ql-color-green) { color: var(--secondary-color) !important; }
+  :deep(.ql-color-blue) { color: var(--info-color) !important; }
+  :deep(.ql-color-purple) { color: #9370db !important; }
+  
+  :deep(.ql-bg-red) { background-color: var(--danger-color) !important; }
+  :deep(.ql-bg-orange) { background-color: var(--warning-color) !important; }
+  :deep(.ql-bg-yellow) { background-color: #ffd700 !important; }
+  :deep(.ql-bg-green) { background-color: var(--secondary-color) !important; }
+  :deep(.ql-bg-blue) { background-color: var(--info-color) !important; }
+  :deep(.ql-bg-purple) { background-color: #9370db !important; }
+  
+  :deep(.ql-indent-1) { padding-left: 3em !important; }
+  :deep(.ql-indent-2) { padding-left: 6em !important; }
+  :deep(.ql-indent-3) { padding-left: 9em !important; }
+  :deep(.ql-indent-4) { padding-left: 12em !important; }
+  :deep(.ql-indent-5) { padding-left: 15em !important; }
+  :deep(.ql-indent-6) { padding-left: 18em !important; }
+  :deep(.ql-indent-7) { padding-left: 21em !important; }
+  :deep(.ql-indent-8) { padding-left: 24em !important; }
+  
+  /* Quill content styles */
+  :deep(p) {
+    margin: 0 0 1em 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  :deep(h1), :deep(h2), :deep(h3) {
+    margin: 0.5em 0;
+  }
+  
+  :deep(ul), :deep(ol) {
+    margin: 0.5em 0;
+    padding-left: 2em;
+  }
+  
+  :deep(strong) {
+    font-weight: bold;
+  }
+  
+  :deep(em) {
+    font-style: italic;
+  }
+  
+  :deep(code) {
+    background: var(--input-bg);
+    border: 1px solid var(--card-border-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-family-monospace);
+    color: var(--text-color);
+  }
+  
+  :deep(pre) {
+    background: var(--input-bg);
+    border: 1px solid var(--card-border-color);
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    
+    code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  :deep(a) {
+    color: var(--primary-color);
+    text-decoration: underline;
+    
+    &:hover {
+      color: var(--primary-color-hover);
+    }
+  }
+  
+  :deep(blockquote) {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1em;
+    margin: 1em 0;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  &.editable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: var(--card-background);
+      border-color: var(--primary-color);
+    }
+  }
+}
+
+/* Modal styles for back editor */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+
+  &.is-open {
+    display: flex;
+  }
+
+  .modal-content {
+    background: var(--card-background);
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    color: var(--text-color);
+  }
+
+  .modal-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--card-border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .modal-title {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--text-color);
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--text-color);
+      opacity: 0.6;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+
+      &:hover {
+        background: var(--input-bg);
+        opacity: 1;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+
+    quill-editor {
+      :deep(.ql-container) {
+        min-height: 300px;
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 20px;
+    border-top: 1px solid var(--card-border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}

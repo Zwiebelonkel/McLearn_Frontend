@@ -17,11 +17,12 @@ import { environment } from '../../../environments/environments';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { StackStatisticsComponent } from '../../components/stats/stats.component';
+import { QuillModule } from 'ngx-quill';
 declare var cloudinary: any;
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LoaderComponent, TranslateModule, StackStatisticsComponent],
+  imports: [CommonModule, FormsModule, RouterLink, LoaderComponent, TranslateModule, StackStatisticsComponent, QuillModule],
   templateUrl: './editor-page.component.html',
   styleUrls: ['./editor-page.component.scss']
 })
@@ -49,6 +50,8 @@ export class EditorPage {
   searchedUsers: User[] = [];
   selectedCardIds = new Set<String>();
   showStatistics = signal(false);
+  showBackEditor = signal(false);
+  editingCard = signal<Card | null>(null);
   
   // Import Progress
   importProgress = signal(0);
@@ -63,7 +66,6 @@ export class EditorPage {
   savingCards = new Set<string>();
   saveErrorCards = new Set<string>();
 
-  @ViewChild('backArea') backArea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild(StackStatisticsComponent) statsComponent?: StackStatisticsComponent;
 
   constructor() {
@@ -174,7 +176,6 @@ export class EditorPage {
     if (!s) return;
   
     this.loading.set(true);
-    // NOTE: Update your API service to accept cover_image parameter
     this.api.updateStack(s.id, s.name, s.description, this.isPublic, s.cover_image).subscribe({
       next: () => {
         this.toast.show('Stack saved', 'success');
@@ -253,101 +254,14 @@ export class EditorPage {
     });
   }
 
-  insert(type: 'bold' | 'italic' | 'code' | 'ul' | 'ol' | 'center' | 'underline' | 'strikethrough' | 'h1' | 'h2' | 'h3' | 'blockquote' | 'link' | 'codeblock' | 'table' | 'highlight') {
-    const textarea = this.backArea.nativeElement;
-    const { selectionStart, selectionEnd, value } = textarea;
-    const selected = value.slice(selectionStart, selectionEnd);
+  openBackEditor(card: Card) {
+    this.editingCard.set(card);
+    this.showBackEditor.set(true);
+  }
 
-    let inserted = '';
-    let cursorOffset = 0;
-
-    switch (type) {
-      case 'bold':
-        inserted = `**${selected || 'bold text'}**`;
-        cursorOffset = selected ? inserted.length : 2;
-        break;
-      case 'italic':
-        inserted = `*${selected || 'italic text'}*`;
-        cursorOffset = selected ? inserted.length : 1;
-        break;
-      case 'underline':
-        inserted = `<u>${selected || 'underlined text'}</u>`;
-        cursorOffset = selected ? inserted.length : 3;
-        break;
-      case 'strikethrough':
-        inserted = `~~${selected || 'strikethrough text'}~~`;
-        cursorOffset = selected ? inserted.length : 2;
-        break;
-      case 'code':
-        inserted = `\`${selected || 'inline code'}\``;
-        cursorOffset = selected ? inserted.length : 1;
-        break;
-      case 'codeblock':
-        inserted = `\`\`\`\n${selected || 'code block\nmultiline'}\n\`\`\``;
-        cursorOffset = selected ? inserted.length : 4;
-        break;
-      case 'ul':
-        if (selected) {
-          inserted = selected.split('\n').map(line => `- ${line}`).join('\n');
-        } else {
-          inserted = '- List item 1\n- List item 2\n- List item 3';
-        }
-        cursorOffset = inserted.length;
-        break;
-      case 'ol':
-        if (selected) {
-          inserted = selected.split('\n').map((line, i) => `${i + 1}. ${line}`).join('\n');
-        } else {
-          inserted = '1. First item\n2. Second item\n3. Third item';
-        }
-        cursorOffset = inserted.length;
-        break;
-      case 'h1':
-        inserted = `# ${selected || 'Heading 1'}`;
-        cursorOffset = selected ? inserted.length : 2;
-        break;
-      case 'h2':
-        inserted = `## ${selected || 'Heading 2'}`;
-        cursorOffset = selected ? inserted.length : 3;
-        break;
-      case 'h3':
-        inserted = `### ${selected || 'Heading 3'}`;
-        cursorOffset = selected ? inserted.length : 4;
-        break;
-      case 'blockquote':
-        if (selected) {
-          inserted = selected.split('\n').map(line => `> ${line}`).join('\n');
-        } else {
-          inserted = '> This is a quote';
-        }
-        cursorOffset = inserted.length;
-        break;
-      case 'link':
-        inserted = `[${selected || 'link text'}](https://example.com)`;
-        cursorOffset = selected ? inserted.length - 21 : 1;
-        break;
-      case 'table':
-        inserted = `| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |`;
-        cursorOffset = inserted.length;
-        break;
-      case 'highlight':
-        inserted = `<mark>${selected || 'highlighted text'}</mark>`;
-        cursorOffset = selected ? inserted.length : 6;
-        break;
-      case 'center':
-        inserted = `<center>${selected || 'centered text'}</center>`;
-        cursorOffset = selected ? inserted.length : 8;
-        break;
-    }
-
-    const newValue = value.slice(0, selectionStart) + inserted + value.slice(selectionEnd);
-    this.back = newValue;
-
-    setTimeout(() => {
-      textarea.focus();
-      const cursor = selectionStart + cursorOffset;
-      textarea.setSelectionRange(cursor, cursor);
-    });
+  closeBackEditor() {
+    this.showBackEditor.set(false);
+    this.editingCard.set(null);
   }
 
   importCSV(event: Event) {

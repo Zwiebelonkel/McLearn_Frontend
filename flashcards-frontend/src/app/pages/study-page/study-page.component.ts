@@ -8,10 +8,6 @@ import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { RainComponent } from '../../components/rain/rain.component';
 
-
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
-
 @Component({
   standalone: true,
   imports: [CommonModule, RouterLink, TranslateModule, RainComponent],
@@ -98,11 +94,6 @@ canRate = !this.isTransitioning() && this.isOwner() && this.current() !== null &
     }
     
     return false;
-  }
-
-  renderMarkdown(text: string): string {
-    const dirty = marked.parse(text || '') as string;
-    return DOMPurify.sanitize(dirty, { ADD_TAGS: ['center'] });
   }
 
   loadCard() {

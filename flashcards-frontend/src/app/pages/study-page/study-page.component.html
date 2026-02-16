@@ -47,7 +47,7 @@
             <p>{{ current()?.front }}</p>
           </div>
           <div class="card-back">
-            <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
+            <div [innerHTML]="current()?.back"></div>
           </div>
         </div>
       </div>

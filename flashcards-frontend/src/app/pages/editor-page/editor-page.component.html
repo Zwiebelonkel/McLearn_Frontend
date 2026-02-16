@@ -158,59 +158,8 @@
     
     <div class="divider"></div>
 
-<div class="markdown-toolbar">
+    <quill-editor [(ngModel)]="back" name="back" format="html" [required]="true"></quill-editor>
 
-  <!-- Text -->
-  <button type="button" (click)="insert('bold')" title="Bold"><b>B</b></button>
-  <button type="button" (click)="insert('italic')" title="Italic"><i>I</i></button>
-  <button type="button" (click)="insert('underline')" title="Underline"><u>U</u></button>
-  <button type="button" (click)="insert('strikethrough')" title="Strike"><s>S</s></button>
-  <button type="button" (click)="insert('highlight')" title="Highlight">🖍</button>
-
-  <span class="toolbar-divider"></span>
-
-  <!-- Headings -->
-  <button type="button" (click)="insert('h1')" title="H1">H1</button>
-  <button type="button" (click)="insert('h2')" title="H2">H2</button>
-  <button type="button" (click)="insert('h3')" title="H3">H3</button>
-
-  <span class="toolbar-divider"></span>
-
-  <!-- Code -->
-<button type="button" (click)="insert('code')" title="Inline Code">
-  &#123; &#125;
-</button>
-  <button type="button" (click)="insert('codeblock')" title="Code Block">```</button>
-
-  <span class="toolbar-divider"></span>
-
-  <!-- Lists -->
-  <button type="button" (click)="insert('ul')" title="Bullet List">• List</button>
-  <button type="button" (click)="insert('ol')" title="Numbered List">1. List</button>
-
-  <span class="toolbar-divider"></span>
-
-  <!-- Quotes / Layout -->
-  <button type="button" (click)="insert('blockquote')" title="Quote">❝</button>
-  <button type="button" (click)="insert('center')" title="Center">⎯⎯⎯</button>
-
-  <span class="toolbar-divider"></span>
-
-  <!-- Extras -->
-  <button type="button" (click)="insert('link')" title="Link">🔗</button>
-  <button type="button" (click)="insert('table')" title="Table">▦</button>
-
-</div>
-
-    <textarea
-      #backArea
-      [(ngModel)]="back"
-      name="back"
-      placeholder="{{ 'answer' | translate }}"
-      required
-      class="form-textarea"
-      rows="4"
-    ></textarea>
     <div class="divider"></div>
 
     <!-- Buttons nebeneinander -->
@@ -304,7 +253,7 @@
           </span>
       
         </span>
-        <b>{{ c.front }}</b> — {{ c.back }} (Box {{ c.box }})
+        <b>{{ c.front }}</b> — <span [innerHTML]="c.back"></span> (Box {{ c.box }})
       </div>
       <div class="card-body">
         <label>{{ 'front' | translate }}:</label>
@@ -334,17 +283,13 @@
         </div>
         
         <div class="divider"></div>
-        <label>{{ 'back' | translate }}:
-          <textarea
-  (click)="$event.stopPropagation()"
-  [(ngModel)]="c.back"
-  (ngModelChange)="onCardChange(c, 'back')"
-  name="b{{c.id}}"
-  class="form-textarea"
-  rows="3"
-  [disabled]="!canEdit">
-</textarea>
-        </label>
+        <label>{{ 'back' | translate }}:</label>
+        <div 
+          class="card-back-preview" 
+          [innerHTML]="c.back"
+          (click)="canEdit && openBackEditor(c); $event.stopPropagation()"
+          [class.editable]="canEdit">
+        </div>
       </div>
     </div>
   </div>
@@ -369,6 +314,28 @@
     <p class="progress-text">
       <strong>{{ importProgress() }}</strong> of <strong>{{ importTotal() }}</strong> cards imported
     </p>
+  </div>
+</div>
+
+<!-- Back Editor Modal -->
+<div class="modal" [class.is-open]="showBackEditor()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Answer</h3>
+      <button class="close-button" (click)="closeBackEditor()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="editingCard()">
+      <quill-editor 
+        [(ngModel)]="editingCard()!.back" 
+        (ngModelChange)="onCardChange(editingCard()!, 'back')"
+        format="html">
+      </quill-editor>
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="closeBackEditor()" class="btn btn-primary">Done</button>
+    </div>
   </div>
 </div>
 

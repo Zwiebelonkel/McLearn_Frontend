@@ -4,11 +4,13 @@
     <h2 *ngIf="isLoggedIn()" class="page-title">{{ 'new' | translate }}</h2>
     <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
       <input [(ngModel)]="name" name="name" placeholder="{{ 'new_stack' | translate }}" required class="form-input" />
-      <button type="submit" class="btn btn-primary" [disabled]="!name || name.trim() === ''">
-        {{ 'create' | translate }}
+      <button type="submit" class="btn add btn-primary" [disabled]="!name || name.trim() === ''">
+        <i class="fa-solid fa-plus"></i> 
       </button>
     </form>
+    
     <h2 class="page-title">{{ 'stacks' | translate }}</h2>
+    
     <div class="filter-controls">
       <div class="search-wrapper">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
@@ -16,54 +18,184 @@
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input
-          type="text"
-          [(ngModel)]="search"
-          placeholder="{{ 'search_stacks' | translate }}..."
-          class="form-input search-input"
-        />
+        <input type="text" [(ngModel)]="search" (ngModelChange)="onSearchOrFilterChange()" placeholder="{{ 'search_stacks' | translate }}..."
+          class="form-input search-input" />
       </div>
-    
-      <select *ngIf="isLoggedIn()" [(ngModel)]="filter" class="form-input select-input">
+      <select *ngIf="isLoggedIn()" [(ngModel)]="filter" (ngModelChange)="onSearchOrFilterChange()" class="form-input select-input">
         <option value="all">{{ 'all' | translate }}</option>
         <option value="public">🌍 {{ 'public_only' | translate }}</option>
         <option value="own">🔒 {{ 'my_stacks' | translate }}</option>
+        <option value="shared">🤝 {{ 'shared_with_me' | translate }}</option>
       </select>
     </div>
     
     <ul class="stack-list">
-      <li *ngFor="let s of filteredStacks" class="stack-item">
+      <li *ngFor="let s of filteredStacks" class="stack-item" (click)="openStackDetail(s)">
         <span class="stack-name">
           {{ s.name }}
-          <span *ngIf="s.is_public && !isOwner(s) && s.owner_name">🌍 {{ 'by' | translate }} {{ s.owner_name }}</span>
+          <span *ngIf="s.is_public && !isOwner(s) && s.owner_name" class="stack-author">
+            🌍 {{ 'by' | translate }} 
+            <a [routerLink]="['/profile', s.user_id]" class="author-link" (click)="$event.stopPropagation()">
+              {{ s.owner_name }}
+            </a>
+          </span>
           <span *ngIf="s.is_public && isOwner(s)">🌍</span>
           <span *ngIf="!s.is_public && isLoggedIn()">🔒</span>
-        </span>
-        <div class="stack-actions">
-          <span class="card-amount">{{ s.card_amount }}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d5d5d5">
-            <path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
-          </svg>              
-          <a *ngIf="isOwner(s)" [routerLink]="['/stack', s.id, 'edit']" class="btn btn-secondary">
-            <span class="btn-text">{{ 'edit' | translate }}</span>
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-              <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+          
+          <!-- Average Rating Display -->
+          <span *ngIf="s.average_rating && s.average_rating > 0" class="stack-rating-badge">
+            <svg class="rating-star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-          </a>
-          <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success">
+            {{ s.average_rating | number:'1.1-1' }}
+            <span class="rating-count">({{ s.rating_count }})</span>
+          </span>
+        </span>
+        
+        <div class="stack-actions">
+          <!-- Card Count -->
+          <div class="card-count">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+              <path d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
+            </svg>
+            <span class="card-amount">{{ s.card_amount }}</span>
+          </div>
+          
+          <!-- Study Button -->
+          <a [routerLink]="['/stack', s.id, 'study']" class="btn btn-success" (click)="$event.stopPropagation()">
             <span class="btn-text">{{ 'study' | translate }}</span>
             <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
               <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z"/>
             </svg>
           </a>
-          <button *ngIf="isOwner(s)" (click)="remove(s)" class="btn btn-danger">
-            <span class="btn-text">{{ 'delete' | translate }}</span>
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-            </svg>
-          </button>
+          
+          <!-- 3-Dot Menu Button -->
+          <div class="menu-wrapper" [attr.data-stack-id]="s.id">
+            <button 
+              class="btn btn-icon-only more-menu-button" 
+              (click)="toggleDropdown(s.id, $event)"
+              [attr.aria-expanded]="isDropdownOpen(s.id)"
+              aria-label="More options">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+              </svg>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" *ngIf="isDropdownOpen(s.id)">
+              
+              <!-- Star Rating Section -->
+              <div class="rating-section" *ngIf="!canEdit(s)">
+                <div class="star-rating">
+                  <button 
+                    *ngFor="let star of [1, 2, 3, 4, 5]" 
+                    class="star-button"
+                    (click)="rateStack(s, star, $event)"
+                    (mouseenter)="setHoverRating(s.id, star)"
+                    (mouseleave)="clearHoverRating(s.id)"
+                    [attr.aria-label]="'Rate ' + star + ' stars'" >
+                    <svg 
+                      class="star-icon" 
+                      [class.star-filled]="star <= getDisplayRating(s)"
+                      xmlns="http://www.w3.org/2000/svg" 
+                      viewBox="0 0 24 24" 
+                      fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Regular Quiz -->
+              <a 
+                *ngIf="s.card_amount && s.card_amount > 0"
+                [routerLink]="['/stack', s.id, 'quiz']" 
+                class="menu-item"
+                (click)="closeDropdownMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M340-280h280v-80H340v80Zm0-160h280v-80H340v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+                </svg>
+                <span>{{ 'quiz' | translate }}</span>
+              </a>
+              
+              <!-- Edit -->
+              <a 
+                *ngIf="canEdit(s)" 
+                [routerLink]="['/stack', s.id, 'edit']" 
+                class="menu-item"
+                (click)="closeDropdownMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                </svg>
+                <span>{{ 'edit_stack' | translate }}</span>
+              </a>
+              
+              <!-- Share (for public stacks or own stacks) -->
+              <button 
+                *ngIf="s.is_public || isOwner(s)"
+                class="menu-item" 
+                (click)="shareStack(s, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M720-80q-50 0-85-35t-35-85q0-7 1-14.5t3-13.5L322-392q-17 15-38 23.5t-44 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 44 8.5t38 23.5l282-164q-2-6-3-13.5t-1-14.5q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-44-8.5T638-672L356-508q2 6 3 13.5t1 14.5q0 7-1 14.5t-3 13.5l282 164q17-15 38-23.5t44-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-640q17 0 28.5-11.5T760-760q0-17-11.5-28.5T720-800q-17 0-28.5 11.5T680-760q0 17 11.5 28.5T720-720ZM240-440q17 0 28.5-11.5T280-480q0-17-11.5-28.5T240-520q-17 0-28.5 11.5T200-480q0 17 11.5 28.5T240-440Zm480 280q17 0 28.5-11.5T760-200q0-17-11.5-28.5T720-240q-17 0-28.5 11.5T680-200q0 17 11.5 28.5T720-160Zm0-600ZM240-480Zm480 280Z"/>
+                </svg>
+                <span>{{ 'share' | translate }}</span>
+              </button>
+              
+              <!-- Export -->
+              <button 
+                class="menu-item" 
+                (click)="exportStack(s, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                </svg>
+                <span>{{ 'export_stack' | translate }}</span>
+              </button>
+              
+              <!-- Duplicate (only for logged-in users) -->
+              <button 
+                *ngIf="isLoggedIn()" 
+                class="menu-item" 
+                (click)="duplicateStack(s, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M240-80q-33 0-56.5-23.5T160-160v-560q0-33 23.5-56.5T240-800h560q33 0 56.5 23.5T880-720v560q0 33-23.5 56.5T800-80H240Zm0-80h560v-560H240v560ZM120-240v-560q0-33 23.5-56.5T200-880h560q33 0 56.5 23.5T840-800v560q0 33-23.5 56.5T760-160H200q-33 0-56.5-23.5T120-240Zm120-480v560-560Z"/>
+                </svg>
+                <span>{{ 'duplicate' | translate }}</span>
+              </button>
+              
+              <!-- Divider (only show if owner) -->
+              <div class="menu-divider" *ngIf="isOwner(s)"></div>
+              
+              <!-- Delete (only for owners) -->
+              <button 
+                *ngIf="isOwner(s)" 
+                class="menu-item menu-item-danger" 
+                (click)="remove(s)">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                </svg>
+                <span>{{ 'delete' | translate }}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </li>
     </ul>
+    
+    <!-- Load More Button -->
+    <div *ngIf="shouldShowLoadMore" class="load-more-container">
+      <button class="btn btn-secondary load-more-btn" (click)="loadMore()">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+          <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/>
+        </svg>
+        {{ 'load_more' | translate }}
+      </button>
+    </div>
+
+    <app-stack-detail-modal
+      *ngIf="isModalOpen"
+      [stack]="selectedStack"
+      (close)="closeModal()"
+      (stackDeleted)="onStackDeleted($event)">
+  </app-stack-detail-modal>
   </div>
 </div>

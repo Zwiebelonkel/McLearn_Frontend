@@ -1,7 +1,10 @@
 {
+  "home": "Home",
+  "profile": "Profile",
   "help": "Help",
   "login": "Login",
   "logout": "Logout",
+  "toggle_theme": "Toggle Theme",
   "username": "Username",
   "password": "Password",
   "login_button": "Login",
@@ -43,5 +46,147 @@
   "howto_title": "How to Use the App",
   "howto_text": "The app is a simple flashcard application. You can create decks of flashcards. A deck is a collection of flashcards. You can edit a deck to add, delete, or modify flashcards. You can also study a deck. When you study a deck, the Leitner Algorithm is used to decide which flashcard to show next. You can also view your progress for each deck.",
   "search_stacks": "Search stacks",
-  "new_stack": "New stack"
+  "new_stack": "New stack",
+  "collaborators": "👥 Collaborators",
+  "manage_collaborators": "Manage collaborators",
+  "current_collaborators": "Current collaborators",
+  "remove": "Remove",
+  "close": "Close",
+  "add_collaborator": "Add collaborator",
+  "search_user": "Search user",
+  "shared_with_me": "Shared with me",
+  "cards": "cards",
+  "friends": "Friends",
+  "requests": "Requests",
+  "add_friend": "Add friend",
+  "friend_requests": "Friend requests",
+  "no_friend_requests": "No friend requests",
+  "accept": "Accept",
+  "decline": "Decline",
+  "remove_friend": "Remove friend",
+  "cancel_request": "Cancel request",
+  "pending": "Pending",
+  "no_friends_found": "No friends found",
+  "logged_out_title": "You have been logged out",
+  "logged_out_message": "Thank you for using our application. You can log in again at any time.",
+  "log_in_again": "Log in again",
+  "delete_selected": "Delete selection",
+  "save_selected": "Save selection",
+  "share":"Share",
+  "edit_stack":"Edit",
+  "export_stack":"Export",
+  "duplicate":"Duplicate",
+  "scribblepad": "ScribblePad",
+  "scribblepad_description": "Your personal note space - write anything you want",
+  "scribblepad_placeholder": "Start writing your notes here...\n\nThis is your personal space to jot down ideas, reminders, drafts, or anything else you want to keep track of.",
+  "scribblepad_login_required": "Please log in to access your personal ScribblePad. Your notes are private and saved automatically.",
+  "saving": "Saving...",
+  "clear": "Clear",
+  "characters": "characters",
+  "words": "words",
+  "quiz": "Quiz",
+  "quiz_mode": "Quiz Mode",
+  "quiz_completed": "Quiz Completed!",
+  "quiz_completed_message": "You've reviewed all cards!",
+  "restart_quiz": "Restart Quiz",
+  "back_to_study": "Back to Study",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
+  "stack_settings": "Stack Settings",
+  "visibility": "Visibility",
+  "load_more": "More",
+  "request_pending": "Request Pending",
+  "already_friends": "Already Friends",
+  "public_stacks": "Public Stacks",
+  "congratulations": "Congratulations!",
+  "completed_100": "100% completed",
+  "add_cards": "Karten hinzufügen",
+    "stats": {
+      "title": "Stack Statistics",
+      "loading": "Loading statistics...",
+      "no_data": "No statistics available",
+      
+      "toggle_show": "Show statistics",
+      "toggle_hide": "Hide statistics",
+      
+      "metrics": {
+        "total_cards": "Total Cards",
+        "total_reviews": "Reviews",
+        "average_box": "Avg Box",
+        "success_rate": "Success Rate"
+      },
+      
+      "response_distribution": {
+        "title": "Response Distribution",
+        "again": "Again",
+        "hard": "Hard",
+        "good": "Good",
+        "easy": "Easy"
+      },
+      
+      "charts": {
+        "activity_title": "Activity (Last 14 Days)",
+        "box_distribution_title": "Box Distribution",
+        "most_reviewed_title": "Most Reviewed",
+        "hardest_cards_title": "Hardest Cards",
+        "easiest_cards_title": "Easiest Cards",
+        
+        "click_hint": "Click on a bar to jump to the card",
+        "tooltip_hint": "💡 Click to jump to card"
+      }
+    },
+      "user_stats": {
+        "private_stack": "Private Stack",
+        "title": "User Statistics",
+        "loading": "Loading statistics...",
+        "no_data": "No statistics available",
+        
+        "limited_title": "Limited Access",
+        "limited_message": "This user has no public stacks. Statistics are not available.",
+        
+        "metrics": {
+          "total_stacks": "Total Stacks",
+          "total_cards": "Total Cards",
+          "total_reviews": "Reviews",
+          "accuracy": "Accuracy"
+        },
+        
+        "study_streak": "Study Streak",
+        "current_streak": "Current Streak",
+        "longest_streak": "Longest Streak",
+        "reviews": "reviews",
+        
+        "charts": {
+          "activity": "Activity (Last 14 Days)",
+          "weekly_pattern": "Weekly Pattern",
+          "box_distribution": "Box Distribution",
+          "top_stacks": "Top Stacks (by Avg Box)",
+          "most_reviewed_stacks": "Most Reviewed Stacks"
+        },
+        
+        "days": {
+          "sun": "Sun",
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat"
+        }
+      },
+  "rate_stack":"Rate",
+  "description": "Description",
+  "rate_this_stack": "Rate this Stack",
+  "your_rating": "Your Rating",
+  "average": "Average",
+  "average_rating": "Average Rating",
+  "click_stars_to_rate": "Click the stars to rate this stack",
+  "your_stack_rating": "Your Stack's Rating",
+  "rating": "Rating",
+  "ratings": "Ratings",
+  "private": "Private",
+  "owner": "Owner",
+  "created": "Created",
+  "export": "Export",
+  "view_profile": "View Profile"
 }

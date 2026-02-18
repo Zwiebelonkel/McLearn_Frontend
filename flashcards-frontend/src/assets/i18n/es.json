@@ -1,4 +1,7 @@
 {
+  "home": "Inicio",
+  "profile": "Perfil",
+  "toggle_theme": "Cambiar tema",
   "help": "Ayuda",
   "login": "Iniciar sesión",
   "logout": "Cerrar sesión",
@@ -43,5 +46,143 @@
   "howto_title": "Cómo usar la aplicación",
   "howto_text": "La aplicación es una herramienta sencilla de tarjetas de estudio. Puedes crear colecciones de tarjetas. Una colección es un conjunto de tarjetas. Puedes editar una colección para añadir, eliminar o modificar tarjetas. También puedes estudiar una colección. Cuando estudias, el algoritmo de Leitner decide qué tarjeta mostrar a continuación. Además, puedes ver tu progreso para cada colección.",
   "search_stacks": "Buscar colecciones",
-  "new_stack": "Nueva colección"
+  "new_stack": "Nueva colección",
+  "collaborators": "👥 Colaboradores",
+  "manage_collaborators": "Gestionar colaboradores",
+  "current_collaborators": "Colaboradores actuales",
+  "remove": "Eliminar",
+  "close": "Cerrar",
+  "add_collaborator": "Agregar colaborador",
+  "search_user": "Buscar usuario",
+  "shared_with_me": "Compartido conmigo",
+  "cards": "tarjetas",
+  "friends": "Amigos",
+  "requests": "Solicitudes",
+  "add_friend": "Añadir amigo",
+  "friend_requests": "Solicitudes de amistad",
+  "no_friend_requests": "No hay solicitudes de amistad",
+  "accept": "Aceptar",
+  "decline": "Rechazar",
+  "remove_friend": "Eliminar amigo",
+  "cancel_request": "Cancelar solicitud",
+  "pending": "Pendiente",
+  "no_friends_found": "No se encontraron amigos",
+  "logged_out_title": "Has cerrado sesión",
+  "logged_out_message": "Gracias por usar nuestra aplicación. Puedes volver a iniciar sesión en cualquier momento.",
+  "log_in_again": "Iniciar sesión de nuevo",
+  "delete_selected": "Eliminar selección",
+  "save_selected": "Guardar selección",
+  "share": "Compartir",
+  "edit_stack": "Editar",
+  "export_stack": "Exportar",
+  "duplicate": "Duplicar",
+  "scribblepad": "Bloc de Notas",
+  "scribblepad_description": "Tu espacio personal de notas - escribe lo que quieras",
+  "scribblepad_placeholder": "Comienza a escribir tus notas aquí...\n\nEste es tu espacio personal para anotar ideas, recordatorios, borradores o cualquier cosa que quieras recordar.",
+  "scribblepad_login_required": "Por favor, inicia sesión para acceder a tu Bloc de Notas personal. Tus notas son privadas y se guardan automáticamente.",
+  "saving": "Guardando...",
+  "clear": "Borrar",
+  "characters": "caracteres",
+  "words": "palabras",
+  "quiz": "Examen",
+  "quiz_mode": "Modo Examen",
+  "quiz_completed": "¡Examen Completado!",
+  "quiz_completed_message": "¡Has revisado todas las tarjetas!",
+  "restart_quiz": "Reiniciar Examen",
+  "back_to_study": "Volver a Estudiar",
+  "correct": "Correcto",
+  "incorrect": "Incorrecto",
+  "stack_settings": "Configuración de la Colección",
+  "visibility": "Visibilidad",
+  "load_more": "Cargar más",
+  "request_pending": "Solicitud Pendiente",
+  "already_friends": "Ya son Amigos",
+  "public_stacks": "Colecciones Públicas",
+    "stats": {
+      "title": "Estadísticas del Stack",
+      "loading": "Cargando estadísticas...",
+      "no_data": "No hay estadísticas disponibles",
+      
+      "toggle_show": "Mostrar estadísticas",
+      "toggle_hide": "Ocultar estadísticas",
+      
+      "metrics": {
+        "total_cards": "Tarjetas totales",
+        "total_reviews": "Repasos",
+        "average_box": "Caja prom.",
+        "success_rate": "Tasa de éxito"
+      },
+      
+      "response_distribution": {
+        "title": "Distribución de respuestas",
+        "again": "Otra vez",
+        "hard": "Difícil",
+        "good": "Bien",
+        "easy": "Fácil"
+      },
+      
+      "charts": {
+        "activity_title": "Actividad (últimos 14 días)",
+        "box_distribution_title": "Distribución de cajas",
+        "most_reviewed_title": "Más repasadas",
+        "hardest_cards_title": "Tarjetas más difíciles",
+        "easiest_cards_title": "Tarjetas más fáciles",
+        
+        "click_hint": "Haz clic en una barra para ir a la tarjeta",
+        "tooltip_hint": "💡 Haz clic para ir a la tarjeta"
+      }
+    },
+      "user_stats": {
+        "title": "Estadísticas de usuario",
+        "loading": "Cargando estadísticas...",
+        "no_data": "No hay estadísticas disponibles",
+        
+        "limited_title": "Acceso limitado",
+        "limited_message": "Este usuario no tiene pilas públicas. Las estadísticas no están disponibles.",
+        
+        "metrics": {
+          "total_stacks": "Pilas totales",
+          "total_cards": "Tarjetas totales",
+          "total_reviews": "Repasos",
+          "accuracy": "Precisión"
+        },
+        
+        "study_streak": "Racha de estudio",
+        "current_streak": "Racha actual",
+        "longest_streak": "Racha más larga",
+        "reviews": "repasos",
+        
+        "charts": {
+          "activity": "Actividad (últimos 14 días)",
+          "weekly_pattern": "Patrón semanal",
+          "box_distribution": "Distribución de cajas",
+          "top_stacks": "Mejores pilas (por caja prom.)",
+          "most_reviewed_stacks": "Pilas más repasadas"
+        },
+        
+        "days": {
+          "sun": "Dom",
+          "mon": "Lun",
+          "tue": "Mar",
+          "wed": "Mié",
+          "thu": "Jue",
+          "fri": "Vie",
+          "sat": "Sáb"
+        }
+      },
+  "rate_stack":"Evaluar",
+  "description": "Descripción",
+  "rate_this_stack": "Calificar este Stack",
+  "your_rating": "Tu calificación",
+  "average": "Promedio",
+  "average_rating": "Calificación promedio",
+  "click_stars_to_rate": "Haz clic en las estrellas para calificar este stack",
+  "your_stack_rating": "Calificación de tu Stack",
+  "rating": "Calificación",
+  "ratings": "Calificaciones",
+  "private": "Privado",
+  "owner": "Propietario",
+  "created": "Creado",
+  "export": "Exportar",
+  "view_profile": "Ver perfil"
 }

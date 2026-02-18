@@ -1,36 +1,22 @@
 <app-toast></app-toast>
 <div class="page-container">
-  <header class="header">
-    <div class="container">
-      <h1 class="title" (click)="goHome()">McLearn</h1>
-
-      <nav class="nav">
-        <a class="nav-link btn btn-primary" routerLink="/help">?</a>
-
-        <ng-container *ngIf="isLoggedIn$ | async; else loginLink">
-          <a
-            class="nav-link btn btn-primary"
-            href="#"
-            (click)="authService.logout()"
-            >{{ 'logout' | translate }}</a
-          >
-        </ng-container>
-        <ng-template #loginLink>
-          <a class="nav-link btn btn-primary" routerLink="/login">{{ 'login' | translate }}</a>
-        </ng-template>
-        
-      </nav>
-
-      <div class="theme-switcher">
+  <div class="main-content">
+    <header class="header">
+      <div class="container">
+        <h1 class="title" (click)="goHome()">McLearn</h1>
+        <button #toggleButton class="sidebar-toggle" (click)="toggleSidebar($event)">&#9776;</button>
       </div>
-    </div>
-  </header>
-
-  <main class="main">
-    <router-outlet></router-outlet>
-  </main>
-
-  <footer class="footer">
-    <p>&copy; 2025 McLearn</p>
-  </footer>
+    </header>
+    <main class="main">
+      <router-outlet></router-outlet>
+    </main>
+    <footer class="footer">
+      <p>&copy; 2026 McLearn</p>
+    </footer>
+  </div>
+  <app-sidebar
+  #sidebar
+  [class.open]="isSidebarOpen"
+  (closed)="isSidebarOpen = false">
+</app-sidebar>
 </div>

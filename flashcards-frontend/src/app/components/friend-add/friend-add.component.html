@@ -1,0 +1,11 @@
+<div class="add-form">
+  <input
+    type="text"
+    [(ngModel)]="username"
+    placeholder="{{ 'username' | translate }}"
+    class="form-input"
+  />
+  <button (click)="sendRequest()" class="btn btn-primary">
+    {{ "add" | translate }}
+  </button>
+</div>

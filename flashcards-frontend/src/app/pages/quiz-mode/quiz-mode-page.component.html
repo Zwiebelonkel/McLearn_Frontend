@@ -1,0 +1,155 @@
+<app-rain #rain></app-rain>
+
+<a routerLink="/stacks" class="back-link">← {{ 'back' | translate }}</a>
+
+<div class="container" (touchstart)="handleTouchStart($event)" (touchend)="handleTouchEnd($event)">
+
+  <!-- Progress Container - matching study page style -->
+  <div class="progress-container" *ngIf="!quizCompleted()">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgressPercent()"></div>
+    </div>
+    <p class="progress-label">{{ getProgressText() }}</p>
+  </div>
+
+  <!-- Quiz Completed Screen -->
+  <ng-container *ngIf="quizCompleted(); else quizActive">
+    <div class="completion-screen">
+      <h2>🎉 {{ 'quiz_completed' | translate }}</h2>
+      
+      <!-- Results Summary -->
+      <div class="results-summary">
+        <div class="result-stats">
+          <div class="stat correct-stat">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ correctCount() }}</div>
+              <div class="stat-label">{{ 'correct' | translate }}</div>
+            </div>
+          </div>
+          
+          <div class="stat incorrect-stat">
+            <div class="stat-icon">❌</div>
+            <div class="stat-info">
+              <div class="stat-number">{{ incorrectCount() }}</div>
+              <div class="stat-label">{{ 'incorrect' | translate }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horizontal Results Bar -->
+        <div class="results-bar-container">
+          <div class="results-bar">
+            <div 
+              *ngFor="let segment of getResultSegments()"
+              class="result-segment"
+              [class.correct-segment]="segment.correct"
+              [class.incorrect-segment]="!segment.correct"
+              [style.width.%]="segment.percentage"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Score Percentage -->
+        <div class="score-percentage">
+          <span class="percentage-number">{{ correctPercentage() }}%</span>
+          <span class="percentage-label">{{ 'score' | translate }}</span>
+        </div>
+      </div>
+
+<!-- Im completion-screen-Bereich, nach dem results-summary -->
+<div class="incorrect-answers" *ngIf="incorrectAnswers().length > 0">
+  <h3>📚 {{ 'review_incorrect' | translate }}</h3>
+  <div class="incorrect-list">
+    <div class="incorrect-card" *ngFor="let answer of incorrectAnswers()">
+      <div class="card-front">
+        <p><strong>{{ 'question' | translate }}:</strong> {{ answer.card?.front }}</p>
+      </div>
+      <div class="card-back">
+        <p><strong>{{ 'answer' | translate }}:</strong></p>
+        <div [innerHTML]="renderMarkdown(answer.card?.back || '')"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <!-- Action Buttons -->
+      <div class="ratings">
+        <button (click)="restartQuiz()" class="btn btn-primary">
+          🔄 {{ 'restart_quiz' | translate }}
+        </button>
+        <button
+        *ngIf="incorrectAnswers().length > 0"
+        (click)="restartWithIncorrect()"
+        class="btn btn-warning">
+        🔁 {{ 'practice_incorrect' | translate }}
+      </button>
+      
+        <button (click)="exitQuiz()" class="btn btn-secondary">
+          ← {{ 'back_to_study' | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Active Quiz - matching study page structure -->
+  <ng-template #quizActive>
+    <ng-container *ngIf="currentCard; else empty">
+      <div class="card-wrapper">
+        <div
+          class="card"
+          [class.flipped]="showBack()"
+          (click)="flip()"
+        >
+          <div class="card-inner">
+            <!-- Front Side -->
+            <div class="card-front">
+              <img 
+                *ngIf="currentCard.front_image" 
+                [src]="currentCard.front_image" 
+                alt="Card image" 
+                class="card-image">
+              <p>{{ currentCard.front }}</p>
+            </div>
+
+            <!-- Back Side -->
+            <div class="card-back">
+              <div [innerHTML]="renderMarkdown(currentCard.back || '')"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons - matching study page ratings style -->
+      <div *ngIf="showBack() && !isTransitioning()">
+        <div class="ratings">
+          <button (click)="markIncorrect()" class="btn btn-danger">
+            ❌ {{ 'incorrect' | translate }}
+          </button>
+          <button (click)="markCorrect()" class="btn btn-success">
+            ✅ {{ 'correct' | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #empty>
+      <p>{{ 'no_card_found' | translate }}</p>
+    </ng-template>
+  </ng-template>
+
+  <!-- Share button - matching study page -->
+  <div class="footer-actions">
+    <button *ngIf="stack()" (click)="shareStack()" class="share-button" title="Share this stack">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+      {{ 'share' | translate }}
+    </button>
+  </div>
+</div>

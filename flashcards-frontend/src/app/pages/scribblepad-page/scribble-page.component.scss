@@ -1,0 +1,339 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.page-title {
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.btn {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.btn svg {
+  flex-shrink: 0;
+}
+
+/* ============ EDITOR CARD ============ */
+
+.editor-card {
+  background-color: none !important;
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.editor-card:focus-within {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ============ QUILL EDITOR (ersetzt .note-textarea) ============ */
+
+quill-editor {
+  display: block;
+  border: none !important;
+
+  body{
+    background-color: none;
+  }
+
+  ::ng-deep .ql-toolbar.ql-snow {
+    border: none;
+    border-bottom: 1px solid var(--card-border-color);
+  }
+
+  ::ng-deep .ql-container.ql-snow {
+    border: none;
+    font-family: var(--font-family-sans-serif);
+  }
+
+  ::ng-deep .ql-editor {
+    min-height: 500px;
+    padding: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-family: var(--font-family-sans-serif);
+
+    &.ql-blank::before {
+      font-style: italic;
+      color: var(--text-color);
+      opacity: 0.4;
+      left: 1.5rem;
+    }
+  }
+}
+
+/* ============ COPY BUTTON ============ */
+
+.copy-btn {
+  position: absolute;
+  top: 2.8rem;
+  right: 0.75rem;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-btn:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-color);
+}
+
+.copy-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============ EDITOR FOOTER ============ */
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+}
+
+.stat-item svg {
+  opacity: 0.7;
+}
+
+.stat-item.limit-reached {
+  color: var(--danger-color, #f44336) !important;
+  font-weight: 600;
+}
+
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+}
+
+.status-icon {
+  flex-shrink: 0;
+}
+
+.save-text {
+  white-space: nowrap;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============ INFO CARD ============ */
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--info-bg, #e3f2fd);
+  border: 1px solid var(--info-border, #90caf9);
+  border-radius: 8px;
+  margin-top: 2rem;
+  color: var(--info-text, #1976d2);
+}
+
+.info-card svg {
+  flex-shrink: 0;
+}
+
+.info-card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ============ DARK THEME ============ */
+
+body.dark-theme {
+  background-color: none !important;
+  .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .editor-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .editor-card:focus-within {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .editor-footer {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .stat-item,
+  .save-status {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .info-card {
+    background-color: rgba(33, 150, 243, 0.1);
+    border-color: rgba(33, 150, 243, 0.3);
+    color: #90caf9;
+  }
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  quill-editor ::ng-deep .ql-editor {
+    min-height: 400px;
+    padding: 1rem;
+  }
+
+  .editor-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .save-status {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .btn span {
+    display: none;
+  }
+
+  .btn {
+    padding: 0.625rem;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  quill-editor ::ng-deep .ql-editor {
+    min-height: 300px;
+    font-size: 0.95rem;
+  }
+}

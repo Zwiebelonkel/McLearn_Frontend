@@ -1,9 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environments';
-import { Card, Stack } from '../models';
+import { Observable } from 'rxjs';
+import { Card, Stack, StackCollaborator, User, StackStatistics, UserStatistics } from '../models';
 
-export type CreateCardPayload = Partial<Card> & { stack_id: string; front_image?: string };
+
+export type CreateCardPayload = Partial<Card> & {
+  stack_id: string;
+  front_image?: string;
+};
 export type CreateStackPayload = { name: string; is_public?: boolean };
 
 @Injectable({ providedIn: 'root' })
@@ -14,16 +19,15 @@ export class ApiService {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       'X-API-Key': environment.apiKey,
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     });
   }
 
   // -------- STACKS --------
   getStack(id: string) {
-    return this.http.get<Stack>(
-      `${environment.apiBase}/stacks/${id}`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<Stack>(`${environment.apiBase}/stacks/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   stacks() {
@@ -40,16 +44,19 @@ export class ApiService {
     );
   }
 
-  updateStack(id: string, name: string, isPublic?: boolean) {
+  updateStack(id: string, name: string, description?: string, isPublic?: boolean, cover_image?: string) {
     const payload: any = { name };
+    if (description) payload.description = description;
     if (typeof isPublic === 'boolean') payload.is_public = isPublic;
-
+    if (cover_image) payload.cover_image = cover_image;
+  
     return this.http.patch<Stack>(
       `${environment.apiBase}/stacks/${id}`,
       payload,
       { headers: this.getHeaders() }
     );
   }
+  
 
   deleteStack(id: string) {
     return this.http.delete(`${environment.apiBase}/stacks/${id}`, {
@@ -72,9 +79,13 @@ export class ApiService {
   }
 
   updateCard(id: string, payload: Partial<Card> & { front_image?: string }) {
-    return this.http.patch<Card>(`${environment.apiBase}/cards/${id}`, payload, {
-      headers: this.getHeaders(),
-    });
+    return this.http.patch<Card>(
+      `${environment.apiBase}/cards/${id}`,
+      payload,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   deleteCard(id: string) {
@@ -93,11 +104,223 @@ export class ApiService {
     );
   }
 
-  review(stackId: string, cardId: string, rating: 'again' | 'hard' | 'good' | 'easy') {
+  review(
+    stackId: string,
+    cardId: string,
+    rating: 'again' | 'hard' | 'good' | 'easy'
+  ) {
     return this.http.post<Card>(
       `${environment.apiBase}/stacks/${stackId}/cards/${cardId}/review`,
       { rating },
       { headers: this.getHeaders() }
     );
   }
+
+  // -------- USERS --------
+
+  searchUsers(query: string) {
+    return this.http.get<User[]>(`${environment.apiBase}/users/search`, {
+      params: { query },
+      headers: this.getHeaders(),
+    });
+  }
+
+  getUser(userId: number) {
+    return this.http.get<User>(`${environment.apiBase}/users/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // -------- COLLABORATORS --------
+
+  getCollaborators(stackId: string) {
+    return this.http.get<StackCollaborator[]>(
+      `${environment.apiBase}/stacks/${stackId}/collaborators`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
+  }
+
+  addCollaborator(stackId: string, userId: number) {
+    return this.http.post<StackCollaborator>(
+      `${environment.apiBase}/stacks/${stackId}/collaborators`,
+      { userId, can_edit: true },
+      {
+        headers: this.getHeaders(),
+      }
+    );
+  }
+
+  removeCollaborator(stackId: string, collaboratorId: string) {
+    return this.http.delete(
+      `${environment.apiBase}/stacks/${stackId}/collaborators/${collaboratorId}`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
+  }
+
+// -------- SCRIBBLEPAD --------
+
+getStackStatistics(stackId: string) {
+  return this.http.get<StackStatistics>(
+    `${environment.apiBase}/stacks/${stackId}/statistics`,
+    {
+      headers: this.getHeaders(),
+    }
+  );
+}
+
+getUserStatistics(userId: number): Observable<UserStatistics> {
+  return this.http.get<UserStatistics>(`${environment.apiBase}/users/${userId}/statistics`);
+}
+  // -------- ADMIN --------
+  
+  // Get all users (admin only)
+  adminGetUsers() {
+    return this.http.get<Array<{
+      id: number;
+      username: string;
+      role?: string;
+      created_at?: string;
+      stack_count: number;
+      card_count: number;
+    }>>(`${environment.apiBase}/admin/users`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Get all stacks (admin only)
+  adminGetStacks() {
+    return this.http.get<Array<{
+      id: string;
+      name: string;
+      user_id: number;
+      owner_name: string;
+      is_public: boolean;
+      card_amount: number;
+      created_at: string;
+      updated_at: string;
+    }>>(`${environment.apiBase}/admin/stacks`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Delete user (admin only)
+  adminDeleteUser(userId: number) {
+    return this.http.delete(`${environment.apiBase}/admin/users/${userId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Delete stack (admin only)
+  adminDeleteStack(stackId: string) {
+    return this.http.delete(`${environment.apiBase}/admin/stacks/${stackId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Update stack visibility (admin only)
+  adminUpdateStack(stackId: string, isPublic: boolean) {
+    return this.http.patch(`${environment.apiBase}/admin/stacks/${stackId}`, 
+      { is_public: isPublic },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Transfer stack ownership (admin only)
+  adminTransferStack(stackId: string, username: string) {
+    return this.http.patch(`${environment.apiBase}/admin/stacks/${stackId}/transfer`,
+      { username },
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Get admin statistics (admin only)
+  adminGetStatistics() {
+    return this.http.get<{
+      total: {
+        users: number;
+        stacks: number;
+        publicStacks: number;
+        cards: number;
+        reviews: number;
+      };
+      recent: {
+        users: number;
+        stacks: number;
+        reviews: number;
+      };
+    }>(`${environment.apiBase}/admin/statistics`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  adminResetReviewSequences(stackId: string) {
+    return this.http.post(`${environment.apiBase}/admin/stacks/${stackId}/reset-sequences`, 
+      {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  rateStack(stackId: string, rating: number): Observable<Stack> {
+    return this.http.post<Stack>(
+      `${environment.apiBase}/stacks/${stackId}/rate`,
+      { rating },
+      { headers: this.getHeaders() }
+    );
+  }
+
+    
+  // Get maintenance mode status (public)
+  getMaintenanceMode() {
+    return this.http.get<{
+      maintenance_mode: boolean;
+      updated_at: string | null;
+      updated_by: string | null;
+    }>(`${environment.apiBase}/admin/maintenance-mode`);
+  }
+
+  // Set maintenance mode (admin only)
+  setMaintenanceMode(maintenanceMode: boolean) {
+    return this.http.post<{
+      maintenance_mode: boolean;
+      updated_at: string;
+      updated_by: string;
+    }>(`${environment.apiBase}/admin/maintenance-mode`, 
+      { maintenance_mode: maintenanceMode },
+      { headers: this.getHeaders() }
+    );
+  }
+
+// -------- SCRIBBLEPAD (add to your existing ApiService) --------
+
+getScribblePad() {
+  return this.http.get<{
+    id: string;
+    user_id: number;
+    content: string;
+    image: string | null;
+    updated_at: string;
+  }>(`${environment.apiBase}/scribblepad`, {
+    headers: this.getHeaders(),
+  });
+}
+
+saveScribblePad(content: string, image: string | null = null) {
+  return this.http.post<{
+    id: string;
+    user_id: number;
+    content: string;
+    image: string | null;
+    updated_at: string;
+  }>(
+    `${environment.apiBase}/scribblepad`,
+    { content, image },
+    { headers: this.getHeaders() }
+  );
+}
+
+
 }

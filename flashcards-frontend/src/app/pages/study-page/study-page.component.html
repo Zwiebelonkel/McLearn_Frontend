@@ -1,12 +1,30 @@
 <a routerLink="/" class="back-link">← {{ 'back' | translate }}</a>
+
+<!-- Confetti Container -->
+<app-rain #rain></app-rain>
+<div class="confetti-container"></div>
+
+<!-- Celebration Message -->
+<div *ngIf="showCelebration()" class="celebration-message">
+  <div class="celebration-emoji">🎉</div>
+  {{ 'congratulations' | translate }}!
+  <div>{{ 'completed_100' | translate }}</div>
+</div>
+
 <div class="container">
-  <h2 class="page-title">{{ 'study' | translate }}</h2>
+  <!-- Clickable title for owners/collaborators -->
+  <a *ngIf="canEdit()" [routerLink]="['/stack', stackId, 'edit']" class="page-title-link">
+    <h2 class="page-title">{{ stack()?.name || ('study' | translate) }}</h2>
+  </a>
+  
+  <!-- Non-clickable title for others -->
+  <h2 *ngIf="!canEdit()" class="page-title">{{ stack()?.name || ('study' | translate) }}</h2>
 
   <div *ngIf="isOwner()" class="progress-container">
     <div class="progress-bar">
       <div class="progress-fill" [style.width.%]="getProgressPercent()"></div>
     </div>
-    <p class="progress-label">{{ getProgressPercent() }} % {{ 'completed' | translate }}</p>
+    <p class="progress-label">{{ getProgressPercent() }} % {{ 'completed' | translate }}</p>
   </div>
 
   <ng-container *ngIf="current(); else empty">
@@ -17,6 +35,8 @@
         [class.fly-left]="flyDirection() === 'left'"
         [class.fly-right]="flyDirection() === 'right'"
         (click)="flip()"
+        (touchstart)="handleTouchStart($event)"
+        (touchend)="handleTouchEnd($event)"
       >
         <div class="card-inner">
           <div class="card-front">
@@ -27,7 +47,7 @@
             <p>{{ current()?.front }}</p>
           </div>
           <div class="card-back">
-            <div [innerHTML]="renderMarkdown(current()?.back || '')"></div>
+            <div [innerHTML]="current()?.back"></div>
           </div>
         </div>
       </div>
@@ -35,18 +55,28 @@
 
     <div *ngIf="showBack() && !isTransitioning()">
       <div *ngIf="isOwner()" class="ratings">
-        <button (click)="rate('again')" class="btn btn-danger">{{ 'again' | translate }}</button>
-        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }}</button>
-        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }}</button>
-        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }}</button>
+        <button (click)="rate('hard')" class="btn btn-warning">{{ 'hard' | translate }} <i class="fa-regular fa-face-dizzy"></i></button>
+        <button (click)="rate('good')" class="btn btn-success">{{ 'good' | translate }} <i class="fa-regular fa-face-smile-beam"></i></button>
+        <button (click)="rate('easy')" class="btn btn-info">{{ 'easy' | translate }} <i class="fa-regular fa-face-grin-beam"></i></button>
       </div>
       <div *ngIf="!isOwner()">
         <button (click)="loadCard()" class="btn btn-primary">{{ 'next' | translate }}</button>
       </div>
     </div>
   </ng-container>
-
+  <div class="footer-actions">
+    <button *ngIf="stack()" (click)="shareStack()" class="share-button" title="Share this stack">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+      {{ 'share' | translate }}
+    </button>
+  </div>
   <ng-template #empty>
-    <p>No card found. Create cards or wait until some are due.{{ 'no_card_found' | translate }}</p>
+    <p>{{ 'no_card_found' | translate }}</p>
   </ng-template>
 </div>

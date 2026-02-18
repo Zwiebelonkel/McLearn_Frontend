@@ -14,6 +14,80 @@
 
   --font-family-sans-serif: 'Poppins', sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --background-color: #f0f2f5;
+  --text-color: #212529;
+  --card-background: #fff;
+  --card-border-color: #dee2e6;
+  --input-bg: #fff;
+  --input-color: #495057;
+  --input-border-color: #ced4da;
+  --header-background: rgb(236, 73, 73);
+  --header-text-color: white;
+  --border: #d5d5d5;
+  --glass: rgba(255, 255, 255, 0.781);
+  --glass-light: rgba(182, 182, 182, 0.897);
+}
+
+body.dark-theme {
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --card-background: #1e1e1e;
+  --success-color: #313131;
+  --danger-color: #913535;
+  --warning-color: #614312;
+  --info-color: #536575;
+
+  --card-border-color: #424242;
+  --input-bg: #2c2c2c;
+  --input-color: #e0e0e0;
+  --input-border-color: #424242;
+  --header-background: #1f1f1f;
+  --header-text-color: #f8f9fa;
+  --border: #444444;
+  --glass: rgba(37, 37, 37, 0.11);
+  --glass-light: rgba(255, 255, 255, 0.096);
+
+  /* Quill Editor Dark Theme */
+  .ql-toolbar.ql-snow {
+    background-color: var(--input-bg);
+
+    .ql-picker-label,
+    .ql-picker-item {
+      color: var(--text-color);
+    }
+
+    .ql-stroke {
+      stroke: var(--text-color);
+    }
+
+    .ql-fill {
+      fill: var(--text-color);
+    }
+
+    .ql-picker-options {
+      background-color: var(--card-background);
+      border-color: var(--card-border-color);
+      color: var(--text-color);
+    }
+
+    .ql-picker-label:hover {
+      color: var(--primary-color);
+    }
+
+    .ql-picker-item:hover {
+      color: var(--primary-color);
+    }
+
+    .ql-picker.ql-expanded .ql-picker-label {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+  }
+
+  .ql-container.ql-snow {
+    color: var(--text-color);
+  }
 }
 
 html, body {
@@ -26,21 +100,14 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #212529;
+  color: var(--text-color);
   text-align: left;
-  background-color: #f0f2f5;
+  background-color: var(--background-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .page-container {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
-}
-
-body.dark-theme {
-  background-color: var(--dark-color);
-  color: var(--light-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -48,19 +115,21 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
   font-weight: 600;
   line-height: 1.2;
+  user-select: none;
 }
 
-h1 { 
-transition: 0.2s;
-font-size: 2.5rem; 
-cursor: pointer;
-user-select: none;
-}
-
-h1:hover { 
+h1 {
   transition: 0.2s;
-  transform: translateX(10px)
-  }
+  font-size: 2.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+h1:hover {
+  transition: 0.2s;
+  transform: translateX(10px);
+}
+
 h2 { font-size: 2rem; }
 h3 { font-size: 1.75rem; }
 h4 { font-size: 1.5rem; }
@@ -80,38 +149,31 @@ h6 { font-size: 1rem; }
 }
 
 .main {
-    margin-top: 100px;
-    flex-grow: 1;
+  margin-top: 100px;
+  flex-grow: 1;
 }
 
 @media (min-width: 576px) {
-  .container {
-    max-width: 540px;
-  }
+  .container { max-width: 540px; }
 }
 
 @media (min-width: 768px) {
-  .container {
-    max-width: 720px;
-  }
+  .container { max-width: 720px; }
 }
 
 @media (min-width: 992px) {
-  .container {
-    max-width: 960px;
-  }
+  .container { max-width: 960px; }
 }
 
 @media (min-width: 1200px) {
-  .container {
-    max-width: 1140px;
-  }
+  .container { max-width: 1140px; }
 }
 
 .btn {
+  user-select: none;
   display: inline-block;
   font-weight: 600;
-  color: #212529;
+  color: var(--text-color);
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -135,7 +197,7 @@ h6 { font-size: 1rem; }
   border-color: var(--primary-color);
 }
 
-.btn-primary:disabled{
+.btn-primary:disabled {
   background-color: var(--disabled);
 }
 
@@ -154,12 +216,12 @@ h6 { font-size: 1rem; }
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
+  color: var(--input-color);
+  background-color: var(--input-bg);
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--input-border-color);
   border-radius: 0.3rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
 .form-control:focus {
@@ -170,16 +232,11 @@ h6 { font-size: 1rem; }
 
 .card {
   transition: all 0.3s ease;
+  color: var(--text-color);
 }
 
 .card:hover {
   transform: translateY(-5px);
-}
-
-
-body.dark-theme .card {
-  background-color: #2d2d2d;
-  border-color: #444;
 }
 
 .card-body {
@@ -201,14 +258,14 @@ body.dark-theme .card {
   top: 0;
   left: 0;
   width: 100%;
-  background: rgb(236, 73, 73);
+  background: var(--header-background);
   padding: 0rem 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: white;
+  color: var(--header-text-color);
 }
 
-.header:hover{
+.header:hover {
   transition: 0.2s;
   height: 95px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.253);
@@ -248,14 +305,9 @@ body.dark-theme .card {
 .footer {
   text-align: center;
   padding: 1rem;
-  background-color: #f8f9fa;
-  border-top: 1px solid #e7e7e7;
+  background-color: var(--card-background);
+  border-top: 1px solid var(--card-border-color);
   flex-shrink: 0;
-}
-
-body.dark-theme .footer {
-  background-color: #232323;
-  border-top-color: #444;
 }
 
 .language-selector {
@@ -273,4 +325,104 @@ body.dark-theme .footer {
 
 .language-selector:focus {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.144);
+}
+
+/* =============================================
+   QUILL EDITOR — Global Styles
+   ============================================= */
+
+/* Font */
+.ql-editor {
+  font-family: var(--font-family-sans-serif);
+  overflow-y: auto;
+}
+
+/* Wrapper: kein overflow:hidden, border-radius per Kinder */
+quill-editor {
+  display: block;
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  position: relative;
+
+  /* Scroll-Wrapper UM die Toolbar — nicht die Toolbar selbst */
+  .ql-toolbar.ql-snow {
+    border: none;
+    border-bottom: 1px solid var(--card-border-color);
+    border-radius: 8px 8px 0 0;
+    /* KEIN overflow hier! */
+    overflow: visible !important;
+    display: flex !important;
+    flex-wrap: wrap !important;   /* ← wrap statt nowrap+scroll */
+    padding: 6px 8px;
+    position: relative;
+    z-index: 2;
+
+    .ql-formats {
+      display: inline-flex !important;
+      align-items: center;
+      flex-shrink: 0 !important;
+    }
+
+    button,
+    .ql-picker { flex-shrink: 0; }
+
+    .ql-picker-options {
+      position: absolute !important;
+      z-index: 9999 !important;
+    }
+
+    select,
+    .ql-picker-label {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .ql-container.ql-snow {
+    border: none;
+    border-radius: 0 0 8px 8px;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 1500px) {
+  .container{
+    min-width: 1500px;
+  }
+  .stack-meta-body {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+// styles.scss
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -10px;
+  width: 12px;
+  height: 12px;
+  opacity: 0.7;
+  animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
 }

@@ -1,0 +1,211 @@
+<div class="stats-wrapper">
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="stats-loading">
+      <div class="loading-spinner"></div>
+      <p>{{ 'stats.loading' | translate }}</p>
+    </div>
+  
+    <!-- Stats Content -->
+    <div *ngIf="!loading() && stats()" class="stats-container">
+      
+      <!-- Header mit Titel -->
+      <div class="stats-header">
+        <h2 class="stats-title">
+          <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor">
+            <path d="M280-280h80v-200h-80v200Zm160 0h80v-400h-80v400Zm160 0h80v-120h-80v120ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+          </svg>
+          {{ 'stats.title' | translate }}
+        </h2>
+      </div>
+  
+      <!-- Key Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card primary">
+          <div class="metric-icon">🃏</div>
+          <div class="metric-content">
+            <div class="metric-value">{{ stats()!.overall.total_cards }}</div>
+            <div class="metric-label">{{ 'stats.metrics.total_cards' | translate }}</div>
+          </div>
+        </div>
+  
+        <div class="metric-card secondary">
+          <div class="metric-icon">🔁</div>
+          <div class="metric-content">
+            <div class="metric-value">{{ stats()!.overall.total_reviews }}</div>
+            <div class="metric-label">{{ 'stats.metrics.total_reviews' | translate }}</div>
+          </div>
+        </div>
+  
+        <div class="metric-card accent">
+          <div class="metric-icon">📦</div>
+          <div class="metric-content">
+            <div class="metric-value">{{ stats()!.overall.average_box | number:'1.1-1' }}</div>
+            <div class="metric-label">{{ 'stats.metrics.average_box' | translate }}</div>
+          </div>
+        </div>
+  
+        <div class="metric-card success">
+          <div class="metric-icon">✅</div>
+          <div class="metric-content">
+            <div class="metric-value">{{ accuracyRate }}%</div>
+            <div class="metric-label">{{ 'stats.metrics.success_rate' | translate }}</div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Response Distribution -->
+      <div class="response-stats">
+        <h3 class="section-title">{{ 'stats.response_distribution.title' | translate }}</h3>
+        <div class="response-grid">
+          <div class="response-item warning">
+            <div class="response-bar" [style.width.%]="(stats()!.overall.total_hard / stats()!.overall.total_reviews * 100)"></div>
+            <div class="response-label">
+              <span class="response-dot"></span>
+              <span>{{ 'stats.response_distribution.hard' | translate }}</span>
+              <strong>{{ stats()!.overall.total_hard }}</strong>
+            </div>
+          </div>
+          <div class="response-item good">
+            <div class="response-bar" [style.width.%]="(stats()!.overall.total_good / stats()!.overall.total_reviews * 100)"></div>
+            <div class="response-label">
+              <span class="response-dot"></span>
+              <span>{{ 'stats.response_distribution.good' | translate }}</span>
+              <strong>{{ stats()!.overall.total_good }}</strong>
+            </div>
+          </div>
+          <div class="response-item easy">
+            <div class="response-bar" [style.width.%]="(stats()!.overall.total_easy / stats()!.overall.total_reviews * 100)"></div>
+            <div class="response-label">
+              <span class="response-dot"></span>
+              <span>{{ 'stats.response_distribution.easy' | translate }}</span>
+              <strong>{{ stats()!.overall.total_easy }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Charts Section -->
+      <div class="charts-section">
+        
+        <!-- Activity Chart (Full Width) -->
+        <div class="chart-card full-width">
+          <div class="chart-header">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/>
+              </svg>
+              {{ 'stats.charts.activity_title' | translate }}
+            </h3>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [data]="activityChartData"
+              [options]="lineChartOptions"
+              type="line">
+            </canvas>
+          </div>
+        </div>
+  
+        <!-- Box Distribution -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"/>
+              </svg>
+              {{ 'stats.charts.box_distribution_title' | translate }}
+            </h3>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [data]="boxDistributionChartData"
+              [options]="doughnutChartOptions"
+              type="doughnut">
+            </canvas>
+          </div>
+        </div>
+  
+        <!-- Most Reviewed -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"/>
+              </svg>
+              {{ 'stats.charts.most_reviewed_title' | translate }}
+            </h3>
+            <span class="chart-hint" [title]="'stats.charts.click_hint' | translate">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [data]="mostReviewedChartData"
+              [options]="mostReviewedChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+  
+        <!-- Hardest Cards -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+              </svg>
+              {{ 'stats.charts.hardest_cards_title' | translate }}
+            </h3>
+            <span class="chart-hint" [title]="'stats.charts.click_hint' | translate">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [data]="hardestCardsChartData"
+              [options]="hardestCardsChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+  
+        <!-- Easiest Cards -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+              </svg>
+              {{ 'stats.charts.easiest_cards_title' | translate }}
+            </h3>
+            <span class="chart-hint" [title]="'stats.charts.click_hint' | translate">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [data]="easiestCardsChartData"
+              [options]="easiestCardsChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+  
+      </div>
+  
+    </div>
+  
+    <!-- Empty State -->
+    <div *ngIf="!loading() && !stats()" class="stats-empty">
+      <svg xmlns="http://www.w3.org/2000/svg" height="64px" viewBox="0 -960 960 960" width="64px" fill="currentColor">
+        <path d="M280-280h80v-200h-80v200Zm160 0h80v-400h-80v400Zm160 0h80v-120h-80v120ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+      </svg>
+      <p>{{ 'stats.no_data' | translate }}</p>
+    </div>
+  </div>

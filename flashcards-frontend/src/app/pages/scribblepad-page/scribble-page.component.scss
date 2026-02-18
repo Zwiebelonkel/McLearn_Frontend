@@ -5,7 +5,7 @@
 }
 
 .header {
-  display: none;
+  display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 2rem;
@@ -71,129 +71,12 @@
   flex-shrink: 0;
 }
 
-/* ============ IMAGE DROPZONE ============ */
-
-.image-dropzone {
-  background-color: var(--card-bg);
-  border: 2px dashed var(--border, #ddd);
-  border-radius: 8px;
-  padding: 2rem;
-  margin-top: 1.5rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.image-dropzone:hover {
-  border-color: var(--primary-color);
-  background-color: var(--hover-bg, rgba(0, 0, 0, 0.02));
-}
-
-.image-dropzone.dragging {
-  border-color: var(--primary-color);
-  background-color: var(--primary-color-light, rgba(99, 102, 241, 0.1));
-  transform: scale(1.01);
-}
-
-.image-dropzone.has-image {
-  cursor: default;
-  padding: 0;
-  border: 1px solid var(--border, #ddd);
-}
-
-.image-dropzone.has-image:hover {
-  background-color: var(--card-bg);
-}
-
-.dropzone-content {
-  text-align: center;
-  position: relative;
-}
-
-.dropzone-content svg {
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  color: var(--text-secondary, #666);
-}
-
-.dropzone-content h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  color: var(--text-color);
-}
-
-.dropzone-content p {
-  margin: 0;
-  color: var(--text-secondary, #666);
-  font-size: 0.9rem;
-}
-
-.file-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.file-hint {
-  margin-top: 0.5rem !important;
-  font-size: 0.8rem !important;
-  color: var(--text-tertiary, #999) !important;
-}
-
-.image-preview {
-  position: relative;
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.image-preview img {
-  width: 100%;
-  height: auto;
-  display: block;
-  max-height: 400px;
-  object-fit: contain;
-  background-color: var(--bg-secondary, #f5f5f5);
-}
-
-.remove-image-btn {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-}
-
-.remove-image-btn:hover {
-  background-color: rgba(220, 38, 38, 0.9);
-  transform: scale(1.1);
-}
-
-.remove-image-btn svg {
-  flex-shrink: 0;
-}
-
 /* ============ EDITOR CARD ============ */
 
 .editor-card {
-  background-color: var(--card-bg);
+  background-color: none !important;
   border: 1px solid var(--card-border-color);
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
   position: relative;
@@ -203,34 +86,50 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.note-textarea {
-  width: 100%;
-  min-height: 500px;
-  padding: 1.5rem;
-  border: none;
-  outline: none;
-  resize: vertical;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  background-color: transparent;
-  box-sizing: border-box;
+/* ============ QUILL EDITOR (ersetzt .note-textarea) ============ */
+
+quill-editor {
+  display: block;
+  border: none !important;
+
+  body{
+    background-color: none;
+  }
+
+  ::ng-deep .ql-toolbar.ql-snow {
+    border: none;
+    border-bottom: 1px solid var(--card-border-color);
+  }
+
+  ::ng-deep .ql-container.ql-snow {
+    border: none;
+    font-family: var(--font-family-sans-serif);
+  }
+
+  ::ng-deep .ql-editor {
+    min-height: 500px;
+    padding: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-family: var(--font-family-sans-serif);
+
+    &.ql-blank::before {
+      font-style: italic;
+      color: var(--text-color);
+      opacity: 0.4;
+      left: 1.5rem;
+    }
+  }
 }
 
-.note-textarea::placeholder {
-  color: var(--text-secondary, #999);
-}
-
-.note-textarea:disabled {
-  background-color: var(--disabled-bg, #f5f5f5);
-  cursor: not-allowed;
-}
+/* ============ COPY BUTTON ============ */
 
 .copy-btn {
   position: absolute;
-  top: 0.75rem;
+  top: 2.8rem;
   right: 0.75rem;
+  z-index: 10;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -252,6 +151,8 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ============ EDITOR FOOTER ============ */
 
 .editor-footer {
   display: flex;
@@ -308,13 +209,11 @@
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
+
+/* ============ INFO CARD ============ */
 
 .info-card {
   display: flex;
@@ -340,30 +239,9 @@
 /* ============ DARK THEME ============ */
 
 body.dark-theme {
+  background-color: none !important;
   .subtitle {
     color: rgba(255, 255, 255, 0.7);
-  }
-
-  .image-dropzone {
-    background-color: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .image-dropzone:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .image-dropzone.dragging {
-    background-color: rgba(99, 102, 241, 0.15);
-  }
-
-  .dropzone-content svg,
-  .dropzone-content p {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .image-preview img {
-    background-color: rgba(255, 255, 255, 0.05);
   }
 
   .editor-card {
@@ -382,10 +260,6 @@ body.dark-theme {
   .stat-item,
   .save-status {
     color: rgba(255, 255, 255, 0.7);
-  }
-
-  .note-textarea:disabled {
-    background-color: rgba(0, 0, 0, 0.2);
   }
 
   .info-card {
@@ -416,11 +290,7 @@ body.dark-theme {
     justify-content: center;
   }
 
-  .image-dropzone {
-    padding: 1.5rem;
-  }
-
-  .note-textarea {
+  quill-editor ::ng-deep .ql-editor {
     min-height: 400px;
     padding: 1rem;
   }
@@ -462,50 +332,8 @@ body.dark-theme {
     gap: 0.5rem;
   }
 
-  .note-textarea {
+  quill-editor ::ng-deep .ql-editor {
     min-height: 300px;
     font-size: 0.95rem;
   }
-
-  .image-dropzone {
-    padding: 1rem;
-  }
-
-  .dropzone-content h3 {
-    font-size: 1rem;
-  }
-
-  .dropzone-content svg {
-    height: 36px;
-    width: 36px;
-  }
-}
-
-// Add this to your existing scribble-page.component.scss
-
-.image-dropzone.compressing {
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.compressing-indicator {
-  text-align: center;
-  padding: 2rem;
-}
-
-.compressing-indicator svg {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-}
-
-.compressing-indicator h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  color: var(--text-color);
-}
-
-.compressing-indicator p {
-  margin: 0;
-  color: var(--text-secondary, #666);
-  font-size: 0.9rem;
 }

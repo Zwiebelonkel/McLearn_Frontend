@@ -1,39 +1,6 @@
 <app-loader *ngIf="loading()" />
 <div *ngIf="!loading()">
   <div class="container">
-    <div class="header">
-      <div class="header-left">
-        <h2 class="page-title">{{ 'scribblepad' | translate }}</h2>
-        <p class="subtitle">{{ 'scribblepad_description' | translate }}</p>
-      </div>
-      
-      <div class="header-actions">
-        <button 
-          (click)="save(false)" 
-          class="btn btn-primary"
-          [disabled]="saving() || isCompressing()"
-          *ngIf="isLoggedIn()">
-          <svg *ngIf="!saving() && !isCompressing()" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-            <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/>
-          </svg>
-          <svg *ngIf="saving() || isCompressing()" class="spinner" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-            <path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Z"/>
-          </svg>
-          <span>{{ isCompressing() ? 'Compressing...' : (saving() ? ('saving' | translate) : ('save' | translate)) }}</span>
-        </button>
-        
-        <button 
-          (click)="clear()" 
-          class="btn btn-secondary"
-          [disabled]="isCompressing()"
-          *ngIf="isLoggedIn() && content().length > 0">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-          </svg>
-          <span>{{ 'clear' | translate }}</span>
-        </button>
-      </div>
-    </div>
 
     <div class="editor-card">
       <!-- Copy Button -->
@@ -46,13 +13,15 @@
           <path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/>
         </svg>
       </button>
-      
-      <textarea
+
+      <!-- ✏️ Quill Editor (ersetzt textarea) -->
+      <quill-editor
         [ngModel]="content()"
         (ngModelChange)="onContentChange($event)"
-        placeholder="{{ 'scribblepad_placeholder' | translate }}"
-        class="note-textarea"
-        [disabled]="!isLoggedIn()"></textarea>
+        format="html"
+        [disabled]="!isLoggedIn()"
+        placeholder="{{ 'scribblepad_placeholder' | translate }}">
+      </quill-editor>
       
       <div class="editor-footer">
         <div class="stats">
@@ -72,7 +41,7 @@
         
         <div class="save-status">
           <svg 
-            *ngIf="!saving() && !isCompressing()" 
+            *ngIf="!saving()" 
             xmlns="http://www.w3.org/2000/svg" 
             height="16px" 
             viewBox="0 -960 960 960" 
@@ -82,7 +51,7 @@
             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
           </svg>
           <svg 
-            *ngIf="saving() || isCompressing()" 
+            *ngIf="saving()" 
             class="spinner status-icon" 
             xmlns="http://www.w3.org/2000/svg" 
             height="16px" 
@@ -95,54 +64,6 @@
         </div>
       </div>
     </div>
-
-        <!-- Image Drop Zone -->
-        <div 
-        class="image-dropzone"
-        *ngIf="isLoggedIn()"
-        [class.dragging]="isDragging()"
-        [class.has-image]="image()"
-        [class.compressing]="isCompressing()"
-        (dragover)="onDragOver($event)"
-        (dragleave)="onDragLeave($event)"
-        (drop)="onDrop($event)">
-        
-        <div class="dropzone-content" *ngIf="!image() && !isCompressing()">
-          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="currentColor">
-            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360v80H200v560h560v-360h80v360q0 33-23.5 56.5T760-120H200Zm480-480v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM240-280h480L570-480 450-320l-90-120-120 160Zm-40-480v560-560Z"/>
-          </svg>
-          <h3>Drop an image here</h3>
-          <p>or click to browse</p>
-          <input 
-            type="file" 
-            accept="image/*" 
-            (change)="onFileSelect($event)"
-            class="file-input"
-            [disabled]="isCompressing()">
-          <p class="file-hint">Max 5MB • Auto-compressed • PNG, JPG, GIF, WebP</p>
-        </div>
-  
-        <div class="compressing-indicator" *ngIf="isCompressing()">
-          <svg class="spinner" xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="currentColor">
-            <path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Z"/>
-          </svg>
-          <h3>Compressing image...</h3>
-          <p>Optimizing for upload</p>
-        </div>
-  
-        <div class="image-preview" *ngIf="image() && !isCompressing()">
-          <img [src]="image()" alt="Uploaded image">
-          <button 
-            class="remove-image-btn"
-            (click)="removeImage()"
-            title="Remove image">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      
 
     <div class="info-card" *ngIf="!isLoggedIn()">
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">

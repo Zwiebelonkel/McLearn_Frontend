@@ -297,7 +297,7 @@
   transform: translateY(100%);
 }
 
-// Confetti Animation
+// styles.scss
 .confetti-container {
   position: fixed;
   top: 0;
@@ -311,19 +311,20 @@
 
 .confetti {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #f0f;
+  top: -10px;
+  width: 12px;
+  height: 12px;
+  opacity: 0.9;
   animation: confetti-fall 3s linear forwards;
 }
 
 @keyframes confetti-fall {
   0% {
-    transform: translateY(-100vh) rotate(0deg);
+    transform: translateY(-20px) rotate(0deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(100vh) rotate(720deg);
+    transform: translateY(110vh) rotate(720deg);
     opacity: 0;
   }
 }
@@ -377,109 +378,93 @@
    HTML CONTENT RENDERING IN CARD BACK
    =========================================== */
 
-/* Target the div inside card-back that contains innerHTML */
 .card-back {
-  /* Reset some defaults */
   ::ng-deep {
+
+    /* ============================================
+       QUILL EDITOR CONTENT RESET
+       ============================================ */
+
+    /* Falls Quill den Content in .ql-editor wrappt */
+    .ql-editor {
+      padding: 0 !important;
+      min-height: unset !important;
+      font-size: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      border: none !important;
+      outline: none !important;
+    }
+
     /* ============================================
        QUILL ALIGNMENT CLASSES
        ============================================ */
-    .ql-align-left {
+    .ql-align-left,
+    [data-align="left"] {
       text-align: left !important;
     }
-    
-    .ql-align-center {
+
+    .ql-align-center,
+    [data-align="center"] {
       text-align: center !important;
     }
-    
-    .ql-align-right {
+
+    .ql-align-right,
+    [data-align="right"] {
       text-align: right !important;
     }
-    
-    .ql-align-justify {
+
+    .ql-align-justify,
+    [data-align="justify"] {
       text-align: justify !important;
     }
-    
+
     /* ============================================
        QUILL SIZE CLASSES
        ============================================ */
     .ql-size-small {
       font-size: 0.75em !important;
     }
-    
+
     .ql-size-large {
       font-size: 1.5em !important;
     }
-    
+
     .ql-size-huge {
       font-size: 2.5em !important;
     }
-    
+
     /* ============================================
        QUILL FONT CLASSES
        ============================================ */
     .ql-font-serif {
       font-family: Georgia, 'Times New Roman', serif !important;
     }
-    
+
     .ql-font-monospace {
       font-family: var(--font-family-monospace) !important;
     }
-    
+
     /* ============================================
        QUILL COLOR CLASSES
        ============================================ */
-    .ql-color-red {
-      color: var(--danger-color) !important;
-    }
-    
-    .ql-color-orange {
-      color: var(--warning-color) !important;
-    }
-    
-    .ql-color-yellow {
-      color: #ffd700 !important;
-    }
-    
-    .ql-color-green {
-      color: var(--secondary-color) !important;
-    }
-    
-    .ql-color-blue {
-      color: var(--info-color) !important;
-    }
-    
-    .ql-color-purple {
-      color: #9370db !important;
-    }
-    
+    .ql-color-red     { color: var(--danger-color) !important; }
+    .ql-color-orange  { color: var(--warning-color) !important; }
+    .ql-color-yellow  { color: #ffd700 !important; }
+    .ql-color-green   { color: var(--secondary-color) !important; }
+    .ql-color-blue    { color: var(--info-color) !important; }
+    .ql-color-purple  { color: #9370db !important; }
+
     /* ============================================
        QUILL BACKGROUND COLOR CLASSES
        ============================================ */
-    .ql-bg-red {
-      background-color: var(--danger-color) !important;
-    }
-    
-    .ql-bg-orange {
-      background-color: var(--warning-color) !important;
-    }
-    
-    .ql-bg-yellow {
-      background-color: #ffd700 !important;
-    }
-    
-    .ql-bg-green {
-      background-color: var(--secondary-color) !important;
-    }
-    
-    .ql-bg-blue {
-      background-color: var(--info-color) !important;
-    }
-    
-    .ql-bg-purple {
-      background-color: #9370db !important;
-    }
-    
+    .ql-bg-red    { background-color: var(--danger-color) !important; }
+    .ql-bg-orange { background-color: var(--warning-color) !important; }
+    .ql-bg-yellow { background-color: #ffd700 !important; }
+    .ql-bg-green  { background-color: var(--secondary-color) !important; }
+    .ql-bg-blue   { background-color: var(--info-color) !important; }
+    .ql-bg-purple { background-color: #9370db !important; }
+
     /* ============================================
        QUILL INDENT CLASSES
        ============================================ */
@@ -491,69 +476,112 @@
     .ql-indent-6 { padding-left: 18em !important; }
     .ql-indent-7 { padding-left: 21em !important; }
     .ql-indent-8 { padding-left: 24em !important; }
-    
+
+    /* ============================================
+       QUILL LIST STYLES
+       ============================================ */
+    ol, ul {
+      padding-left: 1.5em;
+      margin: 0.5em 0;
+    }
+
+    /* Quill rendert Listen als li mit data-list Attribut */
+    li[data-list="bullet"] {
+      list-style-type: disc;
+    }
+
+    li[data-list="ordered"] {
+      list-style-type: decimal;
+    }
+
+    li[data-list="checked"],
+    li[data-list="unchecked"] {
+      list-style: none;
+      padding-left: 1.5em;
+      position: relative;
+
+      &::before {
+        position: absolute;
+        left: 0;
+      }
+    }
+
+    li[data-list="checked"]::before {
+      content: '☑';
+    }
+
+    li[data-list="unchecked"]::before {
+      content: '☐';
+    }
+
+    /* ============================================
+       QUILL CODE BLOCK
+       ============================================ */
+    .ql-code-block-container,
+    pre.ql-syntax {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border-color);
+      border-radius: 6px;
+      padding: 12px;
+      margin: 1em 0;
+      overflow-x: auto;
+      font-family: var(--font-family-monospace);
+      font-size: 0.9em;
+      white-space: pre;
+    }
+
+    /* ============================================
+       STANDARD HTML ELEMENTS
+       ============================================ */
+
     /* Paragraphs */
     p {
-      margin: 0 0 1em 0;
+      margin: 0 0 0.8em 0;
       line-height: 1.6;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
     }
-    
+
     /* Headings */
     h1, h2, h3, h4, h5, h6 {
-      margin: 0.8em 0 0.5em 0;
+      margin: 0.8em 0 0.4em 0;
       font-weight: bold;
       line-height: 1.3;
-      
+      cursor: default;
+      transform: none !important;
+
       &:first-child {
         margin-top: 0;
       }
     }
-    
-    h1 {
-      font-size: 1.8em;
-    }
-    
-    h2 {
-      font-size: 1.5em;
-    }
-    
-    h3 {
-      font-size: 1.3em;
-    }
-    
+
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.3em; }
+    h4 { font-size: 1.1em; }
+    h5 { font-size: 1em; }
+    h6 { font-size: 0.9em; }
+
     /* Lists */
     ul, ol {
       margin: 0.5em 0;
       padding-left: 2em;
-      
+
       li {
         margin-bottom: 0.3em;
         line-height: 1.5;
       }
     }
-    
+
     /* Text formatting */
-    strong, b {
-      font-weight: bold;
-    }
-    
-    em, i {
-      font-style: italic;
-    }
-    
-    u {
-      text-decoration: underline;
-    }
-    
-    s, strike {
-      text-decoration: line-through;
-    }
-    
-    /* Code */
+    strong, b { font-weight: bold; }
+    em, i     { font-style: italic; }
+    u         { text-decoration: underline; }
+    s, strike { text-decoration: line-through; }
+
+    /* Inline code */
     code {
       background: var(--input-bg);
       border: 1px solid var(--card-border-color);
@@ -563,7 +591,8 @@
       font-size: 0.9em;
       color: var(--text-color);
     }
-    
+
+    /* Code block */
     pre {
       background: var(--input-bg);
       border: 1px solid var(--card-border-color);
@@ -571,66 +600,71 @@
       border-radius: 6px;
       overflow-x: auto;
       margin: 1em 0;
-      
+
       code {
         background: none;
         border: none;
         padding: 0;
       }
     }
-    
+
     /* Links */
     a {
       color: var(--primary-color);
       text-decoration: underline;
-      
+
       &:hover {
         color: var(--primary-color-hover);
       }
     }
-    
+
     /* Blockquotes */
     blockquote {
       border-left: 4px solid var(--primary-color);
       padding-left: 1em;
       margin: 1em 0;
       font-style: italic;
-      color: var(--text-color);
-      opacity: 0.8;
+      opacity: 0.85;
     }
-    
+
     /* Horizontal rules */
     hr {
       border: none;
       border-top: 1px solid var(--card-border-color);
       margin: 1em 0;
     }
-    
+
     /* Images */
     img {
       max-width: 100%;
       height: auto;
       display: block;
-      margin: 1em 0;
+      margin: 0.5em auto;
+      border-radius: 4px;
     }
-    
+
     /* Tables */
     table {
       border-collapse: collapse;
       width: 100%;
       margin: 1em 0;
-      
+      font-size: 0.95em;
+
       th, td {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        padding: 8px;
+        border: 1px solid var(--card-border-color);
+        padding: 6px 10px;
         text-align: left;
       }
-      
+
       th {
-        background: rgba(0, 0, 0, 0.05);
+        background: rgba(0, 0, 0, 0.06);
         font-weight: bold;
       }
     }
+
+    /* Superscript / Subscript */
+    sup { vertical-align: super; font-size: 0.75em; }
+    sub { vertical-align: sub;   font-size: 0.75em; }
   }
 }
 

@@ -280,14 +280,14 @@ export class EditorPage {
         const line = lines[i].trim();
         if (!line) continue;
 
-        const firstCommaIndex = line.indexOf(',');
-        if (firstCommaIndex === -1) {
-          console.warn(`Invalid line without comma (skipping): "${line}"`);
-          continue;
+        const firstSeparatorIndex = line.indexOf('~');
+        if (firstSeparatorIndex === -1) {
+          console.warn(`Invalid line without separator (skipping): "${line}"`);
+        continue;
         }
 
-        let front = line.slice(0, firstCommaIndex).trim();
-        let back = line.slice(firstCommaIndex + 1).trim();
+        let front = line.slice(0, firstSeparatorIndex).trim();
+        let back = line.slice(firstSeparatorIndex + 1).trim();
 
         if (front.startsWith('"') && front.endsWith('"')) {
           front = front.slice(1, -1);
@@ -367,17 +367,17 @@ export class EditorPage {
       return;
     }
 
-    let csv = 'Front,Back\n';
+    let csv = 'Front~Back\n';
 
     for (const card of cardsArray) {
       const escapeCsv = (text: string) => {
-        if (text.includes(',') || text.includes('\n') || text.includes('"')) {
+        if (text.includes('~') || text.includes('\n') || text.includes('"')) {
           return `"${text.replace(/"/g, '""')}"`;
         }
         return text;
       };
 
-      csv += `${escapeCsv(card.front)},${escapeCsv(card.back)}\n`;
+      csv += `${escapeCsv(card.front)}~${escapeCsv(card.back)}\n`;
     }
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

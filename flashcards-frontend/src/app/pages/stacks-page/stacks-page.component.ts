@@ -342,7 +342,7 @@ export class StacksPage {
     });
   }
 
-  // Export functionality
+  //  functionality
   exportStack(stack: Stack, event: Event) {
     event.preventDefault();
     event.stopPropagation();
@@ -360,17 +360,17 @@ export class StacksPage {
         }
 
         // Create CSV content
-        let csv = 'Front,Back\n';
+        let csv = 'Front~Back\n';
         
         for (const card of cards) {
           const escapeCsv = (text: string) => {
-            if (text.includes(',') || text.includes('\n') || text.includes('"')) {
+            if (text.includes('~') || text.includes('\n') || text.includes('"')) {
               return `"${text.replace(/"/g, '""')}"`;
             }
             return text;
-          };
+            };
           
-          csv += `${escapeCsv(card.front)},${escapeCsv(card.back)}\n`;
+          csv += `${escapeCsv(card.front)}~${escapeCsv(card.back)}\n`;
         }
 
         // Download CSV

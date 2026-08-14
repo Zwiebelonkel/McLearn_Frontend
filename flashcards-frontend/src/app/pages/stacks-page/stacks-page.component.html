@@ -1,15 +1,18 @@
 <app-loader *ngIf="loading()" />
 <div *ngIf="!loading()">
   <div class="container">
-    <h2 *ngIf="isLoggedIn()" class="page-title">{{ 'new' | translate }}</h2>
+    <section class="page-heading">
+      <span class="eyebrow">FLASHCARDS · FOCUS · FLOW</span>
+      <h2 class="page-title">{{ 'stacks' | translate }}</h2>
+      <p>Lerne smarter, behalte mehr und mach jeden Fortschritt sichtbar.</p>
+    </section>
     <form *ngIf="isLoggedIn()" (submit)="create($event)" class="add-form">
+      <span class="form-label">{{ 'new' | translate }}</span>
       <input [(ngModel)]="name" name="name" placeholder="{{ 'new_stack' | translate }}" required class="form-input" />
       <button type="submit" class="btn add btn-primary" [disabled]="!name || name.trim() === ''">
         <i class="fa-solid fa-plus"></i> 
       </button>
     </form>
-    
-    <h2 class="page-title">{{ 'stacks' | translate }}</h2>
     
     <div class="filter-controls">
       <div class="search-wrapper">

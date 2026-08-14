@@ -1,11 +1,12 @@
 :host {
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 1rem;
-  width: 250px;
-  border-left: 1px solid var(--card-border-color);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  padding: 1.25rem;
+  width: min(320px, 88vw);
+  border-left: var(--brutal-border);
   transition: transform 0.3s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -14,12 +15,12 @@
   top: 0;
   right: 0;
   height: 100%;
-  z-index: 100;
+  z-index: 1001;
   transform: translateX(100%);
 }
 
 body.dark-theme :host {
-  background-color: rgba(29, 29, 29, 0.6);
+  background: var(--glass);
   border-left-color: var(--card-border-color);
 }
 
@@ -29,11 +30,11 @@ body.dark-theme :host {
 
 .sidebar-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: .85rem 1rem;
   color: var(--text-color);
   text-decoration: none;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
+  border-radius: 14px;
+  margin-bottom: .65rem;
   white-space: nowrap;
   background: none;
   border: none;
@@ -42,14 +43,16 @@ body.dark-theme :host {
   font-size: 1rem;
   font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .sidebar-link:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background: var(--surface-strong);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(-2px, -2px);
 }
 
 body.dark-theme .sidebar-link:hover {

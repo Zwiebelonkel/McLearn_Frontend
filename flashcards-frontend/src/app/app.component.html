@@ -1,10 +1,20 @@
 <app-toast></app-toast>
 <div class="page-container">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
   <div class="main-content">
     <header class="header">
       <div class="container">
-        <h1 class="title" (click)="goHome()">McLearn</h1>
-        <button #toggleButton class="sidebar-toggle" (click)="toggleSidebar($event)">&#9776;</button>
+        <button class="brand" (click)="goHome()" aria-label="McLearn Startseite">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span>
+            <strong>McLearn</strong>
+            <small>learn · repeat · master</small>
+          </span>
+        </button>
+        <button #toggleButton class="sidebar-toggle" (click)="toggleSidebar($event)" aria-label="Menü öffnen">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </header>
     <main class="main">

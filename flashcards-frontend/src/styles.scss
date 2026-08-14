@@ -16,6 +16,7 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   --background-color: #f0f2f5;
+  --grid-color: rgba(33, 37, 41, 0.045);
   --text-color: #212529;
   --card-background: #fff;
   --card-border-color: #dee2e6;
@@ -31,6 +32,7 @@
 
 body.dark-theme {
   --background-color: #121212;
+  --grid-color: rgba(255, 255, 255, 0.04);
   --text-color: #e0e0e0;
   --card-background: #1e1e1e;
   --success-color: #313131;
@@ -103,6 +105,12 @@ body {
   color: var(--text-color);
   text-align: left;
   background-color: var(--background-color);
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center top;
+  background-attachment: fixed;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -252,23 +260,19 @@ h6 { font-size: 1rem; }
 }
 
 .header {
-  transition: 0.2s;
-  height: 90px;
+  height: 78px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--header-background);
+  background: color-mix(in srgb, var(--header-background) 94%, transparent);
   padding: 0rem 0;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 28px rgba(75, 24, 24, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--header-text-color);
-}
-
-.header:hover {
-  transition: 0.2s;
-  height: 95px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.253);
 }
 
 .header .container {
@@ -276,13 +280,6 @@ h6 { font-size: 1rem; }
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-}
-
-.header .title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0;
-  color: #ffffa0;
 }
 
 .header .nav {
